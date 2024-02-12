@@ -1,2 +1,25 @@
-package kurenkov.tutorservice.entities;public class User {
+package kurenkov.tutorservice.entities;
+
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Data
+@Entity
+@Table(name="user")
+public class User {
+    @Id
+    @GeneratedValue
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "login", nullable = false)
+    private String login;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_data_id", referencedColumnName = "id")
+    private UserData data;
 }

@@ -1,10 +1,10 @@
 spring:
-datasource:
-url: jdbc:postgresql://localhost:5432/db_name
-username: your_username
-password: your_password
-jpa:
-database-platform: org.hibernate.dialect.PostgreSQLDialect
-hibernate:
-ddl-auto: update
-show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tutor_service
+    username: postgres
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
