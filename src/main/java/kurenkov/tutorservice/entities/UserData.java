@@ -9,7 +9,6 @@ import lombok.Data;
 public class UserData {
 
     @Id
-    @GeneratedValue
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -31,4 +30,8 @@ public class UserData {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "seeker_id", referencedColumnName = "seeker_id")
     private Seeker seeker;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private User user;
 }

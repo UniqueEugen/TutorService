@@ -19,7 +19,4 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_data_id", referencedColumnName = "id")
-    private UserData data;
 }
