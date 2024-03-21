@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Онлайн подбор репетиторов</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Меню перехода на другие страницы -->
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="#">Главная</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">О нас</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Контакты</a>
+        </li>
+    </ul>
+
+    <!-- Кнопка перехода в личный кабинет -->
+    <a class="btn btn-primary" href="#">Личный кабинет</a>
+</nav>
+
+<div class="container mt-4">
+    <!-- Форма фильтрации/сортировки -->
+    <form>
+        <!-- Ваши элементы фильтрации/сортировки -->
+    </form>
+
+    <div class="row mt-4">
+        <!-- Карточки репетиторов -->
+        <div class="col-md-4 mb-4" th:each="tutor : ${tutors}">
+            <div class="card">
+                <img th:src="@{/images/{imageFileName}(imageFileName=${tutor.imageFileName})}" class="card-img-top" alt="Tutor Image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${tutor.name}"></h5>
+                    <p class="card-text" th:text="${tutor.description}"></p>
+                    <!-- Дополнительные данные о репетиторе -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

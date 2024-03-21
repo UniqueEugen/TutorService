@@ -1,14 +1,18 @@
 package kurenkov.tutorservice.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "address")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -26,4 +30,5 @@ public class Address {
 
     @Column(name = "office", nullable = false)
     private String numOfOffice;
+
 }
