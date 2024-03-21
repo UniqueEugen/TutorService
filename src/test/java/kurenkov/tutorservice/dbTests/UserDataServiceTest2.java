@@ -43,7 +43,7 @@ class UserDataServiceTest2 {
         Order order1 = new Order(1L, new Date(1234567890L), new Time(9876543210L), "Order 1");
         Order order2 = new Order(2L, new Date(9876543210L), new Time(1234567890L), "Order 2");
         List<Order> ordersT = Arrays.asList(order1, order2);
-        Tutor tutor = new Tutor(1L, "Math", 10.0f, new Address(1L, "Country", "City", "Street", "1", "Office"), ordersT, chats);
+        Tutor tutor = new Tutor(1L, "Math", 10.0f, null, new Address(1L, "Country", "City", "Street", "1", "Office"), ordersT, chats);
         /*Order order3 = new Order(3L, new Date(9876543220L), new Time(1234567890L), "Order 3");
         List<Order> ordersS = Arrays.asList(order1, order3);
         Seeker seeker = new Seeker(1L, 25, "Description", ordersS, chats);*/

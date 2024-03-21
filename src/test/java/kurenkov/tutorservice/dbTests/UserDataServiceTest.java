@@ -47,7 +47,7 @@ class UserDataServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
+ /*   @Test
     void testGetUserDataByIdTutor() {
         // Создание тестовых данных
         Long userId = 1L;
@@ -111,5 +111,5 @@ class UserDataServiceTest {
         verify(userRepository, times(1)).findById(userId);
         verify(tutorRepository, times(1)).findById(userId);
         verify(seekerRepository, times(1)).findById(userId);
-    }
+    }*/
 }

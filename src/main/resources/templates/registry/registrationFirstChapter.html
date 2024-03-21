@@ -19,13 +19,13 @@
     }
   </style>
 </head>
-<body>
+<body ng-controller="RegistrationController">
 <div class="centered">
 <h2>Регистрация</h2>
 
 <div id="userBlock" class="registration-block visible">
   <h3>Данные пользователя</h3>
-  <form action="/registry" method="post">
+  <form action="registration/registry" method="post">
     <input type="text" placeholder="Login" name="user.login" required><br>
     <input type="password" name="user.password" placeholder="Пароль" required><br>
     <button type="button" onclick="showRoleBlock()">Далее</button>
@@ -34,7 +34,7 @@
 
 <div id="roleBlock"  class="registration-block">
   <h3>Выберите роль</h3>
-  <form action="/registry" method="post">
+  <form action="registration/registry" method="post">
     <label for="roleTutor">
       <input type="radio" id="roleTutor" name="role" value="tutor" required>
       Репетитор
@@ -46,13 +46,14 @@
 
     <button type="button" onclick="showUserBlock()" class="back-button">Назад</button>
     <button type="button" onclick="showUserDataBlock()">Далее</button>
+    <input type="submit">Далеdgdfе</input>
   </form>
 </div>
-
+<!--
 <div id="userDataBlock"  class="registration-block">
   <h3>Данные пользователя</h3>
-  <form action="/registry" method="post">
-    <!-- Поля для заполнения данных пользователя -->
+  <form action="registration/registry" method="post">
+    &lt;!&ndash; Поля для заполнения данных пользователя &ndash;&gt;
     <input type="text" name="userData.name" placeholder="Имя" required><br>
     <input type="text" name="userData.surname" placeholder="Фамилия" required><br>
     <input type="text" name="userData.secName" placeholder="Отчество (необязательно)"><br>
@@ -66,14 +67,14 @@
 
   <div id="seekerBlock" class="registration-block">
     <h3>Данные искателя</h3>
-    <form action="/registry" method="post">
+    <form action="registration/registry" method="post">
       <label for="age">Возраст:</label>
       <input type="number" id="age" name="seeker.age" required><br>
 
       <label for="description">Описание:</label>
       <textarea id="description" name="seeker.description"></textarea><br>
 
-      <!-- Добавьте другие поля для заполнения данных искателя -->
+      &lt;!&ndash; Добавьте другие поля для заполнения данных искателя &ndash;&gt;
 
       <button type="button" onclick="showUserDataBlock()">Назад</button>
       <button type="submit">Завершить регистрацию</button>
@@ -82,7 +83,7 @@
 
   <div id="tutorBlock" class="registration-block">
     <h3>Данные репетитора</h3>
-    <form action="/registry" method="post">
+    <form action="registration/registry" method="post">
       <label for="specialisation">Специализация:</label>
       <input type="text" id="specialisation" name="tutor.specialisation" required><br>
 
@@ -92,7 +93,7 @@
       <label for="photo">Фото:</label>
       <input type="file" id="photo" name="tutor.photo"><br>
 
-      <!-- Добавьте другие поля для заполнения данных репетитора -->
+      &lt;!&ndash; Добавьте другие поля для заполнения данных репетитора &ndash;&gt;
 
       <button type="button" onclick="showUserDataBlock()" class="back-button">Назад</button>
       <button type="button" onclick="showAdressBlock()">Далее</button>
@@ -100,7 +101,7 @@
   </div>
   <div id="addressBlock" class="registration-block">
     <h3>Адрес занятий</h3>
-    <form action="/registry" method="post">
+    <form action="registration/registry" method="post">
       <label for="country">Страна:</label>
       <input type="text" id="country" name="address.country" required><br>
 
@@ -119,7 +120,7 @@
       <button type="button" onclick="showTutorBlock()" class="back-button">Назад</button>
       <button type="submit">Завершить регистрацию</button>
     </form>
-  </div>
+  </div>-->
 </div>
 <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
 <script>

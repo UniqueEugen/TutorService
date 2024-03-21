@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="registrationApp">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body ng-controller="RegistrationController">
+<div class="container">
+    <h1>User Registration</h1>
+
+    <!-- Форма регистрации -->
+    <form ng-submit="registerUser()">
+        <h3>Personal Information</h3>
+        <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input type="text" class="form-control" id="firstName" ng-model="user.firstName" required>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Surname:</label>
+            <input type="text" class="form-control" id="lastName" ng-model="user.lastName" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" ng-model="user.email" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input type="text" class="form-control" id="phone" ng-model="user.phone" required>
+        </div>
+
+        <h3>Address Information</h3>
+        <div class="form-group">
+            <label for="country">Country:</label>
+            <input type="text" class="form-control" id="country" ng-model="address.country" required>
+        </div>
+        <div class="form-group">
+            <label for="city">City:</label>
+            <input type="text" class="form-control" id="city" ng-model="address.city" required>
+        </div>
+        <div class="form-group">
+            <label for="street">Street:</label>
+            <input type="text" class="form-control" id="street" ng-model="address.street" required>
+        </div>
+        <div class="form-group">
+            <label for="house">House:</label>
+            <input type="text" class="form-control" id="house" ng-model="address.house" required>
+        </div>
+
+        <h3>Account Information</h3>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" ng-model="user.username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" ng-model="user.password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    angular.module('registrationApp', [])
+        .controller('RegistrationController', ['$scope', '$http', function($scope, $http) {
+            $scope.user = {};
+            $scope.address = {};
+
+            $scope.registerUser = function() {
+                var userData = {
+                    name: $scope.user.firstName,
+                    surname: $scope.user.lastName,
+                    email: $scope.user.email,
+                    phone: $scope.user.phone,
+                    /*address: {
+                        country: $scope.address.country,
+                        city: $scope.address.city,
+                        street: $scope.address.street,
+                        house: $scope.address.house
+                    },*/
+                    user: {
+                        id: 2,
+                        login: $scope.user.username,
+                        password: $scope.user.password
+                    }
+
+                };
+                console.log(userData);
+                $http.post('/registration/register', userData)
+                    .then(function(response) {
+                        // Обработка успешной регистрации
+                        console.log(response.data);
+                    })
+                    .catch(function(error) {
+                        // Обработка ошибки регистрации
+                        console.log(error);
+                    });
+            };
+        }]);
+</script>
+</body>
+</html>

@@ -5,45 +5,44 @@ import kurenkov.tutorservice.mappers.*;
 import kurenkov.tutorservice.services.UserDataService;
 import kurenkov.tutorservice.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/registration")
 public class RegistrationController {
 
-    private final UserMapper userMapper;
+    /*private final UserMapper userMapper;
     private final SeekerMapper seekerMapper;
     private final AddressMapper addressMapper;
     private final TutorMapper tutorMapper;
-    private final UserDataMapper userDataMapper;
+    private final UserDataMapper userDataMapper;*/
     private final UserDataService userDataService;
     private final UserService userService;
 
     @Autowired
-    public RegistrationController(UserMapper userMapper, SeekerMapper seekerMapper,
+    public RegistrationController(/*UserMapper userMapper, SeekerMapper seekerMapper,
                                   AddressMapper addressMapper, TutorMapper tutorMapper,
-                                  UserDataMapper userDataMapper, UserDataService userDataService,
+                                  UserDataMapper userDataMapper,*/ UserDataService userDataService,
                                   UserService userService) {
-        this.userMapper = userMapper;
+       /* this.userMapper = userMapper;
         this.seekerMapper = seekerMapper;
         this.addressMapper = addressMapper;
         this.tutorMapper = tutorMapper;
-        this.userDataMapper = userDataMapper;
+        this.userDataMapper = userDataMapper;*/
         this.userDataService = userDataService;
         this.userService = userService;
     }
 
     @GetMapping
     public String showRegistrationPage() {
-        return "registry/registrationFirstChapter";
+        return "registry/registrationPage";
     }
 
-    @PostMapping("/registry")
+    /*@PostMapping("/registry")
     public String registerUser(@RequestParam("user.login") String login,
                                @RequestParam("user.password") String password,
                                @RequestParam("role") String role,
@@ -62,9 +61,10 @@ public class RegistrationController {
                                @RequestParam(value = "address.street", required = false) String street,
                                @RequestParam(value = "address.house", required = false) String house,
                                @RequestParam(value = "address.office", required = false) String office) {
-        User user = userMapper.toUser(login, password);
+        //User user = userMapper.toUser(login, password);
+        User user = new User(null, login,password);
         userService.saveUser(user);
-        Seeker seeker = null;
+        *//*Seeker seeker = null;
         Address address;
         Tutor tutor = null;
         if (role.equals("seeker")){
@@ -74,8 +74,22 @@ public class RegistrationController {
             tutor = tutorMapper.toTutor(specialisation, price, photo, address);
         }
         UserData userData = userDataMapper.toUserData(name, surname, secName, email, phone, tutor, seeker);
-        userDataService.saveUserData(userData);
+        userDataService.saveUserData(userData);*//*
         return "registration-success"; // Return the name of the success page template
-    }
+    }*/
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UserData userData) {
+        try {
+            // Вызов сервиса для регистрации пользователя с переданными данными
+            User user = userData.getUser();
+            userService.saveUser(user);
+            userDataService.saveUserData(userData);
 
+            // Возвращаем успешный ответ
+            return ResponseEntity.ok("Registration successful!");
+        } catch (Exception e) {
+            // Возвращаем ошибку с соответствующим кодом состояния
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed.");
+        }
+    }
 }
