@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class UserData {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -26,6 +26,8 @@ public class UserData {
     private String eMail;
     @Column(name = "phone", nullable = false)
     private String phone;
+    @Column(name = "age", nullable = false)
+    private int age;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tutor_id", referencedColumnName = "tutor_id")

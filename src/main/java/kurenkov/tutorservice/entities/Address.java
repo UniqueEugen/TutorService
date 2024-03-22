@@ -29,6 +29,6 @@ public class Address {
     private String house;
 
     @Column(name = "office", nullable = false)
-    private String numOfOffice;
+    private String office;
 
 }

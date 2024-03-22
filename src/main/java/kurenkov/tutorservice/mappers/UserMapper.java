@@ -1,7 +1,10 @@
 package kurenkov.tutorservice.mappers;
 
+import kurenkov.tutorservice.entities.Tutor;
 import kurenkov.tutorservice.entities.User;
 
+import kurenkov.tutorservice.entities.dto.TutorDTO;
+import kurenkov.tutorservice.entities.dto.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -12,7 +15,7 @@ import org.springframework.stereotype.Component;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(target = "login", source = "login")
-    @Mapping(target = "password", source = "password")
-    User toUser(String login, String password);
+    Tutor toUserFromDTO(UserDTO source);
+
+    UserDTO toUserDTO(User source);
 }

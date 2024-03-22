@@ -20,11 +20,11 @@ public class Seeker {
     @Column(name = "seeker_id", nullable = false)
     private Long id;
 
-    @Column(name = "age", nullable = false)
-    private int age;
-
     @Column(name = "description", nullable = true)
     private String description;
+
+    @Column(name = "city", nullable = false)
+    private String city;
 
     @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "seeker_order")

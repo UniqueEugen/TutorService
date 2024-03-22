@@ -35,7 +35,7 @@ alter sequence users_seq owner to postgres;
 
 create table address
 (
-    id      bigint       not null
+    id      bigserial       not null
         primary key,
     city    varchar(255) not null,
     country varchar(255) not null,
@@ -49,7 +49,7 @@ alter table address
 
 create table order_chat
 (
-    id      bigint not null
+    id       bigserial not null
         primary key,
     date    date,
     message varchar(255),
@@ -61,7 +61,7 @@ alter table order_chat
 
 create table seeker
 (
-    seeker_id   bigint  not null
+    seeker_id    bigserial  not null
         primary key,
     age         integer not null,
     description varchar(255)
@@ -72,7 +72,7 @@ alter table seeker
 
 create table seeker_chats
 (
-    seeker_seeker_id bigint not null
+    seeker_seeker_id  bigserial not null
         constraint fkd8eenqv5uewu3liowhqhnf6ad
             references seeker,
     chats_id         bigint not null
@@ -87,7 +87,7 @@ alter table seeker_chats
 
 create table tutor
 (
-    tutor_id       bigint       not null
+    tutor_id        bigserial       not null
         primary key,
     price          real         not null,
     specialisation varchar(255) not null,
@@ -103,7 +103,7 @@ alter table tutor
 
 create table orders
 (
-    id           bigint       not null
+    id            bigserial       not null
         primary key,
     date         date         not null,
     status       varchar(255) not null,
@@ -121,7 +121,7 @@ alter table orders
 
 create table tutor_chats
 (
-    tutor_tutor_id bigint not null
+    tutor_tutor_id  bigserial not null
         constraint fk2qhawcpk6u98oflksh5jfftnr
             references tutor,
     chats_id       bigint not null
@@ -136,7 +136,7 @@ alter table tutor_chats
 
 create table users
 (
-    id       bigint       not null
+    id        bigserial      not null
         primary key,
     login    varchar(255) not null,
     password varchar(255) not null
@@ -152,16 +152,16 @@ create table user_data
     phone       varchar(255) not null,
     second_name varchar(255),
     surname     varchar(255) not null,
-    user_id     bigint       not null
+    user_id      bigserial       not null
         primary key
         constraint fkboeinboxcrb4ilnj0sfyxsbol
             references users,
-    seeker_id   bigint
+    seeker_id    bigserial
         constraint uk_nb2rqdqwryvqqgyyhxm9482sv
             unique
         constraint fkifhlhujafb301og86785umy8l
             references seeker,
-    tutor_id    bigint
+    tutor_id     bigserial
         constraint uk_2fk9srkb7rfpiefmoylgsdv1c
             unique
         constraint fk1wuclc2b5ryaty4vihpgs4w9b
@@ -173,12 +173,12 @@ alter table user_data
 
 create table forum_message
 (
-    message_id   bigint       not null
+    message_id    bigserial       not null
         primary key,
     date         date         not null,
     message      varchar(255) not null,
     time         time(6)      not null,
-    user_data_id bigint
+    user_data_id  bigserial
         constraint fk3uj8adoqp5ti2yp0a3wsbccef
             references user_data
 );

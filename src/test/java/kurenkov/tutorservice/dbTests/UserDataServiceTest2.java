@@ -43,14 +43,14 @@ class UserDataServiceTest2 {
         Order order1 = new Order(1L, new Date(1234567890L), new Time(9876543210L), "Order 1");
         Order order2 = new Order(2L, new Date(9876543210L), new Time(1234567890L), "Order 2");
         List<Order> ordersT = Arrays.asList(order1, order2);
-        Tutor tutor = new Tutor(1L, "Math", 10.0f, null, new Address(1L, "Country", "City", "Street", "1", "Office"), ordersT, chats);
+        Tutor tutor = new Tutor(1L, "Math", 10.0f, null, new Address(1L, "Country", "City", "Street", "1", "Office"), ordersT, chats, null);
         /*Order order3 = new Order(3L, new Date(9876543220L), new Time(1234567890L), "Order 3");
         List<Order> ordersS = Arrays.asList(order1, order3);
         Seeker seeker = new Seeker(1L, 25, "Description", ordersS, chats);*/
         UserData userData1 = new UserData(1L, "John", "Dou", null, "es4709569@gmail.com",
-                "+375293943507", tutor, null, user);
+                "+375293943507",10, tutor, null, user );
         UserData userData2 = new UserData(1L, "John", "Dou", null, "es4709569@gmail.com",
-                "+375293943507", tutor, null, user);
+                "+375293943507", 10, tutor, null, user);
         expectedUserDataList.add(userData1);
         expectedUserDataList.add(userData2);
 
@@ -74,7 +74,7 @@ class UserDataServiceTest2 {
     void getUserDataById_ValidId_ReturnsUserData() {
         // Arrange
         long userDataId = 1L;
-        UserData expectedUserData = new UserData(userDataId, "John", "Doe", null, "john@example.com", "1234567890", null, null, null);
+        UserData expectedUserData = new UserData(userDataId, "John", "Doe", null, "john@example.com", "1234567890", 10, null, null, null);
 
         when(userDataRepo.findById(userDataId)).thenReturn(Optional.of(expectedUserData));
 
@@ -102,8 +102,8 @@ class UserDataServiceTest2 {
     @Test
     void saveUserData_ReturnsSavedUserData() {
         // Arrange
-        UserData userDataToSave = new UserData(1L, "John", "Doe", null, "john@example.com", "1234567890", null, null, null);
-        UserData savedUserData = new UserData(1L, "John", "Doe", null,"john@example.com",  "1234567890", null, null, null);
+        UserData userDataToSave = new UserData(1L, "John", "Doe", null, "john@example.com", "1234567890", 10, null, null, null);
+        UserData savedUserData = new UserData(1L, "John", "Doe", null,"john@example.com",  "1234567890", 10, null, null, null);
 
         when(userDataRepo.save(userDataToSave)).thenReturn(savedUserData);
 

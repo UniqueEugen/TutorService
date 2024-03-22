@@ -25,9 +25,8 @@ public class Tutor {
     @Column(name = "price", nullable = false)
     private float price;
 
-    @Lob
-    @Column(name = "photo", nullable = true)
-    private byte[] photo;
+    @Column(name = "description")
+    private String description;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
@@ -39,4 +38,8 @@ public class Tutor {
 
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<OrderChat> chats;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "photo_id", referencedColumnName = "id", nullable = true)
+    private Photo photo;
 }

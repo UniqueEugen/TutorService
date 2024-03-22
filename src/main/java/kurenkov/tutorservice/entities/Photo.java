@@ -6,21 +6,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Entity
-@Table(name="users")
+@Table(name = "photos")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Photo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "login", nullable = false)
-    private String login;
+    @Column(name = "filename")
+    private String filename;
 
-    @Column(name = "password", nullable = false)
-    private String password;
-
+    @Lob
+    @Column(name = "content")
+    private byte[] content;
 }

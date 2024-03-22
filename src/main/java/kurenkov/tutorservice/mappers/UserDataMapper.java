@@ -2,26 +2,24 @@ package kurenkov.tutorservice.mappers;
 
 import kurenkov.tutorservice.entities.Seeker;
 import kurenkov.tutorservice.entities.Tutor;
+import kurenkov.tutorservice.entities.User;
 import kurenkov.tutorservice.entities.UserData;
+import kurenkov.tutorservice.entities.dto.SeekerDTO;
+import kurenkov.tutorservice.entities.dto.TutorDTO;
+import kurenkov.tutorservice.entities.dto.UserDTO;
+import kurenkov.tutorservice.entities.dto.UserDataDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
-@Mapper
+@Mapper(uses = {UserMapper.class, TutorMapper.class, SeekerMapper.class})
+@Component
 public interface UserDataMapper {
     UserDataMapper INSTANCE = Mappers.getMapper(UserDataMapper.class);
 
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "surname", source = "surname")
-    @Mapping(target = "secName", source = "secName")
-    @Mapping(target = "eMail", source = "email")
-    @Mapping(target = "phone", source = "phone")
-    @Mapping(target = "tutor", source = "tutor")
-    @Mapping(target = "seeker", source = "seeker")
-    @Mapping(target = "user", ignore = true)
-    UserData toUserData(String name, String surname, String secName, String email, String phone, Tutor tutor, Seeker seeker);
+    UserData toUserDataFromDTO(UserDataDTO source);
 
-   /* default Long mapIdToId(Long id) {
-        return id != null ? id : 0;
-    }*/
+    UserDataDTO toUserDataDTO(UserData source);
+
 }

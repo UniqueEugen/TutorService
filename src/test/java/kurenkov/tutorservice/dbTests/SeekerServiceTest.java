@@ -33,8 +33,8 @@ class SeekerServiceTest {
     void getAllSeekers_ReturnsListOfSeekers() {
         // Arrange
         List<Seeker> expectedSeekers = new ArrayList<>();
-        expectedSeekers.add(new Seeker(1L, 25, "Description 1", new ArrayList<>(), new ArrayList<>()));
-        expectedSeekers.add(new Seeker(2L, 30, "Description 2", new ArrayList<>(), new ArrayList<>()));
+        expectedSeekers.add(new Seeker(1L, null, "Description 1", new ArrayList<>(), new ArrayList<>()));
+        expectedSeekers.add(new Seeker(2L, null, "Description 2", new ArrayList<>(), new ArrayList<>()));
 
         when(seekerRepo.findAll()).thenReturn(expectedSeekers);
 
@@ -49,7 +49,7 @@ class SeekerServiceTest {
     void getSeekerById_ValidId_ReturnsSeeker() {
         // Arrange
         long seekerId = 1L;
-        Seeker expectedSeeker = new Seeker(seekerId, 25, "Test Description", new ArrayList<>(), new ArrayList<>());
+        Seeker expectedSeeker = new Seeker(seekerId, null, "Test Description", new ArrayList<>(), new ArrayList<>());
 
         when(seekerRepo.findById(seekerId)).thenReturn(Optional.of(expectedSeeker));
 
@@ -77,8 +77,8 @@ class SeekerServiceTest {
     @Test
     void saveSeeker_ReturnsSavedSeeker() {
         // Arrange
-        Seeker seekerToSave = new Seeker(1L, 25, "New Description", new ArrayList<>(), new ArrayList<>());
-        Seeker savedSeeker = new Seeker(1L, 25, "Saved Description", new ArrayList<>(), new ArrayList<>());
+        Seeker seekerToSave = new Seeker(1L, null, "New Description", new ArrayList<>(), new ArrayList<>());
+        Seeker savedSeeker = new Seeker(1L, null, "Saved Description", new ArrayList<>(), new ArrayList<>());
 
         when(seekerRepo.save(seekerToSave)).thenReturn(savedSeeker);
 

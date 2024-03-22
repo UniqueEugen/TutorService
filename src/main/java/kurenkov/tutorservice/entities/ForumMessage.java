@@ -26,7 +26,7 @@ public class ForumMessage {
     private java.sql.Time time;
 
     @ManyToOne
-    @JoinColumn(name = "userData_id")
+    @JoinColumn(name = "user_data_id")
     private UserData userData;
 
 }

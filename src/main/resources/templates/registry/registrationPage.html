@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <title>User Registration</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        .registration-block {
+            display: none;
+        }
+        .visible {
+            display: block;
+        }
+        .centered {
+            margin: 0 auto;
+            max-width: 400px;
+        }
+        .back-button {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body ng-controller="RegistrationController">
 <div class="container">
@@ -11,53 +26,119 @@
 
     <!-- Форма регистрации -->
     <form ng-submit="registerUser()">
-        <h3>Personal Information</h3>
-        <div class="form-group">
-            <label for="firstName">First Name:</label>
-            <input type="text" class="form-control" id="firstName" ng-model="user.firstName" required>
+        <div class="registration-block visible" id="userDataBlock">
+            <h3>Personal Information</h3>
+            <div ng-show="showErrorMessage" class="error-message">
+                Необходимо заполнить все обязательные поля.
+            </div>
+            <div class="form-group">
+                <label for="surname">Фамилия:</label>
+                <input type="text" class="form-control" id="surname" ng-model="userData.surname" required>
+            </div>
+            <div class="form-group">
+                <label for="firstName">Имя:</label>
+                <input type="text" class="form-control" id="firstName" ng-model="userData.firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Отчество:</label>
+                <input type="text" class="form-control" id="lastName" ng-model="userData.secondName">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" ng-model="userData.email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Телефон</label>
+                <input type="text" class="form-control" id="phone" ng-model="userData.phone" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Возраст:</label>
+                <input type="number" class="form-control" id="age" ng-model="userData.age" required min="4" max="70">
+            </div>
+            <div>
+                <label for="roleTutor">
+                <input type="radio" id="roleTutor" name="role" value="tutor" required>
+                Репетитор
+                </label>
+            </div>
+            <div>
+                <label for="roleSeeker">
+                    <input type="radio" id="roleSeeker" name="role" value="seeker" required>
+                    Искатель репетитора
+                </label>
+            </div>
+            <button type="button" onclick="showSelectedBlock()">Далее</button>
         </div>
-        <div class="form-group">
-            <label for="lastName">Surname:</label>
-            <input type="text" class="form-control" id="lastName" ng-model="user.lastName" required>
+        <div class="registration-block" id="seekerBlock">
+            <div class="form-group requiredChangeSeeker">
+                <label for="descriptionS">Описание (макс. 250 символов):</label>
+                <textarea id="descriptionS" class="form-control" ng-model="seeker.description" maxlength="250"></textarea>
+            </div>
+            <div class="form-group requiredChangeSeeker">
+                <label for="cityS">Город:</label>
+                <input type="text" class="form-control" id="cityS" ng-model="seeker.city" required>
+            </div>
+            <button type="button" onclick="showUserDataBlock()" class="back-button">Назад</button>
+            <button type="button" onclick="showAdressBlock()">Далее</button>
         </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" ng-model="user.email" required>
+        <div class="registration-block" id="tutorBlock">
+            <div class="form-group requiredChangeTutor">
+                <label for="specialisation">Специализация:</label>
+                <input type="text" class="form-control" id="specialisation" ng-model="tutor.specialisation" required>
+            </div>
+            <div class="form-group requiredChangeTutor">
+                <label for="price">Цена:</label>
+                <input type="number" class="form-control" id="price" ng-model="tutor.price" required>
+            </div>
+            <div class="form-group requiredChangeTutor">
+                <label for="photo">Фото:</label>
+                <input type="file" id="photo" accept="image/*" ng-model="tutor.photo">
+            </div>
+            <div class="form-group requiredChangeTutor">
+                <label for="description">Описание (макс. 250 символов):</label>
+                <textarea id="description" class="form-control" ng-model="tutor.description" maxlength="250"></textarea>
+            </div>
+            <button type="button" onclick="showUserDataBlock()" class="back-button">Назад</button>
+            <button type="button" onclick="showAdressBlock()">Далее</button>
         </div>
-        <div class="form-group">
-            <label for="phone">Телефон</label>
-            <input type="text" class="form-control" id="phone" ng-model="user.phone" required>
+        <div class="registration-block" id="addressBlock">
+            <h3>Address Information</h3>
+            <div class="form-group requiredChangeTutor">
+                <label for="country">Cтрана:</label>
+                <input type="text" class="form-control" id="country" ng-model="address.country" required>
+            </div>
+            <div class="form-group requiredChangeTutor">
+                <label for="city">Город:</label>
+                <input type="text" class="form-control" id="city" ng-model="address.city" required>
+            </div>
+            <div class="form-group requiredChangeTutor">
+                <label for="street">Улица (микрорайон):</label>
+                <input type="text" class="form-control" id="street" ng-model="address.street" required>
+            </div>
+            <div class="form-group requiredChangeTutor">
+                <label for="house">Дом:</label>
+                <input type="text" class="form-control" id="house" ng-model="address.house" required>
+            </div>
+            <div class="form-group requiredChangeTutor">
+                <label for="office">Офис (квартира):</label>
+                <input type="text" class="form-control" id="office" ng-model="address.office" required>
+            </div>
+            <button type="button" onclick="showTutorBlock()" class="back-button">Назад</button>
+            <button type="button" onclick="showUserBlock()">Далее</button>
         </div>
-
-        <h3>Address Information</h3>
-        <div class="form-group">
-            <label for="country">Country:</label>
-            <input type="text" class="form-control" id="country" ng-model="address.country" required>
+        <div class="registration-block" id="userBlock">
+            <h3>Account Information</h3>
+            <div class="form-group">
+                <label for="username">Login:</label>
+                <input type="text" class="form-control" id="username" ng-model="user.username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" ng-model="user.password" required>
+            </div>
+            <button type="button" onclick="showSelectedBlock()" class="back-button">Назад</button>
+            <button type="submit" class="btn btn-primary">Register</button>
         </div>
-        <div class="form-group">
-            <label for="city">City:</label>
-            <input type="text" class="form-control" id="city" ng-model="address.city" required>
-        </div>
-        <div class="form-group">
-            <label for="street">Street:</label>
-            <input type="text" class="form-control" id="street" ng-model="address.street" required>
-        </div>
-        <div class="form-group">
-            <label for="house">House:</label>
-            <input type="text" class="form-control" id="house" ng-model="address.house" required>
-        </div>
-
-        <h3>Account Information</h3>
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" ng-model="user.username" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password" ng-model="user.password" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Register</button>
     </form>
 </div>
 
@@ -66,28 +147,74 @@
 <script>
     angular.module('registrationApp', [])
         .controller('RegistrationController', ['$scope', '$http', function($scope, $http) {
-            $scope.user = {};
+            $scope.userData = {};
             $scope.address = {};
+            $scope.user = {};
+            $scope.tutor = {};
+            $scope.seeker = {};
 
             $scope.registerUser = function() {
                 var userData = {
-                    name: $scope.user.firstName,
-                    surname: $scope.user.lastName,
-                    email: $scope.user.email,
-                    phone: $scope.user.phone,
-                    /*address: {
-                        country: $scope.address.country,
-                        city: $scope.address.city,
-                        street: $scope.address.street,
-                        house: $scope.address.house
-                    },*/
+                    name: $scope.userData.firstName,
+                    surname: $scope.userData.surname,
+                    email: $scope.userData.email,
+                    phone: $scope.userData.phone,
+                    secName: $scope.userData.secondName,
+                    age: $scope.userData.age,
                     user: {
-                        id: 2,
                         login: $scope.user.username,
                         password: $scope.user.password
-                    }
-
+                    },
+                    tutor: null,
+                    seeker: null
                 };
+                // Получаем выбранный элемент radio button
+                var selectedRole = document.querySelector('input[name="role"]:checked');
+
+                if (selectedRole && selectedRole.value === "tutor") {
+                    userData.tutor = {
+                        specialisation: $scope.tutor.specialisation,
+                        price: $scope.tutor.price,
+                        description: $scope.tutor.description,
+                        address: {
+                            country: $scope.address.country,
+                            city: $scope.address.city,
+                            street: $scope.address.street,
+                            house: $scope.address.house,
+                            office: $scope.address.office,
+                        }
+                    };
+                    // Получаем выбранное изображение из элемента input типа file
+                    var selectedFile = document.getElementById('photo').files[0];
+                    // Проверяем, было ли выбрано изображение
+                    if (selectedFile) {
+                        userData.tutor.photo = {  };
+                        // Создаем новый FileReader для чтения содержимого файла
+                        var reader = new FileReader();
+
+                        // Устанавливаем обработчик события onload, который будет вызван после завершения чтения файла
+                        reader.onload = function(event) {
+                            // Получаем содержимое файла в формате Data URL
+                            var fileContent = event.target.result;
+                            //Заполняем filename
+                            userData.tutor.photo.filename = selectedFile.name;
+                            // Заполняем поле content в объекте userData
+                            userData.tutor.photo.content = fileContent;
+                        };
+
+                        // Читаем содержимое файла в виде массива байтов
+                        reader.readAsDataURL(selectedFile);
+                    } else {
+                        // Если изображение не выбрано, устанавливаем значение по умолчанию, например, "ТГДД"
+                        userData.tutor.photo=null;
+                    }
+                } else if (selectedRole && selectedRole.value === "seeker") {
+                    userData.seeker = {
+                        description: $scope.seeker.description,
+                        city: $scope.seeker.city
+                    };
+                }
+
                 console.log(userData);
                 $http.post('/registration/register', userData)
                     .then(function(response) {
@@ -100,6 +227,83 @@
                     });
             };
         }]);
+</script>
+<script>
+    function showUserBlock() {
+        document.getElementById("userBlock").style.display = "block";
+        document.getElementById("userDataBlock").style.display = "none";
+        document.getElementById("seekerBlock").style.display = "none";
+        document.getElementById("tutorBlock").style.display = "none";
+        document.getElementById("addressBlock").style.display = "none";
+    }
+
+    function showUserDataBlock() {
+        document.getElementById("userBlock").style.display = "none";
+        document.getElementById("userDataBlock").style.display = "block";
+        document.getElementById("seekerBlock").style.display = "none";
+        document.getElementById("tutorBlock").style.display = "none";
+        document.getElementById("addressBlock").style.display = "none";
+    }
+
+    function showSeekerBlock() {
+        document.getElementById("userBlock").style.display = "none";
+        document.getElementById("userDataBlock").style.display = "none";
+        document.getElementById("seekerBlock").style.display = "block";
+        document.getElementById("tutorBlock").style.display = "none";
+        document.getElementById("addressBlock").style.display = "none";
+    }
+    function showTutorBlock() {
+        document.getElementById("userBlock").style.display = "none";
+        document.getElementById("userDataBlock").style.display = "none";
+        document.getElementById("seekerBlock").style.display = "none";
+        document.getElementById("tutorBlock").style.display = "block";
+        document.getElementById("addressBlock").style.display = "none";
+    }
+    function showAdressBlock() {
+        document.getElementById("userBlock").style.display = "none";
+        document.getElementById("userDataBlock").style.display = "none";
+        document.getElementById("seekerBlock").style.display = "none";
+        document.getElementById("tutorBlock").style.display = "none";
+        document.getElementById("addressBlock").style.display = "block";
+    }
+
+    function showSelectedBlock() {
+        var tutorRadio = document.getElementById("roleTutor");
+        var seekerRadio = document.getElementById("roleSeeker");
+        var formGroupsT = document.getElementsByClassName("requiredChangeTutor");
+        var formGroupsS = document.getElementsByClassName("requiredChangeSeeker")
+        if (tutorRadio.checked) {
+            for (var i = 0; i < formGroupsS.length; i++) {
+                var inputElements = formGroupsS[i].getElementsByTagName("input");
+                for (var j = 0; j < inputElements.length; j++) {
+                    inputElements[j].removeAttribute("required");
+                }
+            }
+            for (var i = 0; i < formGroupsT.length; i++) {
+                var inputElements = formGroupsT[i].getElementsByTagName("input");
+                for (var j = 0; j < inputElements.length; j++) {
+                    inputElements[j].setAttribute("required", "required");
+                }
+            }
+            showTutorBlock();
+        } else if (seekerRadio.checked) {
+            for (var i = 0; i < formGroupsT.length; i++) {
+                var inputElements = formGroupsT[i].getElementsByTagName("input");
+                for (var j = 0; j < inputElements.length; j++) {
+                    inputElements[j].removeAttribute("required");
+                }
+            }
+            for (var i = 0; i < formGroupsS.length; i++) {
+                var inputElements = formGroupsS[i].getElementsByTagName("input");
+                for (var j = 0; j < inputElements.length; j++) {
+                    inputElements[j].setAttribute("required", "required");
+                }
+            }
+            showSeekerBlock();
+        } else {
+            // Если не выбран ни один тип, предпринять необходимые действия, например, вывести сообщение об ошибке.
+        }
+    }
 </script>
 </body>
 </html>

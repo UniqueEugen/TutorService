@@ -34,8 +34,8 @@ class TutorServiceTest {
     void getAllTutors_ReturnsListOfTutors() {
         // Arrange
         List<Tutor> expectedTutors = new ArrayList<>();
-        expectedTutors.add(new Tutor(1L, "Math", 50.0f, null, new Address(1L, "Country 1", "City 1", "Street 1", "House 1", "Office 1"), new ArrayList<>(), new ArrayList<>()));
-        expectedTutors.add(new Tutor(2L, "Science", 60.0f, null, new Address(), new ArrayList<>(), new ArrayList<>()));
+        expectedTutors.add(new Tutor(1L, "Math", 50.0f, null, new Address(1L, "Country 1", "City 1", "Street 1", "House 1", "Office 1"), new ArrayList<>(), new ArrayList<>(),null));
+        expectedTutors.add(new Tutor(2L, "Science", 60.0f, null, new Address(), new ArrayList<>(), new ArrayList<>(), null));
 
         when(tutorRepo.findAll()).thenReturn(expectedTutors);
 
@@ -50,7 +50,7 @@ class TutorServiceTest {
     void getTutorById_ValidId_ReturnsTutor() {
         // Arrange
         long tutorId = 1L;
-        Tutor expectedTutor = new Tutor(tutorId, "Math", 50.0f,null,  new Address(1L, "Country 1", "City 1", "Street 1", "House 1", "Office 1"), new ArrayList<>(), new ArrayList<>());
+        Tutor expectedTutor = new Tutor(tutorId, "Math", 50.0f,null,  new Address(1L, "Country 1", "City 1", "Street 1", "House 1", "Office 1"), new ArrayList<>(), new ArrayList<>(), null);
 
         when(tutorRepo.findById(tutorId)).thenReturn(Optional.of(expectedTutor));
 
@@ -78,8 +78,8 @@ class TutorServiceTest {
     @Test
     void saveTutor_ReturnsSavedTutor() {
         // Arrange
-        Tutor tutorToSave = new Tutor(1L, "Math", 50.0f, null, new Address(1L, "Country 1", "City 1", "Street 1", "House 1", "Office 1"), new ArrayList<>(), new ArrayList<>());
-        Tutor savedTutor = new Tutor(1L, "Math", 50.0f, null, new Address(1L, "Country 1", "City 1", "Street 1", "House 1", "Office 1"), new ArrayList<>(), new ArrayList<>());
+        Tutor tutorToSave = new Tutor(1L, "Math", 50.0f, null, new Address(1L, "Country 1", "City 1", "Street 1", "House 1", "Office 1"), new ArrayList<>(), new ArrayList<>(), null);
+        Tutor savedTutor = new Tutor(1L, "Math", 50.0f, null, new Address(1L, "Country 1", "City 1", "Street 1", "House 1", "Office 1"), new ArrayList<>(), new ArrayList<>(), null);
 
         when(tutorRepo.save(tutorToSave)).thenReturn(savedTutor);
 
