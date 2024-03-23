@@ -20,6 +20,7 @@ public class HomeController {
     @GetMapping
     public String getTutors(Model model) {
         List<Tutor> tutors = tutorService.getAllTutors();
+        System.out.println(tutors);
         model.addAttribute("tutors", tutors);
         return "homePage";
     }

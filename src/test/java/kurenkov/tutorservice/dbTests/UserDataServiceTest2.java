@@ -3,7 +3,9 @@ package kurenkov.tutorservice.dbTests;
 import kurenkov.tutorservice.entities.*;
 import kurenkov.tutorservice.repositories.UserDataRepository;
 import kurenkov.tutorservice.repositories.UserDataRepository;
+import kurenkov.tutorservice.repositories.UserRepository;
 import kurenkov.tutorservice.services.UserDataService;
+import kurenkov.tutorservice.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -23,12 +25,19 @@ class UserDataServiceTest2 {
     @Mock
     private UserDataRepository userDataRepo;
 
+    @Mock
+    private UserRepository userRepository;
+
+    private UserService userService;
+
     private UserDataService userDataService;
+
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.initMocks(this);
-        userDataService = new UserDataService(userDataRepo);
+        userService = new UserService(userRepository);
+        userDataService = new UserDataService(userDataRepo, userService);
     }
 
     @Test

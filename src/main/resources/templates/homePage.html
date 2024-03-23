@@ -1,51 +1,48 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Онлайн подбор репетиторов</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}">
+    <title>Tutor Search</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <!-- Меню перехода на другие страницы -->
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="#">Главная</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">О нас</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Контакты</a>
-        </li>
+<nav class="navbar navbar-expand navbar-light bg-light">
+    <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
     </ul>
-
-    <!-- Кнопка перехода в личный кабинет -->
-    <a class="btn btn-primary" href="#">Личный кабинет</a>
+    <a class="nav-link ml-auto" href="/account">My Account</a>
 </nav>
 
-<div class="container mt-4">
-    <!-- Форма фильтрации/сортировки -->
+<div class="container">
     <form>
-        <!-- Ваши элементы фильтрации/сортировки -->
+        <!-- Add filter/sort elements here -->
     </form>
 
-    <div class="row mt-4">
-        <!-- Карточки репетиторов -->
-        <div class="col-md-4 mb-4" th:each="tutor : ${tutors}">
-            <div class="card">
-                <img th:src="@{/images/{imageFileName}(imageFileName=${tutor.imageFileName})}" class="card-img-top" alt="Tutor Image">
+    <div class="row">
+        <!-- Iterate over tutors -->
+        <div class="col-md-4" th:each="tutor : ${tutors}">
+            <div class="card mb-4">
                 <div class="card-body">
-                    <h5 class="card-title" th:text="${tutor.name}"></h5>
+                    <h5 class="card-title" th:text="${tutor.specialisation}"></h5>
                     <p class="card-text" th:text="${tutor.description}"></p>
-                    <!-- Дополнительные данные о репетиторе -->
+                    <p class="card-text" th:text="'Country: ' + ${tutor.address.country}"></p>
+                    <p class="card-text" th:text="'City: ' + ${tutor.address.city}"></p>
+                    <p class="card-text" th:text="'Price: $' + ${tutor.price}"></p>
+                </div>
+                <div class="card-img-top" th:if="${tutor.photo != null}">
+                    <img th:src="@{'/photos/' + ${tutor.photo.filename}}" alt="Tutor Photo">
+                </div>
+                <div class="card-img-top" th:unless="${tutor.photo != null}">
+                    <div style="background-color: black; width: 100%; height: 200px;"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.min.js}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -4,10 +4,13 @@ import jakarta.persistence.*;
 import kurenkov.tutorservice.entities.Seeker;
 import kurenkov.tutorservice.entities.Tutor;
 import kurenkov.tutorservice.entities.User;
-import lombok.Data;
+import lombok.*;
 
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDataDTO {
 
     private Long id;

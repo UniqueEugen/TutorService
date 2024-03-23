@@ -3,12 +3,15 @@ package kurenkov.tutorservice.entities.dto;
 import jakarta.persistence.*;
 import kurenkov.tutorservice.entities.Order;
 import kurenkov.tutorservice.entities.OrderChat;
-import lombok.Data;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class SeekerDTO {
 
     private Long id;

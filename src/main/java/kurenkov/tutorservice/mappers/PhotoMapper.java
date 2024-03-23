@@ -4,6 +4,7 @@ import kurenkov.tutorservice.entities.Photo;
 import kurenkov.tutorservice.entities.dto.PhotoDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
@@ -11,8 +12,7 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-@Mapper
-@Component
+@Mapper(componentModel = "spring")
 public interface PhotoMapper {
 
     PhotoMapper INSTANCE = Mappers.getMapper(PhotoMapper.class);

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/registration")
@@ -31,13 +32,22 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserDataDTO userDataDTO) {
+    public ResponseEntity<String> registerUser(@RequestBody UserData userData) {
         try {
-            UserData userData = UserDataMapper.INSTANCE.toUserDataFromDTO(userDataDTO);
+            // Проверка наличия логина в базе данных
+            if (userDataService.isUserLoginExists(userData.getUser().getLogin())) {
+                // Логин уже существует, возвращаем ошибку
+                System.out.println(ResponseEntity.badRequest().body("Login already exists."));
+                return ResponseEntity.badRequest().header("Content-Type", "text/plain").body("Login already exists.");
+            }
+
+            // Логин не существует, сохраняем данные пользователя
             userDataService.saveUserData(userData);
 
             // Возвращаем успешный ответ
-            return ResponseEntity.ok("Registration successful!");
+            return ResponseEntity.ok()
+                    .header("Content-Type", "text/plain")
+                    .body("Registration successful!");
         } catch (Exception e) {
             // Возвращаем ошибку с соответствующим кодом состояния
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed.");

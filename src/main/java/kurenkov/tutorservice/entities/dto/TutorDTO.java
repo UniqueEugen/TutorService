@@ -5,13 +5,16 @@ import kurenkov.tutorservice.entities.Address;
 import kurenkov.tutorservice.entities.Order;
 import kurenkov.tutorservice.entities.OrderChat;
 import kurenkov.tutorservice.entities.Photo;
-import lombok.Data;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TutorDTO {
     private Long id;
 
