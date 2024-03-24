@@ -19,9 +19,9 @@ public class RegistrationController {
     private final UserDataService userDataService;
 
     @Autowired
-    public RegistrationController(UserMapper userMapper, SeekerMapper seekerMapper,
+    public RegistrationController(/*UserMapper userMapper, */SeekerMapper seekerMapper,
                                   AddressMapper addressMapper, TutorMapper tutorMapper,
-                                  UserDataMapper userDataMapper, UserDataService userDataService,
+                                  /*UserDataMapper userDataMapper,*/ UserDataService userDataService,
                                   UserService userService) {
         this.userDataService = userDataService;
     }
@@ -31,6 +31,7 @@ public class RegistrationController {
         return "registry/registrationPage";
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserData userData) {
         try {

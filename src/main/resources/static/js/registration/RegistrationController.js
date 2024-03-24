@@ -25,6 +25,10 @@ angular.module('registrationApp', [])
             var selectedRole = document.querySelector('input[name="role"]:checked');
 
             if (selectedRole && selectedRole.value === "tutor") {
+                userData.user.role = {
+                    id: 1,
+                    name: "TUTOR"
+                }
                 userData.tutor = {
                     specialisation: $scope.tutor.specialisation,
                     price: $scope.tutor.price,
@@ -66,6 +70,10 @@ angular.module('registrationApp', [])
                     userData.tutor.photo=null;
                 }*/
             } else if (selectedRole && selectedRole.value === "seeker") {
+                userData.user.role= {
+                    id: 2,
+                    name: "SEEKER"
+                }
                 userData.seeker = {
                     description: $scope.seeker.description,
                     city: $scope.seeker.city

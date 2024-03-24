@@ -1,3 +1,4 @@
+/*
 package kurenkov.tutorservice.mappers;
 
 import kurenkov.tutorservice.entities.Seeker;
@@ -27,4 +28,4 @@ public interface UserDataMapper {
 
     UserDataDTO toUserDataDTO(UserData source);
 
-}
+}*/

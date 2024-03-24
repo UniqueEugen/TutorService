@@ -4,6 +4,33 @@
     <meta charset="UTF-8">
     <title>Tutor Search</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .card {
+            min-height: 100%;
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-text {
+            flex-grow: 1;
+            overflow: auto;
+        }
+
+        .card-description {
+            flex-shrink: 0;
+            height: 25%;
+        }
+
+        .no-photo {
+            background-image: url('../static/pictures/NoPhoto.png');
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 200px;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand navbar-light bg-light">
@@ -26,17 +53,20 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${tutor.specialisation}"></h5>
-                    <p class="card-text" th:text="${tutor.description}"></p>
-                    <p class="card-text" th:text="'Country: ' + ${tutor.address.country}"></p>
-                    <p class="card-text" th:text="'City: ' + ${tutor.address.city}"></p>
-                    <p class="card-text" th:text="'Price: $' + ${tutor.price}"></p>
+                    <div class="card-text">
+                        <p class="card-description" th:if="${tutor.description}" th:text="${tutor.description}"></p>
+                        <div th:unless="${tutor.description}" style="height: 25%;"></div>
+                        <div>
+                            <p th:text="'Country: ' + ${tutor.address.country}"></p>
+                            <p th:text="'City: ' + ${tutor.address.city}"></p>
+                            <p th:text="'Price: $' + ${tutor.price}"></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-img-top" th:if="${tutor.photo != null}">
+                <div class="card-img-top" th:if="${tutor.photo}">
                     <img th:src="@{'/photos/' + ${tutor.photo.filename}}" alt="Tutor Photo">
                 </div>
-                <div class="card-img-top" th:unless="${tutor.photo != null}">
-                    <div style="background-color: black; width: 100%; height: 200px;"></div>
-                </div>
+                <div class="card-img-top no-photo" th:unless="${tutor.photo}"></div>
             </div>
         </div>
     </div>

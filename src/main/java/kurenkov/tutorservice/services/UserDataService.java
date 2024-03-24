@@ -4,6 +4,7 @@ import kurenkov.tutorservice.repositories.UserDataRepository;
 import kurenkov.tutorservice.entities.UserData;
 import kurenkov.tutorservice.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,12 +16,16 @@ public class UserDataService {
 
     private final UserService userService;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
     public UserDataService(UserDataRepository userDataRepository,
-                           UserService userService) {
+                           UserService userService,
+                           PasswordEncoder passwordEncoder) {
 
         this.userDataRepository = userDataRepository;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserData> getAllUserData() {
@@ -32,6 +37,9 @@ public class UserDataService {
     }
 
     public UserData saveUserData(UserData userData) {
+        String password = passwordEncoder.encode(userData.getUser().getPassword());
+        userData.getUser().setPassword(password);
+
         return userDataRepository.save(userData);
     }
 

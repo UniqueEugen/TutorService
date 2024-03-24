@@ -1,6 +1,7 @@
 package kurenkov.tutorservice.dbTests;
 
 import kurenkov.tutorservice.entities.*;
+import kurenkov.tutorservice.repositories.RoleRepository;
 import kurenkov.tutorservice.repositories.UserDataRepository;
 import kurenkov.tutorservice.repositories.UserDataRepository;
 import kurenkov.tutorservice.repositories.UserRepository;
@@ -10,13 +11,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -28,6 +28,9 @@ class UserDataServiceTest2 {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     private UserService userService;
 
     private UserDataService userDataService;
@@ -36,8 +39,8 @@ class UserDataServiceTest2 {
     @BeforeEach
     void setup() {
         MockitoAnnotations.initMocks(this);
-        userService = new UserService(userRepository);
-        userDataService = new UserDataService(userDataRepo, userService);
+        userService = new UserService(userRepository, passwordEncoder);
+        userDataService = new UserDataService(userDataRepo, userService, passwordEncoder);
     }
 
     @Test
@@ -45,7 +48,7 @@ class UserDataServiceTest2 {
         // Arrange
         List<UserData> expectedUserDataList = new ArrayList<>();
         Long userId = 1L;
-        User user = new User(userId, "testuser", "password");
+        User user = new User(userId, "testuser", "password", null, null);
         OrderChat chat1 = new OrderChat(1L, "Chat 1", new Date(1234567890L), new Time(9876543210L));
         OrderChat chat2 = new OrderChat(2L, "Chat 2", new Date(9876543210L), new Time(1234567890L));
         List<OrderChat> chats = Arrays.asList(chat1, chat2);
@@ -111,8 +114,8 @@ class UserDataServiceTest2 {
     @Test
     void saveUserData_ReturnsSavedUserData() {
         // Arrange
-        UserData userDataToSave = new UserData(1L, "John", "Doe", null, "john@example.com", "1234567890", 10, null, null, null);
-        UserData savedUserData = new UserData(1L, "John", "Doe", null,"john@example.com",  "1234567890", 10, null, null, null);
+        UserData userDataToSave = new UserData(1L, "John", "Doe", null, "john@example.com", "1234567890", 10, null, null, new User(1L, "pass", "1234", null, new HashSet<Role>()));
+        UserData savedUserData = new UserData(1L, "John", "Doe", null,"john@example.com",  "1234567890", 10, null, null, new User(1L, "pass", "1234", null, new HashSet<Role>()));
 
         when(userDataRepo.save(userDataToSave)).thenReturn(savedUserData);
 
