@@ -29,4 +29,6 @@ public class AddressDTO {
 
     private String office;
 
+   /* private boolean isMicro;*/
+
 }

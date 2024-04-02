@@ -12,6 +12,7 @@ import java.sql.Time;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +27,12 @@ public class Order {
 
     @Column(name = "status", nullable = false)
     private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "tutor_order")
+    private Tutor tutor;
+
+    @ManyToOne
+    @JoinColumn(name = "seeker_order")
+    private Seeker seeker;
 }

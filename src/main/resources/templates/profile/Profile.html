@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html ng-app="profileApp" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="ru">
+<head>
+    <title>Профиль репетитора</title>
+    <link rel="icon" type="image/x-icon" href="/../static/pictures/faviconCircle.ico">
+    <link rel="stylesheet" href="../../static/css/common/Loader.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=39bf093c-b75b-45ff-8bf6-649c328f9dce&lang=ru_RU" type="text/javascript">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/ru.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <script src="../../static/js/Profile/Cnt.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .no-photo {
+            background-image: url('../../static/pictures/NoPhoto.png');
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 200px;
+        }
+    </style>
+</head>
+<body ng-controller="ProfileController">
+<!-- Прелоадер -->
+<div class="preloader">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <img src="../../static/pictures/preloaders/preloader.gif" alt="Loading animation">
+    </div>
+</div>
+<nav class="navbar navbar-expand navbar-light bg-light">
+    <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+    </ul>
+    <a class="nav-link ml-auto" href="/account">My Account</a>
+</nav>
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Модальное окно</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modalText">Текст модального окна</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" ng-click="redirectOnAccount()" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-5">
+    <div class="row d-flex align-items-stretch">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Данные репетитора</h5>
+                    <div class="card-img-top" th:if="${profile.photo}">
+                        <img th:src="@{'/photos/' + ${profile.photo.filename}}" alt="Tutor Photo">
+                    </div>
+                    <div class="card-img-top no-photo" th:unless="${profile.photo}"></div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Имя: <span th:text="${profile.name}"></span></li>
+                        <li class="list-group-item">Фамилия: <span th:text="${profile.surname}"></span></li>
+                        <li class="list-group-item">Отчество: <span th:text="${profile.secName}"></span></li>
+                        <li class="list-group-item">Специализация: <span th:text="${profile.specialisation}"></span></li>
+                        <li class="list-group-item">Цена: <span th:text="${profile.price}"></span></li>
+                        <li class="list-group-item">
+                            <span th:if="${profile.description}" th:text="${profile.description}"></span>
+                            <span th:unless="${profile.description}">Я стесняюсь писать о себе поэтому нет описания)</span>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="btn btn-primary btn-block text-center"
+                               th:href="@{'/chat?id=' + ${profile.id}}">Начать чат с репетитором</a>
+                        </li>
+                        <li class="list-group-item">
+                            <button class="btn btn-success btn-block text-center" onclick="openModal()"
+                               id="btnOformitBron">Оформить бронь</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card d-flex flex-column h-100">
+                <div class="card-body flex-grow-0">
+                    <h5 class="card-title">Адрес</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Страна: <span id="country" th:text="${profile.address.country}"></span></li>
+                        <li class="list-group-item">Город: <span id="city" th:text="${profile.address.city}"></span></li>
+                        <li class="list-group-item">
+                            <span th:if="${profile.address.street.contains('микрора')}">Микрорайон:</span>
+                            <span th:unless="${profile.address.street.contains('микрора')}">Улица:</span>
+                            <span id="street" th:text="${profile.address.street}"></span>
+                        </li>
+                        <li class="list-group-item">Дом: <span id="house" th:text="${profile.address.house}"></span></li>
+                        <li class="list-group-item">Офис: <span th:text="${profile.address.office}"></span></li>
+                    </ul>
+                </div>
+                <div class="card-footer flex-grow-1">
+                    <div id="map" style="height: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Модальное окно -->
+<div id="myModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Выберите дату и время</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="input-group date" id="datetimepicker" data-target-input="nearest">
+                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" />
+                        <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="saveDateAndTime()">Отправить</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="bg-light py-4 mt-5">
+    <div class="container text-center">
+        <p class="mb-0">&copy; 2024 Tutor Search. All rights reserved.</p>
+        <p class="mb-0">Designed and developed by Yauheni Kurankou.</p>
+    </div>
+</footer>
+<script src="../../static/js/common/Preloader.js"></script>
+<script src="../../static/js/Profile/NewOrderScript.js"></script>
+<script src="../../static/js/Profile/YMaps.js"></script>
+</body>
+</html>

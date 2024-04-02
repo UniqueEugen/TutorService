@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>User Registration</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="/../static/pictures/faviconCircle.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
     <script src="../../static/js/registration/RegistrationController.js"></script>
     <script src="../../static/js/registration/NavigationController.js"></script>
@@ -25,7 +26,7 @@
     </style>
 </head>
 <body ng-controller="RegistrationController">
-<div class="container">
+<div class="container content-container">
     <h1>User Registration</h1>
 
     <!-- Форма регистрации -->
@@ -37,23 +38,23 @@
             </div>
             <div class="form-group">
                 <label for="surname">Фамилия:</label>
-                <input type="text" class="form-control" id="surname" ng-model="userData.surname" required>
+                <input type="text" class="form-control" id="surname" ng-model="userData.surname" minlength="2" maxlength="100" required>
             </div>
             <div class="form-group">
                 <label for="firstName">Имя:</label>
-                <input type="text" class="form-control" id="firstName" ng-model="userData.firstName" required>
+                <input type="text" class="form-control" id="firstName" ng-model="userData.firstName" minlength="2" maxlength="100" required>
             </div>
             <div class="form-group">
                 <label for="lastName">Отчество:</label>
-                <input type="text" class="form-control" id="lastName" ng-model="userData.secondName">
+                <input type="text" class="form-control" id="lastName" ng-model="userData.secondName" minlength="2" maxlength="100">
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" class="form-control" id="email" ng-model="userData.email" required>
             </div>
             <div class="form-group">
-                <label for="phone">Телефон</label>
-                <input type="text" class="form-control" id="phone" ng-model="userData.phone" required>
+                <label for="phone">Телефон: (10-12 цифр)</label>
+                <input type="text" class="form-control" id="phone" ng-model="userData.phone" pattern="[0-9]{10,12}" required>
             </div>
             <div class="form-group">
                 <label for="age">Возраст:</label>
@@ -71,7 +72,7 @@
                     Искатель репетитора
                 </label>
             </div>
-            <button type="button" onclick="next()">Далее</button>
+            <button class="btn btn-secondary" type="button" onclick="next()">Далее</button>
         </div>
         <div class="registration-block" id="seekerBlock">
             <div class="form-group requiredChangeSeeker">
@@ -80,15 +81,15 @@
             </div>
             <div class="form-group requiredChangeSeeker">
                 <label for="cityS">Город:</label>
-                <input type="text" class="form-control" id="cityS" ng-model="seeker.city" required>
+                <input type="text" class="form-control" id="cityS" ng-model="seeker.city" minlength="2" maxlength="100" required>
             </div>
-            <button type="button" onclick="previous()" class="back-button">Назад</button>
-            <button type="button" onclick="next()">Далее</button>
+            <button  type="button" onclick="previous()" class="back-button">Назад</button>
+            <button class="btn btn-secondary" type="button" onclick="next()">Далее</button>
         </div>
         <div class="registration-block" id="tutorBlock">
             <div class="form-group requiredChangeTutor">
                 <label for="specialisation">Специализация:</label>
-                <input type="text" class="form-control" id="specialisation" ng-model="tutor.specialisation" required>
+                <input type="text" class="form-control" id="specialisation" ng-model="tutor.specialisation" minlength="2" maxlength="100" required>
             </div>
             <div class="form-group requiredChangeTutor">
                 <label for="price">Цена:</label>
@@ -103,49 +104,75 @@
                 <textarea id="description" class="form-control" ng-model="tutor.description" maxlength="250"></textarea>
             </div>
             <button type="button" onclick="previous()" class="back-button">Назад</button>
-            <button type="button" onclick="next()">Далее</button>
+            <button class="btn btn-secondary" type="button" onclick="next()">Далее</button>
         </div>
         <div class="registration-block" id="addressBlock">
             <h3>Address Information</h3>
             <div class="form-group requiredChangeTutor">
                 <label for="country">Cтрана:</label>
-                <input type="text" class="form-control" id="country" ng-model="address.country" required>
+                <input type="text" class="form-control" id="country" ng-model="address.country" minlength="4" maxlength="100" required>
             </div>
             <div class="form-group requiredChangeTutor">
                 <label for="city">Город:</label>
-                <input type="text" class="form-control" id="city" ng-model="address.city" required>
+                <input type="text" class="form-control" id="city" ng-model="address.city" minlength="2" maxlength="100" required>
             </div>
             <div class="form-group requiredChangeTutor">
                 <label for="street">Улица (микрорайон):</label>
-                <input type="text" class="form-control" id="street" ng-model="address.street" required>
+                <!--<label for="location">Выберите:</label>
+                <select class="form-control" id="location" ng-model="address.isMicro" required>
+                    <option value=1>Микрорайон</option>
+                    <option value=0>Улица</option>
+                </select>-->
+                <input type="text" class="form-control" id="street" ng-model="address.street" minlength="1" maxlength="100" required
+                       placeholder="Если адрес микрорайон вводите `микрорайон и название`">
             </div>
             <div class="form-group requiredChangeTutor">
                 <label for="house">Дом:</label>
-                <input type="text" class="form-control" id="house" ng-model="address.house" required>
+                <input type="text" class="form-control" id="house" ng-model="address.house" minlength="1" maxlength="20" required>
             </div>
             <div class="form-group requiredChangeTutor">
                 <label for="office">Офис (квартира):</label>
-                <input type="text" class="form-control" id="office" ng-model="address.office" required>
+                <input type="text" class="form-control" id="office" ng-model="address.office" minlength="1" maxlength="10" required>
             </div>
             <button type="button" onclick="previous()" class="back-button">Назад</button>
-            <button type="button" onclick="next()">Далее</button>
+            <button class="btn btn-secondary" type="button" onclick="next()">Далее</button>
         </div>
         <div class="registration-block" id="userBlock">
             <h3>Account Information</h3>
             <div class="form-group">
                 <label for="username">Login:</label>
-                <input type="text" class="form-control" id="username" ng-model="user.username" required>
+                <input type="text" class="form-control" id="username" ng-model="user.username" minlength="4" maxlength="30" required>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password" ng-model="user.password" required>
+                <input type="password" class="form-control" id="password" ng-model="user.password" minlength="4" maxlength="12" required>
+            </div>
+            <div ng-show="showFormErrors">
+                <p>Пожалуйста, исправьте ошибки в форме.</p>
+                <!-- Дополнительная разметка для отображения сообщений об ошибках -->
             </div>
             <button type="button" onclick="previous()" class="back-button">Назад</button>
             <button type="submit" class="btn btn-primary">Register</button>
         </div>
     </form>
 </div>
+<footer class="bg-light py-4 mt-5">
+    <div class="container text-center">
+        <p class="mb-0">&copy; 2024 Tutor Search. All rights reserved.</p>
+        <p class="mb-0">Designed and developed by Yauheni Kurankou.</p>
+    </div>
+</footer>
+<script>
+    // Calculate and set the footer height
+    window.addEventListener('load', function() {
+        var footer = document.querySelector('footer');
+        var footerHeight = footer.offsetHeight;
 
+        var contentContainer = document.querySelector('.content-container');
+        contentContainer.style.minHeight = `calc(100vh - ${footerHeight}px)`;
+        contentContainer.style.marginBottom = `${footerHeight}px`;
+    });
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>

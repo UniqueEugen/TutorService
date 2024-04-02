@@ -1,0 +1,3 @@
+ALTER TABLE orders
+    ADD COLUMN seeker_id BIGSERIAL,
+    ADD COLUMN tutor_id BIGSERIAL;

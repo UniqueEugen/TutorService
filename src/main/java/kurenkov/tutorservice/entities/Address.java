@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +30,8 @@ public class Address {
 
     @Column(name = "office", nullable = false)
     private String office;
+
+    /*@Column(name = "is_microrayon", nullable = true)
+    private boolean isMicro;*/
 
 }

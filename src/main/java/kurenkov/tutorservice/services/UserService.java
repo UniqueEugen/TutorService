@@ -55,4 +55,8 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return usersRepository.findByLogin(username);
     }
+
+    public User findUserByUsername(String username){
+        return usersRepository.findByLogin(username);
+    }
 }

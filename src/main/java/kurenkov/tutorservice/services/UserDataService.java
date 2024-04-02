@@ -1,5 +1,6 @@
 package kurenkov.tutorservice.services;
 
+import kurenkov.tutorservice.entities.dto.TutorDataDTO;
 import kurenkov.tutorservice.repositories.UserDataRepository;
 import kurenkov.tutorservice.entities.UserData;
 import kurenkov.tutorservice.repositories.UserRepository;
@@ -49,5 +50,11 @@ public class UserDataService {
 
     public boolean isUserLoginExists(String login){
         return userService.isUserLoginExists(login);
+    }
+
+    public List<TutorDataDTO> namesAndSurnamesWithTutor() { return (userDataRepository.findNamesAndSurnamesWithTutor());};
+
+    public UserData loadUserDataByUsername(String username){
+        return getUserDataById(userService.findUserByUsername(username).getId());
     }
 }

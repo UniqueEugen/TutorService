@@ -1,5 +1,6 @@
 package kurenkov.tutorservice.services;
 
+import kurenkov.tutorservice.entities.dto.TutorDataDTO;
 import kurenkov.tutorservice.repositories.TutorRepository;
 import kurenkov.tutorservice.entities.Tutor;
 import org.springframework.stereotype.Service;

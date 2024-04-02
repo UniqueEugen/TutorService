@@ -1,28 +1,19 @@
 package kurenkov.tutorservice.config;
 
-import jakarta.servlet.DispatcherType;
-import kurenkov.tutorservice.services.UserService;
+import kurenkov.tutorservice.config.headers.CustomHeaderWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.AuthorizationFilter;
-import org.springframework.security.web.authentication.AuthenticationFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.header.HeaderWriter;
 
 import static jakarta.servlet.DispatcherType.ERROR;
 import static jakarta.servlet.DispatcherType.FORWARD;
@@ -40,24 +31,46 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public HeaderWriter headerWriter() {
+        return new CustomHeaderWriter();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        /*DelegatingServerLogoutHandler logoutHandler = new DelegatingServerLogoutHandler(
+                new SecurityContextServerLogoutHandler(), new WebSessionServerLogoutHandler()
+        );*/
 
         return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
                         .requestMatchers("/home/**").permitAll()
-                        .requestMatchers("/registration/**").permitAll()
-                        .requestMatchers("/profile/**",
-                                "/account/**").authenticated()
-                        .requestMatchers("account/tutor/order/**",
-                                "account/seeker/order/**",
-                                "/profile/newOrder/**").fullyAuthenticated()
-                        .requestMatchers("account/tutor/**").hasRole("TUTOR")
-                        .requestMatchers("account/seeker/**").hasRole("SEEKER")
+                        .requestMatchers("/registration/**").anonymous()
+                        .requestMatchers("/profile/**","/account/**").authenticated()
+                        .requestMatchers("/account/tutor/**").hasRole("TUTOR")
+                        .requestMatchers("/account/seeker/**").hasRole("SEEKER")
                         .requestMatchers(HttpMethod.GET, "/forum").permitAll()
                         .requestMatchers(HttpMethod.POST, "/forum/**").authenticated()
+                        .requestMatchers("/static/pictures/favicon.ico").permitAll()
                         .requestMatchers("/**").permitAll()
-                ).csrf(AbstractHttpConfigurer::disable)
+                        .requestMatchers("/pictures/**").permitAll()
+                )
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
+                .formLogin(form ->form
+                        .loginPage("/login").permitAll()
+                        .defaultSuccessUrl("/home").permitAll()
+                )
+                .logout((logout)-> logout
+                        .logoutSuccessUrl("/home").permitAll()
+                )
+                .exceptionHandling(ex -> ex
+                        .accessDeniedPage("/404")
+                )
+                .headers(headers -> headers
+                        .addHeaderWriter(headerWriter()))
                 .build();
     }
 

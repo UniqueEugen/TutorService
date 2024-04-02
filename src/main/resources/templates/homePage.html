@@ -2,8 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/../static/pictures/faviconCircle.ico">
     <title>Tutor Search</title>
+    <link rel="stylesheet" href="../static/css/common/Loader.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+          integrity="sha384-xrRl7bB7pNABbLjofy4+7V74Q5ihBZ2iDwFhcnGKak6gXjz9otDyM9ypv1Z1rL7C" crossorigin="anonymous">-->
     <style>
         .card {
             min-height: 100%;
@@ -30,9 +34,19 @@
             width: 100%;
             height: 200px;
         }
+
+        body > *:not(footer) {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
+<!-- Прелоадер -->
+<div class="preloader">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <img src="../static/pictures/preloaders/preloader.gif" alt="Loading animation">
+    </div>
+</div>
 <nav class="navbar navbar-expand navbar-light bg-light">
     <ul class="navbar-nav">
         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
@@ -41,25 +55,56 @@
     </ul>
     <a class="nav-link ml-auto" href="/account">My Account</a>
 </nav>
-
 <div class="container">
-    <form>
-        <!-- Add filter/sort elements here -->
-    </form>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="filter-sort-panel">
+                <button class="btn btn-link filter-sort-toggle" type="button" data-toggle="collapse" data-target="#filterSortPanel" aria-expanded="false" aria-controls="filterSortPanel">
+                    <i class="fas fa-cog"></i> Filter/Sort
+                </button>
+                <div class="collapse" id="filterSortPanel">
+                    <form id="sortForm">
+                        <div class="form-group">
+                            <label for="sortOrder">Sort Order:</label>
+                            <select class="form-control" id="sortOrder">
+                                <option value="asc">Price: Low to High</option>
+                                <option value="desc">Price: High to Low</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterField">Filter By:</label>
+                            <select class="form-control" id="filterField">
+                                <option value="city">City</option>
+                                <option value="specialization">Specialization</option>
+                                <option value="lastName">Last Name</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterValue">Filter Value:</label>
+                            <input type="text" class="form-control" id="filterValue">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <!-- Iterate over tutors -->
-        <div class="col-md-4" th:each="tutor : ${tutors}">
-            <div class="card mb-4">
+        <div class="col-md-4 mt-3" th:each="tutor : ${tutors}">
+            <div class="card mb-4" th:onclick="'redirectToTutorProfile(' + ${tutor.id} + ')'"
+                 onmouseover="showProfileText(event)" onmouseout="hideProfileText()" style="cursor: pointer;">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${tutor.specialisation}"></h5>
                     <div class="card-text">
                         <p class="card-description" th:if="${tutor.description}" th:text="${tutor.description}"></p>
                         <div th:unless="${tutor.description}" style="height: 25%;"></div>
                         <div>
+                            <p th:text="'Name: ' + ${tutor.surname} + ' ' + ${tutor.name}"></p>
                             <p th:text="'Country: ' + ${tutor.address.country}"></p>
                             <p th:text="'City: ' + ${tutor.address.city}"></p>
-                            <p th:text="'Price: $' + ${tutor.price}"></p>
+                            <p id="price" th:text="'Price: $' + ${tutor.price}"></p>
                         </div>
                     </div>
                 </div>
@@ -68,10 +113,37 @@
                 </div>
                 <div class="card-img-top no-photo" th:unless="${tutor.photo}"></div>
             </div>
+            <p class="card-text">
+                <small id="profileText" style="display: none;">К профилю</small>
+            </p>
         </div>
     </div>
 </div>
 
+<footer class="bg-light py-4 mt-4">
+    <div class="container text-center">
+        <p class="mb-0">&copy; 2024 Tutor Search. All rights reserved.</p>
+        <p class="mb-0">Designed and developed by Yauheni Kurankou.</p>
+    </div>
+</footer>
+<script>
+    function redirectToTutorProfile(id) {
+        window.location.href = '/profile/getTutor?id=' + id;
+    }
+    function showProfileText(event) {
+        var profileText = document.getElementById('profileText');
+        profileText.style.display = 'inline';
+        profileText.style.left = (event.clientX + 10) + 'px';
+        profileText.style.top = (event.clientY - 20) + 'px';
+    }
+
+    function hideProfileText() {
+        var profileText = document.getElementById('profileText');
+        profileText.style.display = 'none';
+    }
+</script>
+<script src="../static/js/common/Preloader.js"></script>
+<script src="../static/js/home/FiltersAndSort.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 </body>
