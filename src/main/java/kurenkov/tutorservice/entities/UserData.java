@@ -3,6 +3,8 @@ package kurenkov.tutorservice.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.lang.reflect.Field;
+
 @Entity
 @Table(name = "user_data")
 @Getter
@@ -39,4 +41,24 @@ public class UserData {
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private User user;
+
+
+    public UserData updateUserData(UserData userData) {
+        Field[] fields = UserData.class.getDeclaredFields();
+
+        for (Field field : fields) {
+            String fieldName = field.getName();
+            if (!fieldName.equals("tutor") && !fieldName.equals("seeker") && !fieldName.equals("user") && !fieldName.equals("id")) {
+                field.setAccessible(true); // Разрешаем доступ к приватным полям
+                try {
+                    Object value = field.get(userData);
+                    field.set(this, value);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return this;
+    }
 }

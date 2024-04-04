@@ -42,20 +42,20 @@ public class WebSecurityConfig {
         );*/
 
         return http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
                         .requestMatchers("/home/**").permitAll()
+                        .requestMatchers("/photo/**").permitAll()
                         .requestMatchers("/registration/**").anonymous()
-                        .requestMatchers("/profile/**","/account/**").authenticated()
-                        .requestMatchers("/account/tutor/**").hasRole("TUTOR")
-                        .requestMatchers("/account/seeker/**").hasRole("SEEKER")
+                        .requestMatchers("/profile/**","/account/tutor/**", "/account/seeker/**", "/getcurrentpage").authenticated()
+                        /*.requestMatchers("/account/tutor/**").hasRole("TUTOR")
+                        .requestMatchers("/account/seeker/**").hasRole("SEEKER")*/
                         .requestMatchers(HttpMethod.GET, "/forum").permitAll()
                         .requestMatchers(HttpMethod.POST, "/forum/**").authenticated()
                         .requestMatchers("/static/pictures/favicon.ico").permitAll()
                         .requestMatchers("/**").permitAll()
-                        .requestMatchers("/pictures/**").permitAll()
                 )
-                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )

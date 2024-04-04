@@ -40,6 +40,10 @@ angular.module('registrationApp', [])
                         office: $scope.address.office,
                     }
                 };
+                userData.seeker = {
+                    description: $scope.tutor.description,
+                    city: $scope.address.city
+                }
             } else if (selectedRole && selectedRole.value === "seeker") {
                 userData.user.roles = [{
                     id: 1,

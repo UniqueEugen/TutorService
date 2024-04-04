@@ -27,13 +27,17 @@
             height: 25%;
         }
 
-        .no-photo {
-            background-image: url('../static/pictures/NoPhoto.png');
+        .photo{
             background-size: cover;
             background-position: center;
             width: 100%;
-            height: 200px;
+            height: 250px;
         }
+
+        .no-photo {
+            background-image: url('../static/pictures/NoPhoto.png');
+        }
+
 
         body > *:not(footer) {
             margin-bottom: 5px;
@@ -53,7 +57,7 @@
         <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
         <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
     </ul>
-    <a class="nav-link ml-auto" href="/account">My Account</a>
+    <a class="nav-link ml-auto" href="/getcurrentpage">My Account</a>
 </nav>
 <div class="container">
     <div class="row">
@@ -109,9 +113,9 @@
                     </div>
                 </div>
                 <div class="card-img-top" th:if="${tutor.photo}">
-                    <img th:src="@{'/photos/' + ${tutor.photo.filename}}" alt="Tutor Photo">
+                    <div class="photo" th:style="'background-image: url(\'/photo/getImage/' + ${tutor.photo.id} + '\');'"></div>
                 </div>
-                <div class="card-img-top no-photo" th:unless="${tutor.photo}"></div>
+                <div class="card-img-top photo no-photo" th:unless="${tutor.photo}"></div>
             </div>
             <p class="card-text">
                 <small id="profileText" style="display: none;">К профилю</small>

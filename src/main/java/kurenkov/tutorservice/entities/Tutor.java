@@ -3,6 +3,7 @@ package kurenkov.tutorservice.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,4 +42,25 @@ public class Tutor {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "photo_id", referencedColumnName = "id", nullable = true)
     private Photo photo;
+
+
+    public Tutor updateTutorData(Tutor newTutorData) {
+        Field[] fields = Tutor.class.getDeclaredFields();
+
+        for (Field field : fields) {
+            String fieldName = field.getName();
+            if (!fieldName.equals("address") && !fieldName.equals("photo") &&  !fieldName.equals("id")
+                    &&  !fieldName.equals("tutorOrders") &&  !fieldName.equals("chats")) {
+                field.setAccessible(true); // Разрешаем доступ к приватным полям
+                try {
+                    Object value = field.get(newTutorData);
+                    field.set(this, value);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return this;
+    }
 }

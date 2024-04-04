@@ -41,7 +41,6 @@ public class RegistrationController {
                 System.out.println(ResponseEntity.badRequest().body("Login already exists."));
                 return ResponseEntity.badRequest().header("Content-Type", "text/plain").body("Login already exists.");
             }
-
             // Логин не существует, сохраняем данные пользователя
             userDataService.saveUserData(userData);
 

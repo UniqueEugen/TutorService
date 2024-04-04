@@ -1,0 +1,33 @@
+@startuml
+start
+: userData = {};
+: redirectOnAccount();
+if (Успешное перенаправление?) then (Да)
+  : Перенаправление на /home;
+else (Нет)
+  stop
+endif
+: saveDateAndTime();
+: userData = {
+    date: collectDateData(),
+    time: collectTimeData(),
+    tutorId: getID()
+};
+: console.log(userData);
+if (Успешный POST-запрос?) then (Да)
+  : console.log("success");
+  : console.log(response.data);
+  : closeModel(response.data);
+else (Нет)
+  : console.log("error");
+  : console.log(error);
+  if (Ошибка совпадения логина?) then (Да)
+    : console.log("Login already exists. Please choose a different login.");
+    : handleLoginError();
+  else (Нет)
+    : Другие типы ошибок;
+    stop
+  endif
+endif
+stop
+@enduml

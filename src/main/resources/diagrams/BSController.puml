@@ -1,0 +1,38 @@
+@startuml
+start
+: model.addAttribute("profile", getTutorProfileById(25L));
+: return "profile/Profile";
+: tutorProfile(@RequestParam("id") Long id, Model model);
+if (Параметр 'id' есть?) then (Да)
+  : Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+  : UserData currentUser = userDataService.loadUserDataByUsername(authentication.getName());
+  : System.out.println(currentUser.getSeeker().getSeekerOrders());
+  : TutorDataDTO profile = getTutorProfileById(id);
+  : System.out.println(profile);
+  : model.addAttribute("profile", profile);
+  : return "profile/Profile";
+else (Нет)
+  stop
+endif
+: tuft();
+: return "profile/dgdg";
+: createOrder(@RequestBody OrderData orderData);
+: Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+if (Успешная аутентификация?) then (Да)
+  : UserData currentUser = userDataService.loadUserDataByUsername(authentication.getName());
+  : Order order = OrderMapper.INSTANCE.toOrder(orderData);
+  : currentUser.getSeeker().getSeekerOrders().add(order);
+  : UserData tutor = userDataService.getUserDataById(orderData.tutorId);
+  : tutor.getTutor().getTutorOrders().add(order);
+  : orderService.saveOrder(order);
+  : seekerService.saveSeeker(currentUser.getSeeker());
+  : tutorService.saveTutor(tutor.getTutor());
+  : responseMessage = "The order has been successfully saved and is awaiting confirmation by the tutor!";
+  : return ResponseEntity.ok().header("Content-Type", "text/plain").body(responseMessage);
+else (Нет)
+  : return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed.");
+endif
+: getTutorProfileById(Long id);
+: return TutorDataMapper.INSTANCE.userDataToTutorDataDTO(userDataService.getUserDataById(id));
+stop
+@enduml

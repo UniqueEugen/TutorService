@@ -3,6 +3,7 @@ package kurenkov.tutorservice.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "photos")
@@ -23,4 +24,5 @@ public class Photo {
     @Lob
     @Column(name = "content")
     private byte[] content;
+
 }

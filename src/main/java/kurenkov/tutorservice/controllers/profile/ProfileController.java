@@ -76,7 +76,8 @@ public class ProfileController {
                     .body(responseMessage);
         }catch (Exception e) {
             // Возвращаем ошибку с соответствующим кодом состояния
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("Content-Type",
+                    "text/plain").body("Order creation failed");
         }
 
     }

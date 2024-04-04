@@ -34,4 +34,8 @@ public class Address {
     /*@Column(name = "is_microrayon", nullable = true)
     private boolean isMicro;*/
 
+    public Address updateAdress(Address newAddress){
+        newAddress.setId(this.getId());
+        return newAddress;
+    }
 }

@@ -70,4 +70,10 @@ public class User implements UserDetails {
     public String getUsername() {
         return login;
     }
+
+    public User updateUserData(User oldUser){
+        oldUser.setLogin(this.getLogin());
+        oldUser.setPassword(this.password);
+        return (oldUser);
+    }
 }

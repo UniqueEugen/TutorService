@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru" ng-app="tutorApp">
+<head>
+    <title>Личный кабинет</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Подключение библиотеки Croppie с помощью CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- Подключение скриптов Bootstrap и Cropper.js -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <!-- Подключение скрипта Croppie -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <script src="../../static/js/account/tutorAccountController.js"></script>
+    <style>
+        .photo{
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 300px;
+        }
+
+        .no-photo {
+            background-image: url('../../static/pictures/NoPhoto.png');
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand navbar-light bg-light">
+    <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+    </ul>
+    <a class="nav-link ml-auto" href="/getcurrentpage">My Account</a>
+</nav>
+<div class="container content-container" ng-controller="tutorAccountController">
+    <!-- Модальное окно для обрезки -->
+    <div id="crop-modal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="image-preview"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="crop-button">Crop</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1>Личный кабинет</h1>
+    <div class="card">
+        <div class="card-header">Ваше фото</div>
+        <div class="card-body">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="card-img-top">
+                        <div class="photo" th:if="${account.tutor.photo}" th:style="'background-image: url(\'/photo/getImage/' + ${account.tutor.photo.id} + '\');'"></div>
+                        <div class="photo no-photo" th:unless="${account.tutor.photo}"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Поле выбора файла -->
+            <div class="mb-3">
+                <input class="form-control" type="file" id="image-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Форма для логина и пароля -->
+            <form ng-submit="updateUser()">
+                <h3>Данные аккаунта</h3>
+                <div class="form-group">
+                    <label for="username">Логин</label>
+                    <input type="text" class="form-control" id="username" name="username" required  th:value="${account.user.username}" ng-readonly="!isEditingUserForm">
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" class="form-control" id="password" name="password" required ng-readonly="!isEditingUserForm">
+                </div>
+
+                <button type="button" class="btn btn-primary" ng-hide="isEditingUserForm" ng-click="editFormUser()">Изменить данные аккаунта</button>
+                <button type="submit" class="btn btn-success" ng-show="isEditingUserForm">Сохранить</button>
+                <button type="button" class="btn btn-secondary" ng-show="isEditingUserForm" ng-click="cancelEditUser()">Отменить</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <!-- Форма для имени, фамилии, отчества, возраста, email и телефона -->
+            <form ng-submit="updateUserData()">
+                <h3>Персональные данные</h3>
+                <div class="form-group">
+                    <label for="firstName">Имя</label>
+                    <input type="text" class="form-control" id="firstName" name="name" required th:value="${account.name}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Фамилия</label>
+                    <input type="text" class="form-control"  id="lastName" name="surname" required th:value="${account.surname}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="middleName">Отчество</label>
+                    <input type="text" class="form-control" id="middleName"  name="secName" th:value="${account.secName}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="age">Возраст</label>
+                    <input type="number" class="form-control" id="age" name="age"  required th:value="${account.age}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required th:value="${account.eMail}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Телефон</label>
+                    <input type="text" class="form-control" id="phone" name="phone" th:value="${account.phone}" required  readonly>
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="enableForm('personal-info')">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
+                <button type="submit" class="btn btn-success" disabled>Сохранить</button>
+                <button type="button" class="btn btn-secondary" onclick="cancelForm('personal-info')" disabled>Отменить</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Форма для страны, города, улицы, дома и офиса -->
+            <form ng-submit="updateAddress()">
+                <h3>Данные адреса</h3>
+                <div class="form-group">
+                    <label for="country">Страна</label>
+                    <input type="text" class="form-control" id="country"  name="country" required th:value="${account.tutor.address.country}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="city">Город</label>
+                    <input type="text" class="form-control" id="city" name="city" required th:value="${account.tutor.address.city}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="street">Улица</label>
+                    <input type="text" class="form-control" id="street" name="street"  required th:value="${account.tutor.address.street}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="house">Дом</label>
+                    <input type="text" class="form-control" id="house" name="house"  required th:value="${account.tutor.address.house}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="office">Офис</label>
+                    <input type="text" class="form-control" id="office" name="office" required th:value="${account.tutor.address.office}" readonly>
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="enableForm('address-info')">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
+                <button type="submit" class="btn btn-success" disabled>Сохранить</button>
+                <button type="button" class="btn btn-secondary" onclick="cancelForm('address-info')" disabled>Отменить</button>
+            </form>
+        </div>
+        <!-- Дополнительная колонка если нужна -->
+        <div class="col-md-6">
+            <!-- Форма для страны, города, улицы, дома и офиса -->
+            <form ng-submit="updateTutor()">
+                <h3>Данные репетиторства</h3>
+                <div class="form-group">
+                    <label for="specialisation">Специализация</label>
+                    <input type="text" class="form-control" id="specialisation" name="specialisation"  required th:value="${account.tutor.specialisation}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="price">Цена</label>
+                    <input type="number" class="form-control" id="price" name="price" required  th:value="${account.tutor.price}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Описание</label>
+                    <textarea class="form-control" id="description" name="description" th:value="${account.tutor.description}" readonly></textarea>
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="enableForm('address-info')">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
+                <button type="submit" class="btn btn-success" disabled>Сохранить</button>
+                <button type="button" class="btn btn-secondary" onclick="cancelForm('address-info')" disabled>Отменить</button>
+            </form>
+        </div>
+    </div>
+</div>
+<footer class="bg-light py-4 mt-4">
+    <div class="container text-center">
+        <p class="mb-0">&copy; 2024 Tutor Search. All rights reserved.</p>
+        <p class="mb-0">Designed and developed by Yauheni Kurankou.</p>
+    </div>
+</footer>
+<!-- Подключение скриптов Bootstrap и Cropper.js -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+<script src="../../static/js/account/dataManagementScript.js"></script>
+</body>
+</html>
