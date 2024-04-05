@@ -34,8 +34,8 @@ class OrderServiceTest {
     @Test
     void getAllOrders_ReturnsListOfOrders() {
         // Arrange
-        Order order1 = new Order(1L, new Date(1234567890L), new Time(9876543210L), "Order 1");
-        Order order2 = new Order(2L, new Date(9876543210L), new Time(1234567890L), "Order 2");
+        Order order1 = new Order(1L, new Date(1234567890L), new Time(9876543210L), "Order 1", null, null);
+        Order order2 = new Order(2L, new Date(9876543210L), new Time(1234567890L), "Order 2", null, null);
         List<Order> expectedOrders = Arrays.asList(order1, order2);
 
         when(orderRepo.findAll()).thenReturn(expectedOrders);
@@ -51,7 +51,7 @@ class OrderServiceTest {
     void getOrderById_ValidId_ReturnsOrder() {
         // Arrange
         long orderId = 1L;
-        Order expectedOrder = new Order(orderId, new Date(1234567890L), new Time(9876543210L), "Test Order");
+        Order expectedOrder = new Order(orderId, new Date(1234567890L), new Time(9876543210L), "Test Order" , null, null);
 
         when(orderRepo.findById(orderId)).thenReturn(Optional.of(expectedOrder));
 
@@ -79,8 +79,8 @@ class OrderServiceTest {
     @Test
     void saveOrder_ReturnsSavedOrder() {
         // Arrange
-        Order orderToSave = new Order(1L, new Date(1234567890L), new Time(9876543210L), "New Order");
-        Order savedOrder = new Order(1L, new Date(9876543210L), new Time(1234567890L), "Saved Order");
+        Order orderToSave = new Order(1L, new Date(1234567890L), new Time(9876543210L), "New Order", null , null);
+        Order savedOrder = new Order(1L, new Date(9876543210L), new Time(1234567890L), "Saved Order", null , null);
 
         when(orderRepo.save(orderToSave)).thenReturn(savedOrder);
 

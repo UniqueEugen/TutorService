@@ -1,5 +1,6 @@
 package kurenkov.tutorservice.controllers.home;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kurenkov.tutorservice.entities.dto.TutorDataDTO;
 import kurenkov.tutorservice.mappers.TutorDataMapper;
 import kurenkov.tutorservice.services.UserDataService;
@@ -33,5 +34,14 @@ public class HomeController {
         System.out.println(tutors);
         model.addAttribute("tutors", tutors);
         return "homePage";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            request.getSession().invalidate();
+        }
+        return "redirect:/";
     }
 }

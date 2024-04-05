@@ -37,25 +37,24 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        /*DelegatingServerLogoutHandler logoutHandler = new DelegatingServerLogoutHandler(
-                new SecurityContextServerLogoutHandler(), new WebSessionServerLogoutHandler()
-        );*/
 
         return http
-                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
                         .requestMatchers("/home/**").permitAll()
                         .requestMatchers("/photo/**").permitAll()
                         .requestMatchers("/registration/**").anonymous()
                         .requestMatchers("/profile/**","/account/tutor/**", "/account/seeker/**", "/getcurrentpage").authenticated()
-                        /*.requestMatchers("/account/tutor/**").hasRole("TUTOR")
-                        .requestMatchers("/account/seeker/**").hasRole("SEEKER")*/
+                        .requestMatchers("/account/tutor/**").hasRole("TUTOR")
+                        .requestMatchers("/account/seeker/**").hasRole("SEEKER")
                         .requestMatchers(HttpMethod.GET, "/forum").permitAll()
                         .requestMatchers(HttpMethod.POST, "/forum/**").authenticated()
                         .requestMatchers("/static/pictures/favicon.ico").permitAll()
                         .requestMatchers("/**").permitAll()
                 )
+
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )

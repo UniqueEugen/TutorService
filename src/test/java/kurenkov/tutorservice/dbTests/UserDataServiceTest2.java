@@ -52,8 +52,8 @@ class UserDataServiceTest2 {
         OrderChat chat1 = new OrderChat(1L, "Chat 1", new Date(1234567890L), new Time(9876543210L));
         OrderChat chat2 = new OrderChat(2L, "Chat 2", new Date(9876543210L), new Time(1234567890L));
         List<OrderChat> chats = Arrays.asList(chat1, chat2);
-        Order order1 = new Order(1L, new Date(1234567890L), new Time(9876543210L), "Order 1");
-        Order order2 = new Order(2L, new Date(9876543210L), new Time(1234567890L), "Order 2");
+        Order order1 = new Order(1L, new Date(1234567890L), new Time(9876543210L), "Order 1", null, null);
+        Order order2 = new Order(2L, new Date(9876543210L), new Time(1234567890L), "Order 2", null, null);
         List<Order> ordersT = Arrays.asList(order1, order2);
         Tutor tutor = new Tutor(1L, "Math", 10.0f, null, new Address(1L, "Country", "City", "Street", "1", "Office"), ordersT, chats, null);
         /*Order order3 = new Order(3L, new Date(9876543220L), new Time(1234567890L), "Order 3");

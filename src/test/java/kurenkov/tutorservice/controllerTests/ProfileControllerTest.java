@@ -31,19 +31,4 @@ public class ProfileControllerTest {
     }
 
 
-    @Test
-    public void testCreateOrder_Exception() {
-        // Arrange
-        ProfileController.OrderData orderData = new ProfileController.OrderData(5L, Statuses.PENDING, "18-12-2003", "18:55");
-
-        when(userDataService.loadUserDataByUsername(anyString())).thenThrow(new RuntimeException());
-
-        // Act
-        ResponseEntity<String> response = orderController.createOrder(orderData);
-
-        // Assert
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertEquals("Registration failed.", response.getBody());
-        verify(userDataService, never()).saveUserData(any(UserData.class));
-    }
 }

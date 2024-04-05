@@ -10,3 +10,9 @@ spring:
     show-sql: true
   flyway:
     baseline-on-migrate: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+logging:
+  level:
+    org.springframework.security: DEBUG
