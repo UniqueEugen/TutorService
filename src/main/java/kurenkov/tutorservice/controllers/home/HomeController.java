@@ -28,10 +28,12 @@ public class HomeController {
     public String getTutors(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
+        boolean isAuth = !username.equals("anonymousUser");
+        System.out.println(isAuth);
+        model.addAttribute("auth",isAuth);
         System.out.println(username);
         List<TutorDataDTO> tutors = TutorDataMapper.INSTANCE.userDataListToTutorDataDTOList(userDataService.getAllUserData());
         //List<Tutor> tutors = tutorService.getAllTutors();
-        System.out.println(tutors);
         model.addAttribute("tutors", tutors);
         return "homePage";
     }

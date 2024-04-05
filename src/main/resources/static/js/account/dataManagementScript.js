@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     console.log(data);
 });
-
+//User block
 function getUserData() {
     return {
         login: document.getElementById("username").value,
@@ -50,40 +50,76 @@ function setNewUserData(user){
     data.user = user;
 }
 
-function getPhoto() {
-    var formData = new FormData();
-    var fileInput = document.getElementById('image');
-    var file = fileInput.files[0];
-    formData.append("image", file);
-    $.ajax({
-        url: '/account/tutor/uploadPhoto', // URL обработчика на сервере
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            // Обработка успешного ответа от сервера
-            console.log('Изображение успешно загружено.');
-        },
-        error: function(xhr, status, error) {
-            // Обработка ошибок
-            console.error('Произошла ошибка при загрузке изображения: ' + error);
-        }
-    });
-    return formData;
+
+
+//UserData block
+function getUserDataData() {
+    return {
+        name: document.getElementById("firstName").value,
+        surname: document.getElementById("lastName").value,
+        secName: document.getElementById("middleName").value,
+        age: document.getElementById("age").value,
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value
+    };
 }
 
-/*croppie = new Croppie(document.getElementById('image-preview'), {
-    viewport: {
-        width: 300,  // Начальная ширина области обрезки
-        height: 300, // Начальная высота области обрезки
-        type: 'square' // Тип области обрезки (квадратная)
-    },
-    boundary: {
-        width: 400,  // Ширина области предварительного просмотра
-        height: 400  // Высота области предварительного просмотра
-    }
-});*/
+function setUserDataDataCancel(){
+    document.getElementById("firstName").value = data.userData.name;
+    document.getElementById("lastName").value = data.userData.surname;
+    document.getElementById("middleName").value = data.userData.secName;
+    document.getElementById("age").value = data.userData.age;
+    document.getElementById("phone").value = data.userData.phone;
+    document.getElementById("email").value = data.userData.eMail;
+}
+
+function setNewUserDataData(userData){
+    data.userData = userData;
+}
+
+//Address block
+function getAddressData() {
+    return {
+        country: document.getElementById("country").value,
+        city: document.getElementById("city").value,
+        street: document.getElementById("street").value,
+        house: document.getElementById("house").value,
+        office: document.getElementById("office").value,
+    };
+}
+
+function setAddressDataCancel(){
+    document.getElementById("country").value = data.address.country;
+    document.getElementById("city").value = data.address.city;
+    document.getElementById("street").value = data.address.street;
+    document.getElementById("house").value = data.address.house;
+    document.getElementById("office").value = data.address.office;
+}
+
+function setNewAddress(address){
+    data.address = address;
+}
+
+
+function getTutorData() {
+    return {
+        specialisation: document.getElementById("specialisation").value,
+        description: document.getElementById("description").value,
+        price: document.getElementById("price").value
+    };
+}
+
+function setTutorDataCancel(){
+    document.getElementById("description").value = data.tutor.description;
+    document.getElementById("price").value = data.tutor.price;
+    document.getElementById("specialisation").value = data.tutor.specialisation;
+}
+
+function setNewTutorData(tutor){
+    data.tutor = tutor;
+}
+
+
 
 
 // Обработчик события нажатия кнопки "Обрезать"
@@ -116,10 +152,6 @@ document.getElementById('crop-button').addEventListener('click', function() {
     });
     cropModal.style.display = 'none';
 });
-
-
-
-
 
 
 function openCropModal(imageURL) {

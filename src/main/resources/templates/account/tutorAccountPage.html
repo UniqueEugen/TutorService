@@ -35,6 +35,13 @@
     <a class="nav-link ml-auto" href="/getcurrentpage">My Account</a>
 </nav>
 <div class="container content-container" ng-controller="tutorAccountController">
+    <!--модальное окно вывода сообщения сохранения-->
+    <div class="modal" ng-show="isModalVisible">
+        <div class="modal-content">
+            <span class="close" ng-click="closeModal()">&times;</span>
+            <div>{{ modalMessage }}</div>
+        </div>
+    </div>
     <!-- Модальное окно для обрезки -->
     <div id="crop-modal" class="modal">
         <div class="modal-dialog">
@@ -71,8 +78,9 @@
     <div class="row">
         <div class="col-md-6">
             <!-- Форма для логина и пароля -->
-            <form ng-submit="updateUser()">
+            <form ng-submit="update()">
                 <h3>Данные аккаунта</h3>
+                <div ng-show="isEditingUserDataForm || isEditingAddressForm || isEditingTutorForm" style="color: red">Сначала введите пароль</div>
                 <div class="form-group">
                     <label for="username">Логин</label>
                     <input type="text" class="form-control" id="username" name="username" required  th:value="${account.user.username}" ng-readonly="!isEditingUserForm">
@@ -87,38 +95,28 @@
                 <button type="button" class="btn btn-secondary" ng-show="isEditingUserForm" ng-click="cancelEditUser()">Отменить</button>
             </form>
         </div>
+        <!-- Дополнительная колонка если нужна -->
         <div class="col-md-6">
-            <!-- Форма для имени, фамилии, отчества, возраста, email и телефона -->
-            <form ng-submit="updateUserData()">
-                <h3>Персональные данные</h3>
+            <!-- Форма для страны, города, улицы, дома и офиса -->
+            <form ng-submit="updateTutor()">
+                <h3>Данные репетиторства</h3>
                 <div class="form-group">
-                    <label for="firstName">Имя</label>
-                    <input type="text" class="form-control" id="firstName" name="name" required th:value="${account.name}" readonly>
+                    <label for="specialisation">Специализация</label>
+                    <input type="text" class="form-control" id="specialisation" name="specialisation"  required th:value="${account.tutor.specialisation}" ng-readonly="!isEditingTutorForm">
                 </div>
                 <div class="form-group">
-                    <label for="lastName">Фамилия</label>
-                    <input type="text" class="form-control"  id="lastName" name="surname" required th:value="${account.surname}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="middleName">Отчество</label>
-                    <input type="text" class="form-control" id="middleName"  name="secName" th:value="${account.secName}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="age">Возраст</label>
-                    <input type="number" class="form-control" id="age" name="age"  required th:value="${account.age}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required th:value="${account.eMail}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Телефон</label>
-                    <input type="text" class="form-control" id="phone" name="phone" th:value="${account.phone}" required  readonly>
+                    <label for="price">Цена</label>
+                    <input type="number" class="form-control" id="price" name="price" required  th:value="${account.tutor.price}" ng-readonly="!isEditingTutorForm">
                 </div>
 
-                <button type="button" class="btn btn-primary" onclick="enableForm('personal-info')">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
-                <button type="submit" class="btn btn-success" disabled>Сохранить</button>
-                <button type="button" class="btn btn-secondary" onclick="cancelForm('personal-info')" disabled>Отменить</button>
+                <div class="form-group">
+                    <label for="description">Описание</label>
+                    <textarea class="form-control" id="description" name="description" th:text="${account.tutor.description}" ng-readonly="!isEditingTutorForm"></textarea>
+                </div>
+
+                <button type="button" class="btn btn-primary" ng-hide="isEditingTutorForm" ng-click="editFormTutor()">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
+                <button type="submit" class="btn btn-success" ng-show="isEditingTutorForm && !isEditingUserForm" ng-click="updateTutor()">Сохранить</button>
+                <button type="button" class="btn btn-secondary" ng-show="isEditingTutorForm && !isEditingUserForm" ng-click="cancelEditTutor()">Отменить</button>
             </form>
         </div>
     </div>
@@ -129,56 +127,152 @@
                 <h3>Данные адреса</h3>
                 <div class="form-group">
                     <label for="country">Страна</label>
-                    <input type="text" class="form-control" id="country"  name="country" required th:value="${account.tutor.address.country}" readonly>
+                    <input type="text" class="form-control" id="country"  name="country" required th:value="${account.tutor.address.country}" ng-readonly="!isEditingAddressForm">
                 </div>
                 <div class="form-group">
                     <label for="city">Город</label>
-                    <input type="text" class="form-control" id="city" name="city" required th:value="${account.tutor.address.city}" readonly>
+                    <input type="text" class="form-control" id="city" name="city" required th:value="${account.tutor.address.city}" ng-readonly="!isEditingAddressForm">
                 </div>
 
                 <div class="form-group">
                     <label for="street">Улица</label>
-                    <input type="text" class="form-control" id="street" name="street"  required th:value="${account.tutor.address.street}" readonly>
+                    <input type="text" class="form-control" id="street" name="street"  required th:value="${account.tutor.address.street}" ng-readonly="!isEditingAddressForm">
                 </div>
 
                 <div class="form-group">
                     <label for="house">Дом</label>
-                    <input type="text" class="form-control" id="house" name="house"  required th:value="${account.tutor.address.house}" readonly>
+                    <input type="text" class="form-control" id="house" name="house"  required th:value="${account.tutor.address.house}" ng-readonly="!isEditingAddressForm">
                 </div>
 
                 <div class="form-group">
                     <label for="office">Офис</label>
-                    <input type="text" class="form-control" id="office" name="office" required th:value="${account.tutor.address.office}" readonly>
+                    <input type="text" class="form-control" id="office" name="office" required th:value="${account.tutor.address.office}" ng-readonly="!isEditingAddressForm">
                 </div>
 
-                <button type="button" class="btn btn-primary" onclick="enableForm('address-info')">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
-                <button type="submit" class="btn btn-success" disabled>Сохранить</button>
-                <button type="button" class="btn btn-secondary" onclick="cancelForm('address-info')" disabled>Отменить</button>
+                <button type="button" class="btn btn-primary" ng-hide="isEditingAddressForm" ng-click="editAddressForm()">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
+                <button type="submit" class="btn btn-success" ng-show="isEditingAddressForm && !isEditingUserForm" >Сохранить</button>
+                <button type="button" class="btn btn-secondary" ng-show="isEditingAddressForm && !isEditingUserForm" ng-click="updateAddress()">Отменить</button>
             </form>
         </div>
-        <!-- Дополнительная колонка если нужна -->
         <div class="col-md-6">
-            <!-- Форма для страны, города, улицы, дома и офиса -->
-            <form ng-submit="updateTutor()">
-                <h3>Данные репетиторства</h3>
+            <!-- Форма для имени, фамилии, отчества, возраста, email и телефона -->
+            <form ng-submit="updateUserData()">
+                <h3>Персональные данные</h3>
                 <div class="form-group">
-                    <label for="specialisation">Специализация</label>
-                    <input type="text" class="form-control" id="specialisation" name="specialisation"  required th:value="${account.tutor.specialisation}" readonly>
+                    <label for="firstName">Имя</label>
+                    <input type="text" class="form-control" id="firstName" name="name" required th:value="${account.name}" ng-readonly="!isEditingUserDataForm">
                 </div>
                 <div class="form-group">
-                    <label for="price">Цена</label>
-                    <input type="number" class="form-control" id="price" name="price" required  th:value="${account.tutor.price}" readonly>
+                    <label for="lastName">Фамилия</label>
+                    <input type="text" class="form-control"  id="lastName" name="surname" required th:value="${account.surname}" ng-readonly="!isEditingUserDataForm">
+                </div>
+                <div class="form-group">
+                    <label for="middleName">Отчество</label>
+                    <input type="text" class="form-control" id="middleName"  name="secName" th:value="${account.secName}" ng-readonly="!isEditingUserDataForm">
+                </div>
+                <div class="form-group">
+                    <label for="age">Возраст</label>
+                    <input type="number" class="form-control" id="age" name="age"  required th:value="${account.age}" ng-readonly="!isEditingUserDataForm">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required th:value="${account.eMail}" ng-readonly="!isEditingUserDataForm">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Телефон</label>
+                    <input type="text" class="form-control" id="phone" name="phone" th:value="${account.phone}" required  ng-readonly="!isEditingUserDataForm">
                 </div>
 
-                <div class="form-group">
-                    <label for="description">Описание</label>
-                    <textarea class="form-control" id="description" name="description" th:value="${account.tutor.description}" readonly></textarea>
-                </div>
-
-                <button type="button" class="btn btn-primary" onclick="enableForm('address-info')">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
-                <button type="submit" class="btn btn-success" disabled>Сохранить</button>
-                <button type="button" class="btn btn-secondary" onclick="cancelForm('address-info')" disabled>Отменить</button>
+                <button type="button" class="btn btn-primary" ng-hide="isEditingUserDataForm" ng-click="editFormUserData()">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
+                <button type="submit" class="btn btn-success" ng-show="isEditingUserDataForm && !isEditingUserForm" >Сохранить</button>
+                <button type="button" class="btn btn-secondary" ng-show="isEditingUserDataForm && !isEditingUserForm"  ng-click="cancelEditUserData()">Отменить</button>
             </form>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Заказы на работу</h1>
+                <table class="table table-striped table-hover" style="height: 300px; overflow-y: scroll;">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Вывод списка tutorOrders -->
+                    <tr th:each="order : ${account.tutor.tutorOrders}">
+                        <td th:text="${order.date}"></td>
+                        <td th:text="${order.time}"></td>
+                        <td th:text="${order.status}"></td>
+                        <td>
+                            <!-- Вывод кнопок в зависимости от статуса заказа -->
+                            <div th:if="${order.status eq 'PENDING'}">
+                                <button class="btn btn-primary" th:onclick="'window.location.href=\'/account/tutor/changeOrderStatus?id=' + ${order.id} + '&status=CONFIRMED\''">Подтвердить</button>
+                                <button class="btn btn-danger" th:onclick="'window.location.href=\'/account/tutor/changeOrderStatus?id=' + ${order.id} + '&status=CANCELED\''">Отменить</button>
+                            </div>
+                            <div th:if="${order.status eq 'CANCELED'}">
+                                <button class="btn btn-primary" th:onclick="'window.location.href=\'/account/tutor/changeOrderStatus?id=' + ${order.id} + '&status=CONFIRMED\''">Подтвердить</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <h1>Ваши заказы</h1>
+                <table class="table table-striped table-hover" style="height: 300px; overflow-y: scroll;">
+                    <thead>
+                    <tr>
+                        <th>Tutor name</th>
+                        <th>Tutor surname</th>
+                        <th>Tutor specialisation</th>
+                        <th>Price</th>
+                        <th>Address</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Вывод списка tutorOrders -->
+                    <tr th:each="order : ${seekerOrders}">
+                        <td th:text="${order.tutorData.name}"></td>
+                        <td th:text="${order.tutorData.surname}"></td>
+                        <td th:text="${order.tutorData.specialisation}"></td>
+                        <td th:text="${order.tutorData.price}"></td>
+                        <td th:text="${order.tutorData.address.street + ', ' + order.tutorData.address.house + ', ' + order.tutorData.address.office}"></td>
+                        <td th:text="${order.date}"></td>
+                        <td th:text="${order.time}"></td>
+                        <td th:text="${order.status}"></td>
+                        <td>
+                            <!-- Вывод кнопок в зависимости от статуса заказа -->
+                            <div th:if="${order.status eq 'PENDING'}">
+                                <button class="btn btn-danger" th:onclick="'window.location.href=\'/account/tutor/changeOrderStatus?id=' + ${order.id} + '&status=CANCELED\''">Отменить</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-striped table-hover" style="height: 300px; overflow-y: scroll;">
+
+                    <tbody>
+                    <!-- Вывод списка chats -->
+                    <tr th:each="chat : ${account.tutor.chats}">
+                        <td colspan="5">
+                            <!-- Здесь можно отобразить информацию из объекта OrderChat -->
+                            <!-- Например: th:text="${chat.property}" -->
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

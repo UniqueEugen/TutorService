@@ -47,9 +47,7 @@ public class ProfileController {
     public String tutorProfile(@RequestParam("id") Long id, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserData currentUser = userDataService.loadUserDataByUsername(authentication.getName());
-        System.out.println(currentUser.getSeeker().getSeekerOrders());
         TutorDataDTO profile = getTutorProfileById(id);
-        System.out.println(profile);
         model.addAttribute("profile", profile);
         return "profile/Profile";
     }
