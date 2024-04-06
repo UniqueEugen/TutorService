@@ -29,6 +29,6 @@ public class OrderDataDTO {
 
     private Long seeker;
 
-    private Seeker seekerData;
+    private SeekerDataDTO seekerData;
     private TutorDataDTO tutorData;
 }

@@ -44,7 +44,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/home/**").permitAll()
                         .requestMatchers("/photo/**").permitAll()
                         .requestMatchers("/registration/**").anonymous()
-                        .requestMatchers("/profile/**","/account/tutor/**", "/account/seeker/**", "/getcurrentpage").authenticated()
+                        .requestMatchers("/profile/**","/account/**",  "/getcurrentpage").authenticated()
                         .requestMatchers("/account/tutor/**").hasRole("TUTOR")
                         .requestMatchers("/account/seeker/**").hasRole("SEEKER")
                         .requestMatchers(HttpMethod.GET, "/forum").permitAll()

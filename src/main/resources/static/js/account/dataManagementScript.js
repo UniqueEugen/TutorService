@@ -28,6 +28,10 @@ document.addEventListener("DOMContentLoaded", function() {
             specialisation: document.getElementById("specialisation").value,
             price: document.getElementById("price").value,
             description: document.getElementById("description").value
+        },
+        seeker:{
+            city: document.getElementById("citySeeker").value,
+            description: document.getElementById("descriptionSeeker").value
         }
     }
 
@@ -119,6 +123,23 @@ function setNewTutorData(tutor){
     data.tutor = tutor;
 }
 
+function getSeekerData() {
+    return {
+        login: document.getElementById("citySeeker").value,
+        password: document.getElementById("descriptionSeeker").value
+    };
+}
+
+function setSeekerDataCancel(){
+    document.getElementById("citySeeker").value = data.seeker.city;
+    document.getElementById("descriptionSeeker").value = data.seeker.description;
+}
+
+function setNewSeekerData(seeker){
+    data.seeker = seeker;
+}
+
+
 
 
 
@@ -191,3 +212,5 @@ document.addEventListener("DOMContentLoaded", function() {
         openCropModal(imageURL);
     });
 });
+
+

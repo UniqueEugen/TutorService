@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru" ng-app="tutorApp">
 <head>
+    <meta charset="UTF-8">
     <title>Личный кабинет</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Подключение библиотеки Croppie с помощью CDN -->
@@ -32,7 +33,7 @@
         <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
         <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
     </ul>
-    <a class="nav-link ml-auto" href="/getcurrentpage">My Account</a>
+    <a class="nav-link ml-auto" href="/home/logout">Logout</a>
 </nav>
 <div class="container content-container" ng-controller="tutorAccountController">
     <!--модальное окно вывода сообщения сохранения-->
@@ -57,7 +58,7 @@
         </div>
     </div>
     <h1>Личный кабинет</h1>
-    <div class="card">
+    <div class="card" th:if="${account.tutor}">
         <div class="card-header">Ваше фото</div>
         <div class="card-body">
             <div class="row justify-content-center">
@@ -96,7 +97,7 @@
             </form>
         </div>
         <!-- Дополнительная колонка если нужна -->
-        <div class="col-md-6">
+        <div class="col-md-6" th:if="${account.tutor}">
             <!-- Форма для страны, города, улицы, дома и офиса -->
             <form ng-submit="updateTutor()">
                 <h3>Данные репетиторства</h3>
@@ -114,14 +115,34 @@
                     <textarea class="form-control" id="description" name="description" th:text="${account.tutor.description}" ng-readonly="!isEditingTutorForm"></textarea>
                 </div>
 
-                <button type="button" class="btn btn-primary" ng-hide="isEditingTutorForm" ng-click="editFormTutor()">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
+                <button type="button" class="btn btn-primary" ng-hide="isEditingTutorForm" ng-click="editFormTutor()">Изменить данные "О репетиторе"</button>
                 <button type="submit" class="btn btn-success" ng-show="isEditingTutorForm && !isEditingUserForm" ng-click="updateTutor()">Сохранить</button>
                 <button type="button" class="btn btn-secondary" ng-show="isEditingTutorForm && !isEditingUserForm" ng-click="cancelEditTutor()">Отменить</button>
             </form>
         </div>
+        <!-- Для seeker-а -->
+        <div class="col-md-6" th:unless="${account.tutor}">
+            <!-- Форма для страны, города, улицы, дома и офиса -->
+            <form ng-submit="updateSeeker()">
+                <h3>Данные искателя</h3>
+                <div class="form-group">
+                    <label for="price">Город проживания</label>
+                    <input type="text" class="form-control" id="citySeeker" name="citySeeker" required  th:value="${account.seeker.city}" ng-readonly="!isEditingSeekerForm">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Опишите себя, улучшите ваши шансы найти репетитора!)</label>
+                    <textarea class="form-control" id="descriptionSeeker" name="descriptionSeeker" th:text="${account.seeker.description}" ng-readonly="!isEditingSeekerForm"></textarea>
+                </div>
+
+                <button type="button" class="btn btn-primary" ng-hide="isEditingSeekerForm" ng-click="editFormSeeker()">Изменить данные "О себе"</button>
+                <button type="submit" class="btn btn-success" ng-show="isEditingSeekerForm && !isEditingUserForm" ng-click="updateSeeker()">Сохранить</button>
+                <button type="button" class="btn btn-secondary" ng-show="isEditingSeekerForm && !isEditingUserForm" ng-click="cancelEditSeeker()">Отменить</button>
+            </form>
+        </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6" th:if="${account.tutor}">
             <!-- Форма для страны, города, улицы, дома и офиса -->
             <form ng-submit="updateAddress()">
                 <h3>Данные адреса</h3>
@@ -149,7 +170,7 @@
                     <input type="text" class="form-control" id="office" name="office" required th:value="${account.tutor.address.office}" ng-readonly="!isEditingAddressForm">
                 </div>
 
-                <button type="button" class="btn btn-primary" ng-hide="isEditingAddressForm" ng-click="editAddressForm()">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
+                <button type="button" class="btn btn-primary" ng-hide="isEditingAddressForm" ng-click="editAddressForm()">Изменить адрес</button>
                 <button type="submit" class="btn btn-success" ng-show="isEditingAddressForm && !isEditingUserForm" >Сохранить</button>
                 <button type="button" class="btn btn-secondary" ng-show="isEditingAddressForm && !isEditingUserForm" ng-click="updateAddress()">Отменить</button>
             </form>
@@ -183,7 +204,7 @@
                     <input type="text" class="form-control" id="phone" name="phone" th:value="${account.phone}" required  ng-readonly="!isEditingUserDataForm">
                 </div>
 
-                <button type="button" class="btn btn-primary" ng-hide="isEditingUserDataForm" ng-click="editFormUserData()">Изменить имя/фамилию/отчество/возраст/email/телефон</button>
+                <button type="button" class="btn btn-primary" ng-hide="isEditingUserDataForm" ng-click="editFormUserData()">Изменить личные данные</button>
                 <button type="submit" class="btn btn-success" ng-show="isEditingUserDataForm && !isEditingUserForm" >Сохранить</button>
                 <button type="button" class="btn btn-secondary" ng-show="isEditingUserDataForm && !isEditingUserForm"  ng-click="cancelEditUserData()">Отменить</button>
             </form>
@@ -191,11 +212,14 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12" th:if="${account.tutor}">
                 <h1>Заказы на работу</h1>
                 <table class="table table-striped table-hover" style="height: 300px; overflow-y: scroll;">
                     <thead>
                     <tr>
+                        <th>Имя заказчика</th>
+                        <th>Фамилия заказчика</th>
+                        <th>Возраст</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th>Status</th>
@@ -204,18 +228,24 @@
                     </thead>
                     <tbody>
                     <!-- Вывод списка tutorOrders -->
-                    <tr th:each="order : ${account.tutor.tutorOrders}">
+                    <tr th:each="order : ${tutorOrders}">
+                        <td th:if="${order.seekerData}" th:text="${order.seekerData.name}"></td>
+                        <td th:unless="${order.seekerData}">DELETED USER</td>
+                        <td th:if="${order.seekerData}" th:text="${order.seekerData.surname}"></td>
+                        <td th:unless="${order.seekerData}">DELETED USER</td>
+                        <td th:if="${order.seekerData}" th:text="${order.seekerData.age}"></td>
+                        <td th:unless="${order.seekerData}">DELETED USER</td>
                         <td th:text="${order.date}"></td>
                         <td th:text="${order.time}"></td>
                         <td th:text="${order.status}"></td>
                         <td>
                             <!-- Вывод кнопок в зависимости от статуса заказа -->
                             <div th:if="${order.status eq 'PENDING'}">
-                                <button class="btn btn-primary" th:onclick="'window.location.href=\'/account/tutor/changeOrderStatus?id=' + ${order.id} + '&status=CONFIRMED\''">Подтвердить</button>
-                                <button class="btn btn-danger" th:onclick="'window.location.href=\'/account/tutor/changeOrderStatus?id=' + ${order.id} + '&status=CANCELED\''">Отменить</button>
+                                <button class="btn btn-primary" th:onclick="'window.location.href=\'/account/changeOrderStatus?id=' + ${order.id} + '&status=CONFIRMED\''">Подтвердить</button>
+                                <button class="btn btn-danger" th:onclick="'window.location.href=\'/account/changeOrderStatus?id=' + ${order.id} + '&status=CANCELED\''">Отменить</button>
                             </div>
                             <div th:if="${order.status eq 'CANCELED'}">
-                                <button class="btn btn-primary" th:onclick="'window.location.href=\'/account/tutor/changeOrderStatus?id=' + ${order.id} + '&status=CONFIRMED\''">Подтвердить</button>
+                                <button class="btn btn-primary" th:onclick="'window.location.href=\'/account/changeOrderStatus?id=' + ${order.id} + '&status=CONFIRMED\''">Подтвердить</button>
                             </div>
                         </td>
                     </tr>
@@ -224,7 +254,7 @@
             </div>
             <div class="col-md-12">
                 <h1>Ваши заказы</h1>
-                <table class="table table-striped table-hover" style="height: 300px; overflow-y: scroll;">
+                <table class="table table-striped table-hover" style="max-height: 300px; overflow-y: scroll;">
                     <thead>
                     <tr>
                         <th>Tutor name</th>
@@ -241,26 +271,31 @@
                     <tbody>
                     <!-- Вывод списка tutorOrders -->
                     <tr th:each="order : ${seekerOrders}">
-                        <td th:text="${order.tutorData.name}"></td>
-                        <td th:text="${order.tutorData.surname}"></td>
-                        <td th:text="${order.tutorData.specialisation}"></td>
-                        <td th:text="${order.tutorData.price}"></td>
-                        <td th:text="${order.tutorData.address.street + ', ' + order.tutorData.address.house + ', ' + order.tutorData.address.office}"></td>
+                        <td th:if="${order.tutorData}" th:text="${order.tutorData.name}"></td>
+                        <td th:unless="${order.tutorData}">DELETED USER</td>
+                        <td th:if="${order.tutorData}" th:text="${order.tutorData.surname}"></td>
+                        <td th:unless="${order.tutorData}">DELETED USER</td>
+                        <td th:if="${order.tutorData}" th:text="${order.tutorData.specialisation}"></td>
+                        <td th:unless="${order.tutorData}">DELETED USER</td>
+                        <td th:if="${order.tutorData}" th:text="${order.tutorData.price}"></td>
+                        <td th:unless="${order.tutorData}">DELETED USER</td>
+                        <td th:if="${order.tutorData}" th:text="${order.tutorData.address.street + ', ' + order.tutorData.address.house + ', ' + order.tutorData.address.office}"></td>
+                        <td th:unless="${order.tutorData}">DELETED USER</td>
                         <td th:text="${order.date}"></td>
                         <td th:text="${order.time}"></td>
                         <td th:text="${order.status}"></td>
                         <td>
                             <!-- Вывод кнопок в зависимости от статуса заказа -->
                             <div th:if="${order.status eq 'PENDING'}">
-                                <button class="btn btn-danger" th:onclick="'window.location.href=\'/account/tutor/changeOrderStatus?id=' + ${order.id} + '&status=CANCELED\''">Отменить</button>
+                                <button class="btn btn-danger" th:onclick="'window.location.href=\'/account/changeOrderStatus?id=' + ${order.id} + '&status=CANCELED\''">Отменить</button>
                             </div>
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-12">
-                <table class="table table-striped table-hover" style="height: 300px; overflow-y: scroll;">
+            <div th:if="${account.tutor}" class="col-md-12">
+                <table class="table table-striped table-hover" style="max-height: 300px; overflow-y: scroll;">
 
                     <tbody>
                     <!-- Вывод списка chats -->

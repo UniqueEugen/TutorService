@@ -32,8 +32,7 @@ public class Tutor {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "tutor")
     private UserData userData;
 
     @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)

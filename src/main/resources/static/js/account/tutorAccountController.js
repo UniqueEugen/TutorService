@@ -14,6 +14,7 @@ angular.module('tutorApp', [])
         $scope.isEditingUserDataForm = false;
         $scope.isEditingAddressForm = false;
         $scope.isEditingTutorForm = false;
+        $scope.isEditingSeekerForm = false;
         // Функция для обработки нажатия кнопки "Изменить"
         $scope.editFormUser = function() {
             $scope.isEditingUserForm = true;
@@ -48,7 +49,7 @@ angular.module('tutorApp', [])
         }
 
         $scope.sendUserData =function (user){
-            $http.post('/account/tutor/setuser', user, { responseType: 'text' })
+            $http.post('/account/setuser', user, { responseType: 'text' })
                 .then(function(response) {
                     console.log("success");
                     setNewUserData(user);
@@ -98,7 +99,7 @@ angular.module('tutorApp', [])
         }
 
         $scope.sendUserDataData= function (userData, user){
-            $http.post('/account/tutor/setuserdata', userData, { responseType: 'text' })
+            $http.post('/account/setuserdata', userData, { responseType: 'text' })
                 .then(function(response) {
                     console.log("success");
                     // Обработка успешной регистрации
@@ -149,7 +150,7 @@ angular.module('tutorApp', [])
         }
 
         $scope.sendAddress = function (address, user){
-            $http.post('/account/tutor/setaddress', address, { responseType: 'text' })
+            $http.post('/account/setAddress', address, { responseType: 'text' })
                 .then(function(response) {
                     console.log("success");
                     $scope.sendUserData(user);
@@ -198,7 +199,7 @@ angular.module('tutorApp', [])
             $scope.isEditingTutorForm = false;
         }
         $scope.sendTutor = function (tutor, user){
-            $http.post('/account/tutor/setTutor', tutor, { responseType: 'text' })
+            $http.post('/account/setTutor', tutor, { responseType: 'text' })
                 .then(function(response) {
                     console.log("success");
                     $scope.sendUserData(user);
@@ -210,6 +211,58 @@ angular.module('tutorApp', [])
                     window.location.href = '/home';
                 })
                 .catch(function(error) {
+                    console.log("error");
+                    // Обработка ошибки регистрации
+                    console.log(error);
+
+                    // Проверка ошибки совпадения логина
+                    if (error.status === 400 && error.data === "Login already exists.") {
+                        // Вывод сообщения об ошибке совпадения логина
+                        console.log("Login already exists. Please choose a different login.");
+                        // Дополнительные действия при ошибке совпадения логина, если необходимо
+                        handleLoginError();
+                    } else {
+                        // Другие типы ошибок
+                        // ...
+                    }
+                });
+        }
+
+
+
+        $scope.editFormSeeker = function() {
+            $scope.isEditingSeekerForm = true;
+            $scope.isEditingUserForm = true;
+        };
+
+        // Функция для обработки нажатия кнопки "Отменить"
+        $scope.cancelEditSeeker = function() {
+            setSeekerDataCancel();
+            setUserDataCancel();
+            $scope.isEditingUserForm= false;
+            $scope.isEditingSeekerForm = false;
+        };
+        $scope.updateSeeker = function (){
+            var seeker = getSeekerData();
+            var user = $scope.updateUser(false);
+            console.log(seeker);
+            $scope.sendTutor(seeker, user);
+            // После сохранения/обновления данных сбросить форму и выйти из режима редактирования
+            $scope.isEditingSeekerForm = false;
+        }
+        $scope.sendSeeker = function (seeker, user) {
+            $http.post('/account/setSeeker', seeker, {responseType: 'text'})
+                .then(function (response) {
+                    console.log("success");
+                    $scope.sendUserData(user);
+                    // Обработка успешной регистрации
+                    console.log(response.data);
+
+                    setNewSeekerData(seeker);
+                    // Перенаправление на /home
+                    window.location.href = '/home';
+                })
+                .catch(function (error) {
                     console.log("error");
                     // Обработка ошибки регистрации
                     console.log(error);
