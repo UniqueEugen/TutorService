@@ -28,16 +28,6 @@ public class Order {
     @Column(name = "status", nullable = false)
     private String status;
 
-
-
-    /*@ManyToOne
-    @JoinColumn(name = "tutor_order")
-    private Tutor tutor;
-
-    @ManyToOne
-    @JoinColumn(name = "seeker_order")
-    private Seeker seeker;*/
-
     @Column(name = "tutor_order")
     private Long tutor;
 

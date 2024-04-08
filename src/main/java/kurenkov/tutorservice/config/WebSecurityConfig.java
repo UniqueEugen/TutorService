@@ -50,6 +50,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/forum").permitAll()
                         .requestMatchers(HttpMethod.POST, "/forum/**").authenticated()
                         .requestMatchers("/static/pictures/favicon.ico").permitAll()
+                        .requestMatchers("/chat/**").permitAll()
                         .requestMatchers("/**").permitAll()
                 )
 
@@ -72,6 +73,8 @@ public class WebSecurityConfig {
                         .addHeaderWriter(headerWriter()))
                 .build();
     }
+
+
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

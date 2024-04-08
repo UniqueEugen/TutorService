@@ -34,6 +34,7 @@ public class Seeker {
     private List<Order> seekerOrders=new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "seeker_id")
     private List<OrderChat> chats=new ArrayList<>();
 
 

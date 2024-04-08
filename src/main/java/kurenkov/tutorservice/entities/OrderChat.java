@@ -4,6 +4,9 @@ package kurenkov.tutorservice.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "order_chat")
 @Getter
@@ -12,17 +15,17 @@ import lombok.*;
 @NoArgsConstructor
 public class OrderChat {
     @Id
-    @GeneratedValue
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "message")
-    private String message;
+    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "chat_message_id")
+    private List<ChatMessage> chatMessages=new ArrayList<>();
 
-    @Column(name = "date")
-    private java.sql.Date date;
-
-    @Column(name = "time")
-    private java.sql.Time time;
+    @Column(name = "tutor_id")
+    private Long tutor;
+    @Column(name = "seeker_id")
+    private Long seeker;
 
 }

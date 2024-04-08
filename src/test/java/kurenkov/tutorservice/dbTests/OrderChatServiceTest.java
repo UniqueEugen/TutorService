@@ -1,108 +1,108 @@
 package kurenkov.tutorservice.dbTests;
 
+import kurenkov.tutorservice.entities.ChatMessage;
 import kurenkov.tutorservice.entities.OrderChat;
+import kurenkov.tutorservice.repositories.ChatMessageRepository;
 import kurenkov.tutorservice.repositories.OrderChatRepository;
 import kurenkov.tutorservice.services.OrderChatService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 
-@SpringBootTest
-@RunWith(MockitoJUnitRunner.class)
-class OrderChatServiceTest {
+public class OrderChatServiceTest {
+
     @Mock
     private OrderChatRepository orderChatRepository;
+
+    @Mock
+    private ChatMessageRepository chatMessageRepository;
 
     private OrderChatService orderChatService;
 
     @BeforeEach
-    void setup() {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
-        orderChatService = new OrderChatService(orderChatRepository);
+        orderChatService = new OrderChatService(orderChatRepository, chatMessageRepository);
     }
 
     @Test
-    void getAllOrderChats_ReturnsListOfChats() {
+    public void testGetAllOrderChats() {
         // Arrange
-        OrderChat chat1 = new OrderChat(1L, "Chat 1", new Date(1234567890L), new Time(9876543210L));
-        OrderChat chat2 = new OrderChat(2L, "Chat 2", new Date(9876543210L), new Time(1234567890L));
-        List<OrderChat> expectedChats = Arrays.asList(chat1, chat2);
-
-        when(orderChatRepository.findAll()).thenReturn(expectedChats);
+        List<OrderChat> expectedOrderChats = new ArrayList<>();
+        expectedOrderChats.add(new OrderChat());
+        expectedOrderChats.add(new OrderChat());
+        Mockito.when(orderChatRepository.findAll()).thenReturn(expectedOrderChats);
 
         // Act
-        List<OrderChat> actualChats = orderChatService.getAllOrderChats();
+        List<OrderChat> actualOrderChats = orderChatService.getAllOrderChats();
 
         // Assert
-        assertEquals(expectedChats, actualChats);
+        Assertions.assertEquals(expectedOrderChats, actualOrderChats);
+        Mockito.verify(orderChatRepository).findAll();
     }
 
     @Test
-    void getOrderChatById_ValidId_ReturnsChat() {
+    public void testCreateOrderChat() {
         // Arrange
-        long chatId = 1L;
-        OrderChat expectedChat = new OrderChat(chatId, "Test Chat", new Date(1234567890L), new Time(9876543210L));
-
-        when(orderChatRepository.findById(chatId)).thenReturn(Optional.of(expectedChat));
+        OrderChat orderChat = new OrderChat();
+        Mockito.when(orderChatRepository.save(any(OrderChat.class))).thenReturn(orderChat);
 
         // Act
-        OrderChat actualChat = orderChatService.getOrderChatById(chatId);
+        OrderChat createdOrderChat = orderChatService.createOrderChat(orderChat);
 
         // Assert
-        assertEquals(expectedChat, actualChat);
+        Assertions.assertEquals(orderChat, createdOrderChat);
+        Mockito.verify(orderChatRepository).save(orderChat);
     }
 
     @Test
-    void getOrderChatById_InvalidId_ReturnsNull() {
+    public void testGetOrderChatById() {
         // Arrange
-        long chatId = 1L;
-
-        when(orderChatRepository.findById(chatId)).thenReturn(Optional.empty());
+        Long orderId = 1L;
+        OrderChat expectedOrderChat = new OrderChat();
+        Mockito.when(orderChatRepository.findById(orderId)).thenReturn(Optional.of(expectedOrderChat));
 
         // Act
-        OrderChat actualChat = orderChatService.getOrderChatById(chatId);
+        OrderChat actualOrderChat = orderChatService.getOrderChatById(orderId);
 
         // Assert
-        assertEquals(null, actualChat);
+        Assertions.assertEquals(expectedOrderChat, actualOrderChat);
+        Mockito.verify(orderChatRepository).findById(orderId);
     }
 
     @Test
-    void saveOrderChat_ReturnsSavedChat() {
+    public void testCreateChatMessage() {
         // Arrange
-        OrderChat chatToSave = new OrderChat(1L, "New Chat", new Date(1234567890L), new Time(9876543210L));
-        OrderChat savedChat = new OrderChat(1L, "Saved Chat", new Date(9876543210L), new Time(1234567890L));
-
-        when(orderChatRepository.save(chatToSave)).thenReturn(savedChat);
+        ChatMessage chatMessage = new ChatMessage();
+        Mockito.when(chatMessageRepository.save(any(ChatMessage.class))).thenReturn(chatMessage);
 
         // Act
-        OrderChat actualChat = orderChatService.saveOrderChat(chatToSave);
+        ChatMessage createdChatMessage = orderChatService.createChatMessage(chatMessage);
 
         // Assert
-        assertEquals(savedChat, actualChat);
+        Assertions.assertEquals(chatMessage, createdChatMessage);
+        Mockito.verify(chatMessageRepository).save(chatMessage);
     }
 
     @Test
-    void deleteOrderChat_ValidId_DeletesChat() {
+    public void testDeleteOrderChat() {
         // Arrange
-        long chatId = 1L;
+        Long orderId = 1L;
 
         // Act
-        orderChatService.deleteOrderChat(chatId);
+        orderChatService.deleteOrderChat(orderId);
 
         // Assert
-        verify(orderChatRepository, times(1)).deleteById(chatId);
+        Mockito.verify(orderChatRepository).deleteById(orderId);
     }
 }

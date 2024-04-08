@@ -40,6 +40,7 @@ public class Tutor {
     private List<Order> tutorOrders=new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "tutor_id")
     private List<OrderChat> chats;
 
     @OneToOne(cascade = CascadeType.ALL)
