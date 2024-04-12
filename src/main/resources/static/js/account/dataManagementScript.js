@@ -4,7 +4,7 @@ var data ={
 var croppie;
 var cropModal;
 document.addEventListener("DOMContentLoaded", function() {
-    data = {
+    var data = {
         userData: {
             name: document.getElementById("firstName").value,
             surname: document.getElementById("lastName").value,
@@ -16,25 +16,32 @@ document.addEventListener("DOMContentLoaded", function() {
         user: {
             login: document.getElementById("username").value,
             password: document.getElementById("password").value
-        },
-        address: {
+        }
+    };
+    if (document.getElementById("addressBlock")) {
+        data.address = {
             country: document.getElementById("country").value,
             city: document.getElementById("city").value,
             street: document.getElementById("street").value,
             house: document.getElementById("house").value,
             office: document.getElementById("office").value
-        },
-        tutor:{
+        };
+    }
+
+    if (document.getElementById("tutorBlock")) {
+        data.tutor = {
             specialisation: document.getElementById("specialisation").value,
             price: document.getElementById("price").value,
             description: document.getElementById("description").value
-        },
-        seeker:{
-            city: document.getElementById("citySeeker").value,
-            description: document.getElementById("descriptionSeeker").value
-        }
+        };
     }
 
+    if (document.getElementById("seekerBlock")) {
+        data.seeker = {
+            city: document.getElementById("citySeeker").value,
+            description: document.getElementById("descriptionSeeker").value
+        };
+    }
     console.log(data);
 });
 //User block

@@ -31,6 +31,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -56,6 +57,8 @@ public class ChatController {
 
     private String username;
 
+    private Boolean type;
+
     @GetMapping
     public String getPage(){
         return "chat/ChatTest";
@@ -65,7 +68,7 @@ public class ChatController {
     public String showChat(@RequestParam("id") Long id, Model model){
         setUsername();
 
-        if(!isType()){
+        if(!isType(id)){
             SeekerDataDTO seekerDataDTO = getSeekerProfileById(orderChatService.getOrderChatById(id).getSeeker());
             model.addAttribute("companion", seekerDataDTO);
             model.addAttribute("type", false);
@@ -82,19 +85,27 @@ public class ChatController {
     }
 
     @GetMapping("/createChat")
-    public String createChat(@RequestParam("id") Long id, Model model){
+    public RedirectView createChat(@RequestParam("id") Long id){
+        String redirectPath = "/chat/getChat?id=";
         setUsername();
         UserData user = getAccount();
+        for(OrderChat orderChat: user.getSeeker().getChats()){
+            if(Objects.equals(orderChat.getTutor(), userDataService.getUserDataById(id).getTutor().getId())){
+                redirectPath = redirectPath.concat(orderChat.getId().toString());
+                return new RedirectView(redirectPath);
+            }
+        }
         OrderChat orderChat = new OrderChat(null, null, userDataService.getUserDataById(id).getTutor().getId(), null);
         user.getSeeker().getChats().add(orderChat);
         orderChatService.createOrderChat(orderChat);
-        Tutor tutor = tutorService.getTutorById(id);
+        Tutor tutor = userDataService.getUserDataById(id).getTutor();
         tutor.getChats().add(orderChat);
         tutorService.saveTutor(tutor);
         userDataService.saveUserData(user);
         user = getAccount();
         id = user.getSeeker().getChats().get(user.getSeeker().getChats().size()-1).getId();
-        return showChat(id, model);
+        redirectPath = redirectPath.concat(id.toString());
+        return new RedirectView(redirectPath);
     }
 
 
@@ -107,7 +118,7 @@ public class ChatController {
         if (chatRoomOptional.isPresent()) {
             // Комната найдена, обработка сообщения и отправка клиентам в комнате
             OrderChat chatRoom = chatRoomOptional.get();
-            ChatMessage chatMessage = new ChatMessage(null, message.getMessage(), Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()), isType(), message.getId());
+            ChatMessage chatMessage = new ChatMessage(null, message.getMessage(), Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()), isType(roomId), message.getId());
             chatRoom.getChatMessages().add(chatMessage);
             orderChatService.createChatMessage(chatMessage);
             // Обработка полученного сообщения от клиента
@@ -136,9 +147,12 @@ public class ChatController {
     private void setUsername(){
         username = SecurityContextHolder.getContext().getAuthentication().getName();
     }
-    private boolean isType(){
+    private boolean isType(Long id){
         UserData user = getAccount();
         if(user.getUser().getRoles().stream().anyMatch(role -> role.getName().equals("TUTOR"))){
+            if(user.getSeeker().getId() == orderChatService.getOrderChatById(id).getSeeker()){
+                return true;
+            }
             return false;
         }else {
             return true;

@@ -1,8 +1,10 @@
 package kurenkov.tutorservice.controllers.account;
 import kurenkov.tutorservice.entities.*;
+import kurenkov.tutorservice.entities.dto.ChatDTO;
 import kurenkov.tutorservice.entities.dto.OrderDataDTO;
 import kurenkov.tutorservice.entities.dto.SeekerDataDTO;
 import kurenkov.tutorservice.entities.dto.TutorDataDTO;
+import kurenkov.tutorservice.mappers.ChatListMapper;
 import kurenkov.tutorservice.mappers.OrderListMapper;
 import kurenkov.tutorservice.mappers.SeekerMapper;
 import kurenkov.tutorservice.mappers.TutorDataMapper;
@@ -46,6 +48,9 @@ public class TutorAccountController {
     @Autowired
     private OrderListMapper orderListMapper;
 
+    @Autowired
+    private ChatListMapper chatListMapper;
+
     private String username;
 
 
@@ -61,7 +66,10 @@ public class TutorAccountController {
         UserData user = getAccount(); // Ваша логика получения аккаунта
         model.addAttribute("account", user);
         List<OrderDataDTO> seekerOrdersList = getSeekersData(user);
+        List<ChatDTO> seekerChatDTO = getSeekerChatData(user);
         model.addAttribute("seekerOrders", seekerOrdersList);
+        model.addAttribute("seekerChats", seekerChatDTO);
+
         return "account/tutorAccountPage"; // Возвращаем имя шаблона Thymeleaf
     }
 
@@ -71,8 +79,12 @@ public class TutorAccountController {
         UserData userData = getAccount();
         List<OrderDataDTO> seekerOrdersList = getSeekersData(userData);
         List<OrderDataDTO> tutorOrdersList = getTutorsData(userData);
+        List<ChatDTO> seekerChatDTO = getSeekerChatData(userData);
+        List<ChatDTO> tutorChatDTO = getTutorChatData(userData);
         model.addAttribute("seekerOrders", seekerOrdersList);
         model.addAttribute("tutorOrders", tutorOrdersList);
+        model.addAttribute("seekerChats", seekerChatDTO);
+        model.addAttribute("tutorChats", tutorChatDTO);
         return showAccountPage(model);
     }
     // Обработка POST-запроса для обновления логина и пароля
@@ -225,6 +237,27 @@ public class TutorAccountController {
             SeekerDataDTO s = getSeekerProfileById(currentOrder.getSeeker());
             currentOrder.setSeekerData(s);
             tutorOrdersList.add(currentOrder);
+        }
+        return tutorOrdersList;
+    }
+
+    private List<ChatDTO> getTutorChatData(UserData userData){
+        List<ChatDTO> tutorOrdersList = new ArrayList<>();
+        for(OrderChat orderChat: userData.getTutor().getChats()){
+            ChatDTO chatDTO = chatListMapper.chatToChatDto(orderChat);
+            SeekerDataDTO s = getSeekerProfileById(chatDTO.getSeeker());
+            chatDTO.setSeekerData(s);
+            tutorOrdersList.add(chatDTO);
+        }
+        return tutorOrdersList;
+    }
+    private List<ChatDTO> getSeekerChatData(UserData userData){
+        List<ChatDTO> tutorOrdersList = new ArrayList<>();
+        for(OrderChat orderChat: userData.getSeeker().getChats()){
+            ChatDTO chatDTO = chatListMapper.chatToChatDto(orderChat);
+            TutorDataDTO s = getTutorProfileById(chatDTO.getTutor());
+            chatDTO.setTutorData(s);
+            tutorOrdersList.add(chatDTO);
         }
         return tutorOrdersList;
     }
