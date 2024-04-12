@@ -14,6 +14,22 @@
         .no-photo {
             background-image: url('../../static/pictures/NoPhoto.png');
         }
+        #messageForm {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        #messageInput {
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .send-button {
+            display: flex;
+            justify-content: flex-end;
+        }
     </style>
 </head>
 <body>
@@ -33,7 +49,7 @@
     <a class="nav-link ml-auto" href="/getcurrentpage">My Account</a>
 </nav>
 <div class="container">
-    <div class="card">
+    <div class="card" style="height: 90vh; width: 72vw">
         <div class="card-header bg-info">
             <div class="row align-items-center">
                 <div class="col-auto">
@@ -51,20 +67,35 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <div id="messageContainer">
-                <div th:each="messages : ${chatMessages}">
-                    <div class="alert alert-info" th:text="${messages.message}"></div>
+        <div id="cardBody" class="card-body" style="height: 60%; overflow-y: auto;">
+            <div id="messageContainer" style="display: flex; flex-direction: column;">
+                <div th:each="message : ${chatMessages}">
+                    <div class="alert" th:class="${message.type ? 'alert-primary float-right' : 'alert-success float-left'}" style="max-width: 60%; border-radius: 5px; padding: 5px; margin: 5px;">
+                        <span th:text="${message.message}"></span>
+                        <div class="small text-muted">
+                            <span th:text="${message.time}"></span>
+                            <span> - </span>
+                            <span th:text="${message.date}"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-    <form id="messageForm" th:action="@{/chat/{roomId}/sendMessage}" th:object="${messagePayload}" method="post">
-        <input type="hidden" th:value="${type}" id="senderType">
-        <input type="hidden" th:name="roomId" th:value="${roomId}" id="roomID">
-        <input id="messageInput" type="text" class="form-control" th:field="*{message}" placeholder="Enter your message">
-        <button type="submit" class="btn btn-primary">Send</button>
-    </form>
+
+
+        <div class="card-footer">
+            <form id="messageForm" th:action="@{/chat/{roomId}/sendMessage}" th:object="${messagePayload}" method="post" style="display: flex; width: 100%">
+                <div class="form-group" style="flex: 1;">
+                    <input type="hidden" th:value="${type}" id="senderType">
+                    <input type="hidden" th:name="roomId" th:value="${roomId}" id="roomID">
+                    <input id="messageInput" type="text" class="form-control" th:field="*{message}" placeholder="Enter your message" style="width: 1000px;" maxlength="225">
+                </div>
+                <div class="send-button">
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -75,6 +106,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
+
+    function scrollToBottom() {
+        var messageContainer = document.getElementById("cardBody");
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
 
     function connect() {
             var socket = new SockJS('/ws');
@@ -93,29 +129,6 @@
 
     }
 
-    // Подключение к серверу WebSocket
-    /*var socket = new SockJS('/chat');
-    console.log("socket created " + socket)
-    var stompClient = Stomp.over(socket);
-    console.log("stompClient created " + stompClient)
-    stompClient.connect({}, function () {
-        console.log('Connected to WebSocket');
-
-        // Подписка на тему комнаты
-        var roomId = document.getElementById("roomID").value;
-        var topic = '/topic/room/' + roomId;
-        console.log("in connecion")
-        stompClient.subscribe(topic, function (message) {
-            console.log("subscribing")
-            var chatMessage = JSON.parse(message.body);
-            displayChatMessage(chatMessage);
-        });
-    });*/
-
-    /*document.getElementById("connectBtn").addEventListener("click", e=>{
-        connect(e);
-    })*/
-
     function onMessageReceived(message){
             console.log("subscribing")
             var chatMessage = JSON.parse(message.body);
@@ -124,18 +137,17 @@
     }
     // Функция для отправки сообщения
     function sendMessage() {
-        var messageInput = document.getElementById("messageInput").value;
+        var messageInput = document.getElementById("messageInput");
         var roomId = document.getElementById("roomID").value;
 
         var payload = {
             roomId: roomId,
-            message: messageInput,
+            message: messageInput.value,
             type: document.getElementById("senderType").value
         };
+        messageInput.value = '';
         console.log(payload.message);
         stompClient.send("/app/chat/" + roomId + "/sendMessage", {}, JSON.stringify(payload));
-
-        messageInput.value = '';
     }
 
     // Обработка отправки формы
@@ -145,13 +157,42 @@
     });
 
     // Функция для отображения сообщения
-    function displayChatMessage(chatMessage) {
+    function displayChatMessage(message) {
         var messageContainer = $('#messageContainer');
-        var messageDiv = $('<div>').addClass('alert alert-info').text(chatMessage.message);
-        messageContainer.append(messageDiv);
+        var messageDiv = $('<div>').text(message.message);
+
+        if (message.type) {
+            messageDiv.addClass('alert-primary float-right');
+        } else {
+            messageDiv.addClass('alert-success float-left');
+        }
+
+        messageDiv.css({
+            'max-width': '60%',
+            'border-radius': '5px',
+            'padding': '5px',
+            'margin': '5px'
+        });
+
+        var currentDate = new Date();
+        var time = currentDate.getHours() + ':' + currentDate.getMinutes();
+        var date = currentDate.toDateString();
+
+        var smallText = $('<div>').addClass('small text-muted');
+        smallText.append($('<span>').text(time));
+        smallText.append($('<span>').text(' - '));
+        smallText.append($('<span>').text(date));
+
+        messageDiv.append(smallText);
+        var divCon = $('<div>');
+        divCon.append(messageDiv)
+        messageContainer.append(divCon);
+
+        scrollToBottom()
     }
 
     connect();
+    scrollToBottom()
 </script>
 </body>
 </html>
