@@ -1,0 +1,60 @@
+/'
+@startuml
+
+start
+:HTTP запрос;
+if (Запрос метода showAccountPage?) then (Да)
+  :Запрос к БД на получение
+         данных о аккаунте;
+  :Рендер страницы
+           аккаунта;
+else (Нет)
+  if (Запрос метода updateProfile?) then (Да)
+    :Валидация введенных
+                    данных;
+    if (Данные валидны?) then (Да)
+      :Обновить профиль;
+      :Редирект к странице аккаунта;
+      :Редирект к странице
+              типа аккаунта;
+    else (Нет)
+      :Вывести сообщение
+                 об ошибке;
+      :   Рендер страницы
+      обновления профиля;
+    endif
+  else(Нет)
+    :Вывести сообщение
+              об ошибке;
+  endif
+endif
+
+stop
+
+@enduml'/
+@startuml
+
+skinparam rectangle {
+    backgroundColor White
+}
+
+rectangle "Учредительное собрание" as Founders
+rectangle "Генеральный директор" as CEO
+rectangle "Менеджер по разработке игр" as GameDevManager
+rectangle "Маркетолог" as Marketer
+rectangle "Производственный менеджер" as ProductionManager
+rectangle "Логист" as Logistician
+rectangle "Дизайнеры" as Designers
+rectangle "Редакторы" as Editors
+rectangle "Главбух" as Accountant
+
+Founders --> CEO
+CEO --> GameDevManager
+CEO --> Marketer
+CEO --> ProductionManager
+CEO --> Logistician
+CEO --> Designers
+CEO --> Editors
+CEO --> Accountant
+
+@enduml

@@ -1,0 +1,38 @@
+@startuml
+
+package kurenkov.tutorservice.controllers.account {
+
+
+
+class TutorAccountController {
+    - userDataService: UserDataService
+    - addressService: AddressService
+    - userService: UserService
+    - tutorService: TutorService
+    - photoService: PhotoService
+    - seekerService: SeekerService
+    - orderService: OrderService
+    - orderListMapper: OrderListMapper
+    - chatListMapper: ChatListMapper
+    - username: String
+    + setUsername(): void
+    + showAccountPage(model: Model): String
+    + showSeekerPage(model: Model): String
+    + updateLoginAndPassword(user: User): ResponseEntity<String>
+    + updateUserData(userData: UserData): ResponseEntity<String>
+    + updateAddressData(address: Address): ResponseEntity<String>
+    + updateTutorData(tutor: Tutor): ResponseEntity<String>
+    + updateSeekerData(seeker: Seeker): ResponseEntity<String>
+    + changeOrderStatus(orderId: Long, status: String): String
+    + uploadImage(image: MultipartFile): ResponseEntity<String>
+    - getAccount(): UserData
+    - getTutorProfileById(id: Long): TutorDataDTO
+    - getSeekerProfileById(id: Long): SeekerDataDTO
+    - getSeekersData(user: UserData): List<OrderDataDTO>
+    - getTutorsData(userData: UserData): List<OrderDataDTO>
+    - getTutorChatData(userData: UserData): List<ChatDTO>
+    - getSeekerChatData(userData: UserData): List<ChatDTO>
+}
+}
+
+@enduml

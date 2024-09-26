@@ -162,7 +162,7 @@ document.getElementById('crop-button').addEventListener('click', function() {
 
         // Отправка обрезанного изображения на сервер
         $.ajax({
-            url: '/account/tutor/uploadPhoto', // URL обработчика на сервере
+            url: '/account/uploadPhoto', // URL обработчика на сервере
             type: 'POST',
             data: formData,
             processData: false,

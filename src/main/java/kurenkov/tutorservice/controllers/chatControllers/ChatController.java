@@ -30,9 +30,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
@@ -78,8 +76,10 @@ public class ChatController {
             model.addAttribute("type", true);
         }
         OrderChat orderChat = orderChatService.getOrderChatById(id);
+        List<ChatMessage> chatMessages = orderChat.getChatMessages();
+        Collections.sort(chatMessages, Comparator.comparingLong(ChatMessage::getId));
         model.addAttribute("roomId", orderChat.getId());
-        model.addAttribute("chatMessages", orderChat.getChatMessages());
+        model.addAttribute("chatMessages", chatMessages);
         model.addAttribute("messagePayload", new MessagePayload());
         return "chat/Chat";
     }

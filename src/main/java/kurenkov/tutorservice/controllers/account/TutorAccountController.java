@@ -53,7 +53,6 @@ public class TutorAccountController {
 
     private String username;
 
-
     private void setUsername(){
         username = SecurityContextHolder.getContext().getAuthentication().getName();
     }

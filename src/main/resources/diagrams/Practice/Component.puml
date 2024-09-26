@@ -1,0 +1,77 @@
+@startuml
+skinparam componentStyle uml2
+skinparam width 700
+skinparam height 700
+
+component "Project Planning System" as planning_system {
+  component "Project Management" as projects
+  component "Task Management" as tasks
+  component "Resource Management" as resources
+  component "Calendars and Scheduling" as scheduling
+  component "Reporting and Analytics" as reporting
+}
+
+component "User Interface" as ui {
+  component "Web Application" as web
+  component "Mobile App" as mobile
+  component "Desktop App" as desktop
+}
+
+component "Integration Layer" as integration {
+  component "API Gateway" as api_gateway
+  component "Authentication and Authorization" as auth
+  component "Webhooks and Notifications" as notifications
+}
+
+component "Data Layer" as data {
+  component "Database" as database
+  component "File Storage" as file_storage
+}
+
+ui --> integration
+integration --> planning_system
+planning_system --> data
+
+database --> planning_system
+file_storage --> planning_system
+
+@enduml
+
+@startuml
+skinparam componentStyle uml2
+
+component "Jira Core" as core {
+  component "Project Management" as projects
+  component "Task Management" as tasks
+  component "Agile Boards" as boards
+  component "Dashboards and Reporting" as dashboards
+}
+
+component "Jira Plugins" as plugins {
+  component "Resource Management" as resources
+  component "Advanced Permissions" as permissions
+}
+
+component "User Interface" as ui {
+  component "Web Client" as web
+  component "Mobile App" as mobile
+}
+
+component "Integration Layer" as integration {
+  component "API Gateway" as api_gateway
+  component "Authentication" as authentication
+  component "Webhooks" as webhooks
+}
+
+component "Data Layer" as data {
+  component "Database" as database
+  component "File Storage" as file_storage
+}
+
+ui --> integration
+integration --> core
+integration --> plugins
+core --> data
+plugins --> data
+
+@enduml

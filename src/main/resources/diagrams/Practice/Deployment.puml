@@ -1,0 +1,37 @@
+@startuml
+skinparam componentStyle uml2
+skinparam width 600
+skinparam height 600
+
+node "Cloud Infrastructure" as cloud {
+  node "Web Server" as web_server
+  node "Application Server" as app_server
+  node "Database Server" as db_server
+  node "File Storage" as file_storage
+}
+
+
+cloud <- [Desktop App]
+cloud <- [Web Application]
+
+web_server <- [Web Application]
+
+app_server <- [Desktop App]
+
+
+db_server <- [Database]
+file_storage <- [File Storage]
+
+
+
+[Database] <-- [Project Management]
+[Database] <-- [Task Management]
+[Database] <-- [Resource Management]
+[Database] <-- [Calendars and Scheduling]
+[Database] <-- [Reporting and Analytics]
+
+[File Storage] <-- [Project Management]
+[File Storage] <-- [Task Management]
+[File Storage] <-- [Resource Management]
+
+@enduml

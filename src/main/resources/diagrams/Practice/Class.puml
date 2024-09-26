@@ -1,0 +1,80 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class User {
+  - id: Integer
+  - username: String
+  - email: String
+  - password: String
+  - role: String
+  + createProject(name, description): Project
+  + assignTask(task, assignee): void
+  + createCalendarEvent(start, end, title, description): Calendar
+  + generateReport(name, description): Report
+}
+
+class Project {
+  - id: Integer
+  - name: String
+  - description: String
+  - start_date: Date
+  - end_date: Date
+  - status: String
+  - owner_id: Integer
+  + addTask(task): void
+  + addResource(resource): void
+  + updateStatus(status): void
+}
+
+class Task {
+  - id: Integer
+  - name: String
+  - description: String
+  - due_date: Date
+  - status: String
+  - assignee_id: Integer
+  - project_id: Integer
+  + updateStatus(status): void
+  + updateDueDate(dueDate): void
+  + reassign(newAssignee): void
+}
+
+class Resource {
+  - id: Integer
+  - name: String
+  - description: String
+  - type: String
+  - availability: Boolean
+  + setAvailability(availability): void
+}
+
+class Calendar {
+  - id: Integer
+  - user_id: Integer
+  - start_date: Date
+  - end_date: Date
+  - all_day: Boolean
+  - title: String
+  - description: String
+  + updateEvent(start, end, title, description): void
+  + deleteEvent(): void
+}
+
+class Report {
+  - id: Integer
+  - name: String
+  - description: String
+  - data: JSON
+  - generated_at: Date
+  + updateData(data): void
+  + updateDescription(description): void
+}
+
+User "1" -- "*" Project : Creates/Owns
+User "1" -- "*" Task : Assigned to
+Project "1" -- "*" Task : Contains
+Project "1" -- "*" Resource : Utilizes
+User "1" -- "*" Calendar : Owns
+User "1" -- "*" Report : Generates
+
+@enduml

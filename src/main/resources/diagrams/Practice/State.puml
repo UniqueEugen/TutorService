@@ -1,0 +1,40 @@
+@startuml
+skinparam state {
+  BackgroundColor LightYellow
+  FontColor #333
+  BorderColor #333
+}
+
+[*] --> Initiated
+Initiated --> Planning : Start planning
+Planning --> Planned : Create plan
+Planned --> Executing : Start executing
+Executing --> Executed : Complete tasks
+Executed --> Closed : Close project
+Closed --> [*]
+
+state Initiated {
+  [*] --> New
+  New --> Defined : Define project
+  Defined --> Planned
+}
+
+state Planning {
+  [*] --> Scoping
+  Scoping --> Scheduling : Create schedule
+  Scheduling --> Budgeting : Create budget
+  Budgeting --> Planned
+}
+
+state Executing {
+  [*] --> InProgress
+  InProgress --> OnHold : Suspend tasks
+  OnHold --> InProgress : Resume tasks
+  InProgress --> Completed : Complete tasks
+}
+
+state Closed {
+  [*] --> Completed
+  Completed --> Archived : Archive project
+}
+@enduml

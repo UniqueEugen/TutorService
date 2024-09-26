@@ -1,0 +1,22 @@
+@startuml
+scale 1.1
+title Контекстная диаграмма IDEF0
+
+rectangle "Система управления складом" {
+    rectangle "Получение заказа" as receive_order
+    rectangle "Формирование заказа" as form_order
+    rectangle "Комплектация заказа" as pick_order
+    rectangle "Отгрузка заказа" as ship_order
+}
+
+rectangle "Клиент" as client <<external>>
+rectangle "Поставщик" as supplier <<external>>
+
+client --> receive_order : Заказ
+receive_order --> form_order : Данные заказа
+form_order --> pick_order : Заказ на комплектацию
+pick_order --> ship_order : Собранный заказ
+ship_order --> client : Отгрузка
+
+supplier --> form_order : Данные о товарах
+@enduml

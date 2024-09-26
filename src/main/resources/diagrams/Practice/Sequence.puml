@@ -1,0 +1,35 @@
+@startuml
+skinparam sequenceMessageAlign center
+skinparam sequenceParticipantBorderColor #333
+skinparam sequenceParticipantBackgroundColor LightYellow
+
+actor User
+participant "User Interface" as UI
+participant "Project Management System" as PMS
+participant "Database" as DB
+
+User -> UI: Create new project
+UI -> PMS: createProject(name, description)
+PMS -> DB: saveProject(project)
+DB --> PMS: project_id
+PMS --> UI: project
+
+User -> UI: Assign task to user
+UI -> PMS: assignTask(task, user)
+PMS -> DB: updateTask(task)
+DB --> PMS: task
+PMS --> UI: task
+
+User -> UI: Create calendar event
+UI -> PMS: createCalendarEvent(start, end, title, description)
+PMS -> DB: saveCalendarEvent(event)
+DB --> PMS: event_id
+PMS --> UI: event
+
+User -> UI: Generate report
+UI -> PMS: generateReport(name, description)
+PMS -> DB: saveReport(report)
+DB --> PMS: report_id
+PMS --> UI: report
+
+@enduml
