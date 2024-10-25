@@ -20,11 +20,11 @@ ORDER BY
 
 SELECT t.tutor_id
 FROM tutor t
-/*WHERE t.tutor_id NOT IN (
+WHERE t.tutor_id NOT IN (
     SELECT tutor_id
     FROM tutor_views
     WHERE user_id = 53
-)*/
+)
 ORDER BY
     (CASE
          WHEN t.specialisation IN (

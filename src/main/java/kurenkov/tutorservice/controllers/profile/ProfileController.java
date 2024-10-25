@@ -5,10 +5,7 @@ import kurenkov.tutorservice.entities.dto.FullTutorProfileDTO;
 import kurenkov.tutorservice.entities.dto.TutorDataDTO;
 import kurenkov.tutorservice.mappers.OrderMapper;
 import kurenkov.tutorservice.mappers.TutorDataMapper;
-import kurenkov.tutorservice.services.OrderService;
-import kurenkov.tutorservice.services.SeekerService;
-import kurenkov.tutorservice.services.TutorService;
-import kurenkov.tutorservice.services.UserDataService;
+import kurenkov.tutorservice.services.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +34,9 @@ public class ProfileController {
     @Autowired
     private SeekerService seekerService;
 
+    @Autowired
+    private TutorViewsService tutorViewsService;
+
     @GetMapping
     public String tut(Model model){
         model.addAttribute("profile", getTutorProfileById(25L));
@@ -48,8 +48,14 @@ public class ProfileController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserData currentUser = userDataService.loadUserDataByUsername(authentication.getName());
         TutorDataDTO profile = getTutorProfileById(id);
+        Long tutorId = getTutorId(id);
+        ResponseEntity res = addTutorView(currentUser.getId(), tutorId);
         model.addAttribute("profile", profile);
-        return "profile/Profile";
+        if (res.getStatusCode() == HttpStatus.OK){
+            return "profile/Profile";
+        } else {
+            return "errors/error404";
+        }
     }
 
     @GetMapping("/g")
@@ -82,6 +88,16 @@ public class ProfileController {
 
     private TutorDataDTO getTutorProfileById(Long id) {
         return TutorDataMapper.INSTANCE.userDataToTutorDataDTO(userDataService.getUserDataById(id));
+    }
+    private Long getTutorId(Long id) {
+        UserData userData = userDataService.getUserDataById(id);
+        Long tutorId = userData.getTutor().getId();
+        return tutorId;
+    }
+
+    public ResponseEntity addTutorView(Long userId, Long tutorId) {
+        tutorViewsService.addOrUpdateTutorView(userId, tutorId);
+        return ResponseEntity.ok().build();
     }
 
     @Getter
