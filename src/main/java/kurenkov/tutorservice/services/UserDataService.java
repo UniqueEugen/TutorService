@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,14 +20,18 @@ public class UserDataService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final TutorService tutorService;
+
     @Autowired
     public UserDataService(UserDataRepository userDataRepository,
                            UserService userService,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           TutorService tutorService) {
 
         this.userDataRepository = userDataRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.tutorService = tutorService;
     }
 
     public List<UserData> getAllUserData() {
@@ -52,9 +57,18 @@ public class UserDataService {
         return userService.isUserLoginExists(login);
     }
 
-    public List<TutorDataDTO> namesAndSurnamesWithTutor() { return (userDataRepository.findNamesAndSurnamesWithTutor());};
+    public List<TutorDataDTO> namesAndSurnamesWithTutor() { return (userDataRepository.findNamesAndSurnamesWithTutor());}
 
     public UserData loadUserDataByUsername(String username){
         return getUserDataById(userService.findUserByUsername(username).getId());
+    }
+
+    public List<UserData>  getUserIDbyTutor(Long userId){
+        List<Long> ids = tutorService.getTutorsIds(userId);
+        List<UserData> recommneds = new ArrayList<>();
+        for(Long id : ids){
+            recommneds.add(userDataRepository.findByTutor(tutorService.getTutorById(id)));
+        }
+       return recommneds;
     }
 }

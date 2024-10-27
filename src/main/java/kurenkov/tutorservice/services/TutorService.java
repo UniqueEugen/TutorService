@@ -30,4 +30,6 @@ public class TutorService {
     public void deleteTutor(Long id) {
         tutorRepository.deleteById(id);
     }
+
+    public List<Long> getTutorsIds(Long id) {return tutorRepository.findTutorsByUserId(id);}
 }
