@@ -1,10 +1,11 @@
-package kurenkov.tutorservice.controllers.home;
+package kurenkov.tutorservice.controllers.home.api;
 
+import kurenkov.tutorservice.controllers.home.HomeController;
 import kurenkov.tutorservice.entities.UserData;
 import kurenkov.tutorservice.entities.dto.TutorDataDTO;
 import kurenkov.tutorservice.mappers.TutorDataMapper;
-import kurenkov.tutorservice.services.TutorService;
 import kurenkov.tutorservice.services.UserDataService;
+import kurenkov.tutorservice.services.VisitsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,12 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
-public class HomeRestController extends HomeController{
+@RequestMapping("/home/api")
+public class HomeRestController extends HomeController {
 
     @Autowired
     private UserDataService userDataService;
-
 
     @GetMapping("/recommended")
     public List<TutorDataDTO>  recommendedTutors() {
@@ -47,4 +47,6 @@ public class HomeRestController extends HomeController{
     private TutorDataDTO getTutorProfileById(Long id) {
         return TutorDataMapper.INSTANCE.userDataToTutorDataDTO(userDataService.getUserDataById(id));
     }
+
+
 }

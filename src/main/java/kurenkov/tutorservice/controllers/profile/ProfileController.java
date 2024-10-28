@@ -40,6 +40,9 @@ public class ProfileController {
     @Autowired
     private TutorViewsService tutorViewsService;
 
+    @Autowired
+    private VisitsService visitsService;
+
     @GetMapping
     public String tut(Model model){
         model.addAttribute("profile", getTutorProfileById(25L));
@@ -52,6 +55,7 @@ public class ProfileController {
         UserData currentUser = userDataService.loadUserDataByUsername(authentication.getName());
         TutorDataDTO profile = getTutorProfileById(id);
         Long tutorId = getTutorId(id);
+
         ResponseEntity res = addTutorView(currentUser.getId(), tutorId);
         model.addAttribute("profile", profile);
         if (res.getStatusCode() == HttpStatus.OK){
@@ -101,7 +105,11 @@ public class ProfileController {
 
     public ResponseEntity addTutorView(Long userId, Long tutorId) {
         tutorViewsService.addOrUpdateTutorView(userId, tutorId);
+        addPageView(tutorId);
         return ResponseEntity.ok().build();
+    }
+    public void addPageView(Long tutorId) {
+        visitsService.createVisit(tutorId);
     }
 
     @Getter

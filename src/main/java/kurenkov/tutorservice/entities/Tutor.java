@@ -47,6 +47,9 @@ public class Tutor {
     @JoinColumn(name = "photo_id", referencedColumnName = "id", nullable = true)
     private Photo photo;
 
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PageVisit> pageVisits;
+
 
     public Tutor updateTutorData(Tutor newTutorData) {
         Field[] fields = Tutor.class.getDeclaredFields();
