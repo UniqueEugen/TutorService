@@ -29,7 +29,7 @@
         }
     </style>
 </head>
-<body ng-controller="ProfileController">
+<body>
 <!-- Прелоадер -->
 <div class="preloader">
     <div class="d-flex justify-content-center align-items-center vh-100">
@@ -45,105 +45,116 @@
     <a class="nav-link ml-auto" href="/home/logout">Logout</a>
     <a class="nav-link ml-auto" href="/getcurrentpage">My Account</a>
 </nav>
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Модальное окно</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="modalText">Текст модального окна</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" ng-click="redirectOnAccount()" data-dismiss="modal">Закрыть</button>
+<div  ng-controller="ProfileController">
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Модальное окно</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalText">Текст модального окна</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="redirectOnAccount()" data-dismiss="modal">Закрыть</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="container mt-5">
-    <div class="row d-flex align-items-stretch">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Данные репетитора</h5>
-                    <div class="card-img-top">
-                        <div class="photo" th:if="${profile.photo}" th:style="'background-image: url(\'/photo/getImage/' + ${profile.photo.id} + '\');'"></div>
-                        <div class="photo no-photo" th:unless="${profile.photo}"></div>
+    <div class="container mt-5">
+        <div class="row d-flex align-items-stretch">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Данные репетитора</h5>
+                        <div class="card-img-top">
+                            <div class="photo" th:if="${profile.photo}" th:style="'background-image: url(\'/photo/getImage/' + ${profile.photo.id} + '\');'"></div>
+                            <div class="photo no-photo" th:unless="${profile.photo}"></div>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Имя: <span th:text="${profile.name}"></span></li>
+                            <li class="list-group-item">Фамилия: <span th:text="${profile.surname}"></span></li>
+                            <li class="list-group-item">Отчество: <span th:text="${profile.secName}"></span></li>
+                            <li class="list-group-item">Специализация: <span th:text="${profile.specialisation}"></span></li>
+                            <li class="list-group-item">Цена: <span th:text="${profile.price}"></span></li>
+                            <li class="list-group-item">
+                                <span th:if="${profile.description}" th:text="${profile.description}"></span>
+                                <span th:unless="${profile.description}">Я стесняюсь писать о себе поэтому нет описания)</span>
+                            </li>
+                            <li class="list-group-item">
+                                <a class="btn btn-primary btn-block text-center"
+                                   th:href="@{'/chat/createChat?id=' + ${profile.id}}">Начать чат с репетитором</a>
+                            </li>
+                            <li class="list-group-item">
+                                <button class="btn btn-success btn-block text-center" onclick="openModal()"
+                                        id="btnOformitBron">Оформить бронь</button>
+                            </li>
+                        </ul>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Имя: <span th:text="${profile.name}"></span></li>
-                        <li class="list-group-item">Фамилия: <span th:text="${profile.surname}"></span></li>
-                        <li class="list-group-item">Отчество: <span th:text="${profile.secName}"></span></li>
-                        <li class="list-group-item">Специализация: <span th:text="${profile.specialisation}"></span></li>
-                        <li class="list-group-item">Цена: <span th:text="${profile.price}"></span></li>
-                        <li class="list-group-item">
-                            <span th:if="${profile.description}" th:text="${profile.description}"></span>
-                            <span th:unless="${profile.description}">Я стесняюсь писать о себе поэтому нет описания)</span>
-                        </li>
-                        <li class="list-group-item">
-                            <a class="btn btn-primary btn-block text-center"
-                               th:href="@{'/chat/createChat?id=' + ${profile.id}}">Начать чат с репетитором</a>
-                        </li>
-                        <li class="list-group-item">
-                            <button class="btn btn-success btn-block text-center" onclick="openModal()"
-                               id="btnOformitBron">Оформить бронь</button>
-                        </li>
-                    </ul>
                 </div>
             </div>
-        </div>
-        <div class="col-md-8">
-            <div class="card d-flex flex-column h-100">
-                <div class="card-body flex-grow-0">
-                    <h5 class="card-title">Адрес</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Страна: <span id="country" th:text="${profile.address.country}"></span></li>
-                        <li class="list-group-item">Город: <span id="city" th:text="${profile.address.city}"></span></li>
-                        <li class="list-group-item">
-                            <span th:if="${profile.address.street.contains('микрора')}">Микрорайон:</span>
-                            <span th:unless="${profile.address.street.contains('микрора')}">Улица:</span>
-                            <span id="street" th:text="${profile.address.street}"></span>
-                        </li>
-                        <li class="list-group-item">Дом: <span id="house" th:text="${profile.address.house}"></span></li>
-                        <li class="list-group-item">Офис: <span th:text="${profile.address.office}"></span></li>
-                    </ul>
-                </div>
-                <div class="card-footer flex-grow-1">
-                    <div id="map" style="height: 100%;"></div>
+            <div class="col-md-8">
+                <div class="card d-flex flex-column h-100">
+                    <div class="card-body flex-grow-0">
+                        <h5 class="card-title">Адрес</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Страна: <span id="country" th:text="${profile.address.country}"></span></li>
+                            <li class="list-group-item">Город: <span id="city" th:text="${profile.address.city}"></span></li>
+                            <li class="list-group-item">
+                                <span th:if="${profile.address.street.contains('микрора')}">Микрорайон:</span>
+                                <span th:unless="${profile.address.street.contains('микрора')}">Улица:</span>
+                                <span id="street" th:text="${profile.address.street}"></span>
+                            </li>
+                            <li class="list-group-item">Дом: <span id="house" th:text="${profile.address.house}"></span></li>
+                            <li class="list-group-item">Офис: <span th:text="${profile.address.office}"></span></li>
+                        </ul>
+                    </div>
+                    <div class="card-footer flex-grow-1">
+                        <div id="map" style="height: 100%;"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Модальное окно -->
-<div id="myModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Выберите дату и время</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <div class="input-group date" id="datetimepicker" data-target-input="nearest">
-                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" />
-                        <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
-                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+    <!-- Модальное окно -->
+    <div id="myModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Выберите дату и время</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="input-group date" id="datetimepicker" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" />
+                            <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" ng-click="saveDateAndTime()">Отправить</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="saveDateAndTime()">Отправить</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                </div>
             </div>
         </div>
     </div>
+</div>
+<div ng-controller="CommentController">
+    <button class="nav-link" ng-click="addComment()">Добавить комментарий</button>
+    <h1>Комментарии к репетитору:</h1>
+
+    <!-- Встроенный tutorId в атрибуте data- -->
+    <ul id="comments">
+        <!-- Комментарии будут добавлены сюда -->
+    </ul>
 </div>
 <footer class="bg-light py-4 mt-5">
     <div class="container text-center">
@@ -154,5 +165,6 @@
 <script src="../../static/js/common/Preloader.js"></script>
 <script src="../../static/js/Profile/NewOrderScript.js"></script>
 <script src="../../static/js/Profile/YMaps.js"></script>
+<script src="../../static/js/Profile/Rest/GetComments.js"></script>
 </body>
 </html>

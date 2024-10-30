@@ -51,11 +51,9 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/forum/**").authenticated()
                         .requestMatchers("/static/pictures/favicon.ico").permitAll()
                         .requestMatchers("/chat/**").permitAll()
+                        .requestMatchers("api/**").permitAll()
                         .requestMatchers("/**").permitAll()
                 )
-
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
@@ -67,10 +65,13 @@ public class WebSecurityConfig {
                         .logoutSuccessUrl("/home").permitAll()
                 )
                 .exceptionHandling(ex -> ex
-                        .accessDeniedPage("/404")
+                        .accessDeniedPage("/403")
+
                 )
                 .headers(headers -> headers
                         .addHeaderWriter(headerWriter()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .build();
     }
 

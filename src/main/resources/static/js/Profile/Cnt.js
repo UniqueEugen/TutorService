@@ -39,5 +39,35 @@ angular.module('profileApp', [])
                         // ...
                     }
                 });
+
         };
-    }]);
+    }])
+    .controller('CommentController', function($scope, $http) {
+
+        $scope.tutorId = 25; // Пример ID репетитора
+        $scope.rating = 5;    // Пример рейтинга
+        $scope.commentText = 'Отличный репетитор!'; // Пример текста комментария
+
+        $scope.addComment = function() {
+            console.log("sf")
+            var commentRequest = {
+                tutor_id: $scope.tutorId,
+                rating: $scope.rating,
+                comment: $scope.commentText
+            };
+
+            $http({
+                method: 'POST',
+                url: 'http://localhost:8080/profile/api/addcomment',
+                data: commentRequest,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function(response) {
+                console.log('Комментарий успешно добавлен!', response);
+            }, function(error) {
+                console.error('Ошибка при добавлении комментария:', error);
+            });
+        };
+    })
+;

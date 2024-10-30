@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Функция для получения списка репетиторов
-    fetch('/api/recommended')
+    fetch('/home/api/recommended')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Сеть ответила с ошибкой: ' + response.status);
