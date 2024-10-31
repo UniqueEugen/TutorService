@@ -61,6 +61,7 @@
 .comment-list {
     overflow-y: auto;
     padding-right: 15px;
+    transition: margin-top 0.3s ease; /* Плавное изменение отступа сверху */
 }
 
 .comment-list::-webkit-scrollbar {
@@ -99,3 +100,50 @@
     border-radius: 2px; /* Скругление краев */
 }
 
+
+.comment-form {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #f8f9fa; /* Светлый фон для формы */
+    border: 1px solid #dee2e6; /* Рамка */
+    border-radius: 0.25rem; /* Скругление углов */
+    padding: 1rem; /* Отступы внутри формы */
+    margin-top: 1rem; /* Отступ сверху */
+    transform: translateY(20px); /* Начальная позиция для анимации */
+    opacity: 0; /* Начальная непрозрачность */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Плавная анимация */
+    display: none; /* Скрываем форму по умолчанию */
+}
+
+.comment-form.show {
+    display: block; /* Показываем форму */
+    transform: translateY(0); /* Конечная позиция для анимации */
+    opacity: 1; /* Полная непрозрачность */
+}
+
+.stars-form {
+    display: flex; /* Используем Flexbox для размещения элементов в ряд */
+    align-items: center; /* Выравнивание по вертикали по центру */
+    margin-left: 1rem; /* Отступ между меткой и звездочками */
+    cursor: pointer; /* Курсор, показывающий возможность клика */
+}
+
+.star {
+    cursor: pointer; /* Курсор, показывающий возможность клика */
+    font-size: 35px; /* Размер звезд */
+    color: #ccc; /* Цвет звезд по умолчанию */
+    transition: color 0.2s; /* Плавный переход цвета */
+}
+
+.star.selected {
+    color: #ffc107; /* Цвет заполненных звезд */
+}
+
+
+#commentText{
+    flex: 1; /* Занимает оставшееся пространство */
+    min-width: 200px; /* Минимальная ширина для текстовой области */
+    width: 65%;
+    margin-left: 20px;
+    margin-top: 10px;
+}

@@ -3,6 +3,7 @@ package kurenkov.tutorservice.services;
 import jakarta.transaction.Transactional;
 import kurenkov.tutorservice.entities.Comment;
 import kurenkov.tutorservice.entities.Tutor;
+import kurenkov.tutorservice.entities.UserData;
 import kurenkov.tutorservice.repositories.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,8 @@ public class CommentService {
 
     public List<Comment> findByTutor(Tutor tutor) {
         return commentRepository.findByTutor(tutor);
+    }
+    public Comment findByUserData(UserData userData) {
+        return commentRepository.findByUserData(userData);
     }
 }

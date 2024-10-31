@@ -105,6 +105,17 @@ function displayComments(comments, currentUserId) {
         const commentElement = document.createElement('div');
         commentElement.className = 'comment-card d-flex flex-column';
 
+
+        const commentUserId = document.createElement('div');
+        commentUserId.style.display = 'none';
+        commentUserId.className = "userIdClass";
+        commentUserId.textContent = comment.userId;
+
+        const commentId = document.createElement('div');
+        commentUserId.style.display = 'none';
+        commentUserId.className = "commentIdClass";
+        commentUserId.textContent = comment.commentId;
+
         const commentHeader = document.createElement('div');
         commentHeader.className = 'comment-header d-flex justify-content-between align-items-center';
 
@@ -119,7 +130,7 @@ function displayComments(comments, currentUserId) {
             const editButton = document.createElement('button');
             editButton.className = 'btn btn-sm btn-outline-secondary';
             editButton.innerHTML = '<i class="bi bi-pencil"></i>';
-            editButton.onclick = () => editComment(comment.commentId);
+            editButton.onclick = () => editComment(comment.comment, comment.rating);
 
             const deleteButton = document.createElement('button');
             deleteButton.className = 'btn btn-sm btn-outline-danger';
@@ -196,14 +207,16 @@ function adjustCommentListHeight() {
 }
 
 // Функции для редактирования и удаления комментариев
-function editComment(commentId) {
+function editComment(comment, rating) {
     // Логика редактирования комментария
-    console.log(`Редактировать комментарий с ID: ${commentId}`);
+    console.log(`Редактировать комментарий: ${comment}`);
+    showCommentForm(comment, rating);
 }
 
 function deleteComment(commentId) {
     // Логика удаления комментария
     console.log(`Удалить комментарий с ID: ${commentId}`);
+
 }
 
 // Вызов функции для получения комментариев при загрузке страницы

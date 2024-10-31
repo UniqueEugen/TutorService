@@ -82,16 +82,17 @@ public class ProfileRestController {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserData currentUser = userDataService.loadUserDataByUsername(authentication.getName());
+            Comment ExistsComment = commentService.findByUserData(currentUser);
             Comment comment = new Comment();
-            comment.setUserData(currentUser);
+            if (ExistsComment == null) {
+                comment.setUserData(currentUser);
+                comment.setTutor(userDataService.getUserDataById(request.tutor_id).getTutor());
+            }else {
+                comment = ExistsComment;
+            }
             comment.setRating(request.rating);
             comment.setComment(request.comment);
-            comment.setTutor(tutorService.getTutorById(request.tutor_id));
             commentService.save(comment);
-            /*Comment comment = commentClass.getComment();
-            comment.setTutor(tutorService.getTutorById(commentClass.getTutor_id()));
-            comment.setUserData(currentUser);
-            commentService.save(commentClass.comment);*/
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

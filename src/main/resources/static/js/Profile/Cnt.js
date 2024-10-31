@@ -44,18 +44,18 @@ angular.module('profileApp', [])
     }])
     .controller('CommentController', function($scope, $http) {
 
-        $scope.tutorId = 25; // Пример ID репетитора
-        $scope.rating = 5;    // Пример рейтинга
-        $scope.commentText = '"Я очень доволен занятиями с репетитором. Уроки всегда проходят в дружелюбной атмосфере, и я чувствую, что получаю много полезной информации. Репетитор умеет объяснять сложные темы простым языком, что очень помогает в обучении. Я рекомендую его всем, кто хочет улучшить свои знания и навыки!"'; // Пример текста комментария
-
         $scope.addComment = function() {
+            const commentText = document.getElementById('commentText').value;
+            $scope.tutorId = getID(); // Пример ID репетитора
+            $scope.rating = getRating().rating;    // Пример рейтинга
+            $scope.commentText = commentText; // Пример текста комментария
             console.log("sf")
             var commentRequest = {
                 tutor_id: $scope.tutorId,
                 rating: $scope.rating,
                 comment: $scope.commentText
             };
-
+            console.log(commentRequest);
             $http({
                 method: 'POST',
                 url: 'http://localhost:8080/profile/api/addcomment',
@@ -65,6 +65,7 @@ angular.module('profileApp', [])
                 }
             }).then(function(response) {
                 console.log('Комментарий успешно добавлен!', response);
+                fetchComments();
             }, function(error) {
                 console.error('Ошибка при добавлении комментария:', error);
             });
