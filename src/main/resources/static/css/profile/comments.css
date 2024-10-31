@@ -1,0 +1,101 @@
+.comment-card {
+    width: 80%;
+    margin: 0 auto; /* Центрируем контейнер */
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.comment-author {
+    font-weight: bold;
+}
+
+.comment-actions {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.comment-card:hover .comment-actions {
+    opacity: 1;
+}
+
+.comment-content {
+    margin-bottom: 0.5rem;
+}
+
+.comment-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.comment-rating .stars {
+    color: #ccc;
+}
+
+.comment-rating .stars .active {
+    color: #ffc107;
+}
+
+.comment-date {
+    color: #6c757d;
+    font-size: 0.875rem;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.comment-content-and-date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.comment-list {
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+.comment-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.comment-list::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.comment-list::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+}
+
+.btn-load-more {
+    margin-top: 1rem;
+}
+
+.reviews-header {
+    font-size: 2rem; /* Размер шрифта */
+    font-weight: bold; /* Жирный шрифт */
+    color: #333; /* Цвет текста */
+    text-align: center; /* Выравнивание по центру */
+    margin: 1.5rem 0; /* Отступ сверху и снизу */
+    position: relative; /* Для использования псевдоэлемента */
+}
+
+.reviews-header::after {
+    content: ""; /* Пустой контент для псевдоэлемента */
+    display: block; /* Блоковый элемент */
+    width: 50%; /* Ширина линии */
+    height: 4px; /* Высота линии */
+    background-color: #007bff; /* Цвет линии */
+    margin: 0.5rem auto; /* Центрирование линии */
+    border-radius: 2px; /* Скругление краев */
+}
+

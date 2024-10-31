@@ -4,6 +4,7 @@ package kurenkov.tutorservice.controllers.profile.api;
 import kurenkov.tutorservice.entities.Comment;
 import kurenkov.tutorservice.entities.Tutor;
 import kurenkov.tutorservice.entities.UserData;
+import kurenkov.tutorservice.entities.dto.UserDataDTO;
 import kurenkov.tutorservice.services.CommentService;
 import kurenkov.tutorservice.services.TutorService;
 import kurenkov.tutorservice.services.UserDataService;
@@ -50,14 +51,30 @@ public class ProfileRestController {
         List<Comment> comments = commentService.findByTutor(tutor);
         List<CommentResponse> commentResponses = new ArrayList<>();
         for (Comment comment : comments) {
-            CommentResponse commentResponse = new CommentResponse();
+            CommentResponse commentResponse = new CommentResponse(
+                    comment.getId(),
+                    comment.getComment(),
+                    comment.getRating(),
+                    comment.getCreatedAt(),
+                    comment.getUserData().getId(),
+                    comment.getUserData().getName() + " " + comment.getUserData().getSurname());
+            /*CommentResponse commentResponse = new CommentResponse();
             commentResponse.setComment(comment.getComment());
             commentResponse.setRating(comment.getRating());
             commentResponse.setUserId(comment.getUserData().getId());
-            commentResponse.setDateTime(comment.getCreatedAt());
+            commentResponse.setDateTime(comment.getCreatedAt());*/
             commentResponses.add(commentResponse);
         }
         return commentResponses;
+    }
+
+    @GetMapping("/getuserid")
+    public Long getUserId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long id = userDataService.loadUserDataByUsername(authentication.getName()).getId();
+        //List<Long> userIds = new ArrayList<>();
+        //userIds.add(id);
+        return id;
     }
 
     @PostMapping(value = "/addcomment", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -92,9 +109,11 @@ public class ProfileRestController {
     @Getter
     @Setter
     private class CommentResponse {
+        public Long commentId;
         public String comment;
         public int rating;
         public LocalDateTime dateTime;
         public Long userId;
+        public String nameSurname;
     }
 }
