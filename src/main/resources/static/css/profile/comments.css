@@ -27,6 +27,9 @@
     opacity: 1;
 }
 
+.comment-card:active .comment-actions{
+    opacity: 1;
+}
 .comment-content {
     margin-bottom: 0.5rem;
 }

@@ -62,7 +62,7 @@ function hideCommentForm(flag=false) {
     setTimeout(() => {
         commentForm.style.display = 'none'; // Скрываем форму после анимации
     }, 300); // Задержка для завершения анимации
-    if(flag){
+    if(flag && !getRating().check){
         const showFromBtn = document.getElementById('showBtn');
         showFromBtn.style.display = 'block';
     }
@@ -137,6 +137,3 @@ function setRating(rating) {
         ratingInput.checked = true; // Устанавливаем выбранный рейтинг
     }
 }
-
-// Пример использования: установить рейтинг на 3
-setRating(3);

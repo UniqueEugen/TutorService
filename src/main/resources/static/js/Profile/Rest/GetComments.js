@@ -144,6 +144,8 @@ function displayComments(comments, currentUserId) {
         commentHeader.appendChild(commentAuthor);
         commentHeader.appendChild(commentActions);
 
+
+
         const commentContent = document.createElement('div');
         commentContent.className = 'comment-content';
         commentContent.textContent = comment.comment;
@@ -172,6 +174,8 @@ function displayComments(comments, currentUserId) {
         commentElement.appendChild(commentDate);
 
         commentsList.appendChild(commentElement);
+
+
     });
     // Проверяем, нужно ли отображать кнопку добавления комментария
     const addCommentButton = document.querySelector('.comm');
