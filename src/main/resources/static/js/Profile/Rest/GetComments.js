@@ -217,9 +217,32 @@ function editComment(comment, rating) {
     showCommentForm(comment, rating);
 }
 
-function deleteComment(commentId) {
+async function deleteComment(commentId) {
     // Логика удаления комментария
     console.log(`Удалить комментарий с ID: ${commentId}`);
+    try {
+        const response = await fetch(`/profile/api/deletecomment/${commentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.status === 204) {
+            // Comment deleted successfully
+            console.log(`Comment with ID ${commentId} deleted successfully.`);
+            fetchComments();
+        } else if (response.status === 404) {
+            // Comment not found
+            console.error('Comment not found.');
+        } else {
+            // Other error
+
+            console.error('An error occurred while deleting the comment.' + response);
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+    }
 
 }
 

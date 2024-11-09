@@ -1,0 +1,79 @@
+@startuml
+actor User
+box "Controllers"
+    participant "ProfileRestController" as PRC
+box end
+box "Model"
+    participant "UserDataService" as UDS
+    participant "UserDataRepository" as UDR
+    participant "CommentService" as CS
+    participant "CommentRepository" as CR
+    database "База данных" as DB
+
+User -> PRC : addComment(commentRequest)
+activate PRC
+
+PRC -> UDS : loadUserDataByUsername(name)
+activate UDS
+
+UDS -> UDR : findUserDataByUsername(name)
+activate UDR
+
+UDR -> DB : findByLogin(name)
+activate DB
+
+DB -->> UDR : userData
+deactivate DB
+
+UDR -->> UDS : userData
+deactivate UDR
+
+UDS -->> PRC : currentUser
+deactivate UDS
+
+PRC -> CS : findByUserData(currentUser)
+activate CS
+
+CS -> CR : findByUserData(currentUser)
+activate CR
+
+CR ->  DB : findByUserData(currentUser)
+activate DB
+
+DB -->> CR : comment
+deactivate DB
+
+CR -->> CS : comment
+deactivate CR
+
+CS -->> PRC : comment
+deactivate CS
+
+alt Комментарий существует
+    PRC -> PRC : setNewData(comment, commentRequest)
+    else Комментария не существует
+    PRC -> PRC : setNewComment(commentRequest)
+end
+
+PRC -> CS : save(comment)
+activate CS
+
+CS -> CR : save(comment)
+activate CR
+
+CR -> DB : save(comment)
+activate DB
+DB -> DB : сохранение
+DB -->> CR : comment
+deactivate DB
+
+CR -->> CS : comment
+deactivate CR
+
+CS -->> PRC : comment
+deactivate CS
+
+PRC -->> User : ответ
+deactivate PRC
+
+@enduml

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/profile/api")
@@ -99,11 +100,30 @@ public class ProfileRestController {
         }
     }
 
+    @DeleteMapping("/deletecomment/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
+        try {
+            // Check if the comment exists
+            Comment comment = commentService.findById(commentId);
+            if (comment == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comment not found");
+            }
+
+            // Delete the comment
+            commentService.deleteById(commentId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     private static class CommentRequest {
         public Long tutor_id;
         public int rating;
         public String comment;
     }
+
+
 
     @AllArgsConstructor
     @NoArgsConstructor
