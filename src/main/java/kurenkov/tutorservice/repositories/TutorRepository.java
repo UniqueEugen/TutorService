@@ -32,7 +32,7 @@ public interface TutorRepository extends JpaRepository<Tutor, Long> {
                      ELSE 1
                 END) ASC,
                 t.price ASC
-            LIMIT 3
+            LIMIT 4
             """, nativeQuery = true)
     List<Long> findTutorsByUserId(@Param("userId") Long userId);
 }

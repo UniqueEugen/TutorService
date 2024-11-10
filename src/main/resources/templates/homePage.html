@@ -8,21 +8,23 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
           integrity="sha384-xrRl7bB7pNABbLjofy4+7V74Q5ihBZ2iDwFhcnGKak6gXjz9otDyM9ypv1Z1rL7C" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/css/common/Heading.css">
     <style>
-        .card {
+        #main-container .card {
             min-height: 100%;
         }
-        .card-body {
+        #main-container .card-body {
             display: flex;
             flex-direction: column;
         }
 
-        .card-text {
+        #main-container .card-text {
             flex-grow: 1;
             overflow: auto;
         }
 
-        .card-description {
+        #main-container .card-description {
             flex-shrink: 0;
             height: 25%;
         }
@@ -42,6 +44,44 @@
         body > *:not(footer) {
             margin-bottom: 5px;
         }
+
+        :root {
+            --gradient: linear-gradient(to left top, #DD2476 10%, #FF512F 90%) !important;
+        }
+
+        .card {
+            background: #FFFFFF;
+            border: 1px solid #dd2476;
+            color: rgba(0, 0, 0, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            border: 5px solid;
+            border-image-slice: 1;
+            background: var(--gradient) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            border-image-source:  var(--gradient) !important;
+            text-decoration: none;
+            transition: all .4s ease;
+        }
+
+        .btn:hover, .btn:focus {
+            background: var(--gradient) !important;
+            -webkit-background-clip: none !important;
+            -webkit-text-fill-color: #fff !important;
+            border: 5px solid #fff !important;
+            box-shadow: #222 1px 0 10px;
+            text-decoration: underline;
+        }
+        .rec-card-text {
+            height: 60px; /* Установите желаемую высоту */
+            overflow-y: scroll; /* Добавляет многоточие, если текст не помещается */
+            /*display: -webkit-box; /* Для поддержки многоточия */
+            -webkit-box-orient: vertical; /* Для вертикального отображения */
+            -webkit-line-clamp: 3; /* Количество строк, которые будут отображаться */
+        }
     </style>
 </head>
 <body>
@@ -60,7 +100,14 @@
     <a  class="nav-link ml-auto" href="/getcurrentpage">My Account</a>
     <a th:if="${auth}" class="nav-link ml-auto" href="/home/logout">Logout</a>
 </nav>
-<div class="container">
+<div id="recommended-heading">
+    <h1>Рекомендуем</h1>
+</div>
+<div class="container mx-auto mt-4" id="cards-container">
+    <div class="row" id="card-row"></div>
+</div>
+
+<div class="container" id="main-container">
     <div class="row">
         <div class="col-md-12">
             <div class="filter-sort-panel">

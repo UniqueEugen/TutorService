@@ -38,8 +38,9 @@ public class HomeRestController extends HomeController {
         List<UserData> tutorRecomends = userDataService.getUserIDbyTutor(userId);
         List<TutorDataDTO> recommendedTutors = new ArrayList<>();
         for (UserData tutor : tutorRecomends) {
-            TutorDataDTO profile = getTutorProfileById(tutor.getId());
-            recommendedTutors.add(profile);
+            TutorDataDTO profile;
+            profile = tutor != null ? getTutorProfileById(tutor.getId()) : null;
+            var b = profile != null ? recommendedTutors.add(profile) : null;
         }
         return recommendedTutors;
     }

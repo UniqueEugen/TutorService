@@ -23,4 +23,6 @@ public class TutorDataDTO {
     private String description;
     private Address address;
     private Photo photo;
+    private String phone;
+    private String email;
 }
