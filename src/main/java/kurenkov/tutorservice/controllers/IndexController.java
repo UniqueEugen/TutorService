@@ -18,8 +18,8 @@ public class IndexController {
 
     @GetMapping
     public RedirectView redirectToHomePage() {
-        /*User user = userService.getUserById(53L);
-        user.setPassword("1234");
+        /*User user = userService.getUserById(26L);
+        user.setPassword("3469");
         userService.saveUser(user);*/
         return new RedirectView("/home");
     }

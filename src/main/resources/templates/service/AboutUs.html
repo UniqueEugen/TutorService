@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+          href="../../static/css/common/aboutUs.css">
+    <title>About Us</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="/../static/pictures/faviconCircle.ico">
+    <link rel="stylesheet" href="/../static/css/common/navigation.css">
+    <style>
+        .nav-link:hover {
+            color: #b825b3; /* Цвет при наведении */
+        }
+        .nav-link {
+            text-decoration: none; /* Убираем подчеркивание */
+            color: #FFF; /* Цвет ссылок */
+            transition: color 0.6s; /* Плавный переход для цветов */
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand navbar-light bg-light" style="background-color: rgb(229, 85, 225) !important; margin-bottom: 0; padding-bottom: 0;">
+    <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+    </ul>
+    <a  class="nav-link ml-auto" href="/getcurrentpage">My Account</a>
+</nav>
+
+<section class="about">
+    <h1 style="color: bisque">О нас</h1>
+    <p style="font-weight: bold">
+        TutorMatch is a free open-source platform...
+    </p>
+
+    <div class="about-info">
+        <div class="about-img">
+            <img src=
+                         "../../static/pictures/logoToAbout.png" alt="Geeksforgeeks">
+        </div>
+        <div>
+            <p> Добро пожаловать в Tutor Match — ваш надежный помощник
+                в поиске квалифицированных репетиторов! Мы понимаем, как важно
+                найти подходящего преподавателя, который сможет помочь вам или
+                вашему ребенку достичь учебных целей. Наша миссия — сделать обучение
+                доступным и эффективным.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="team">
+    <h1>Наша команда</h1>
+    <div class="team-cards">
+
+        <!-- Cards here -->
+        <!-- Card 1 -->
+
+        <div class="card">
+            <div class="card-img">
+                <img src="/static/pictures/orig.webp" alt="User 1">
+            </div>
+            <div class="card-info">
+                <h2 class="card-name">Yauheni Kurankou</h2>
+                <p class="card-role">CEO & Founder</p>
+                <a class="card-email" href="mailto:zenja2003@gmail.com?subject=Вопрос по сайту поиска репетиторов">zenja2003@gmail.com</a>
+                <p><button class="button" id="CEOB">Contact</button></p>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+
+        <div class="card">
+            <div class="card-img">
+                <img src="/static/pictures/vika.png" alt="User 2">
+            </div>
+            <div class="card-info">
+                <h2 class="card-name" style="font-size: 1.8rem;">Victoria Draenkova</h2>
+                <p class="card-role">Inspiration</p>
+                <a class="card-email" href="mailto:zenja2003@gmail.com?subject=Вопрос по сайту поиска репетиторов">victory@gmail.com</a>
+                <p><button class="button" id="VD">Contact</button></p>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+
+        <div class="card">
+            <div class="card-img">
+                <img src="/static/pictures/poe.png" alt="User 3">
+            </div>
+            <div class="card-info">
+                <h2 class="card-name">Poe</h2>
+                <p class="card-role">AI-Helper</p>
+                <a class="card-email" href="https://poe.com">poe.com</a>
+                <p><button id="HB" class="button">Contact</button></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="w3-container w3-teal w3-center w3-margin-top" style="background-color: rgb(229, 85, 225) !important; opacity: 0.9;">
+    <p>Find me on social media.</p>
+    <a href=""><i class="fa fa-facebook-official w3-hover-opacity"></i></a>
+    <a href=""><i class="fa fa-instagram w3-hover-opacity"></i></a>
+    <a href="https://t.me/Menar_games"><i class="fa fa-telegram w3-hover-opacity"></i></a>
+    <a href="https://www.youtube.com/@menargames"><i class="fa fa-youtube w3-hover-opacity"></i></a>
+    <a href="https://x.com/GamesMenar?t=T05f5tuj0TdjmB49G9jQSg&s=09"><i class="fa fa-twitter w3-hover-opacity"></i></a>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+    <p>Powered by <a href="https://t.me/Menar_games" target="_blank">MenarGames</a></p>
+</footer>
+
+<script>
+    function phone(tel)
+    {
+        window.location = tel;
+    }
+    document.getElementById("CEOB").addEventListener('click', () => phone("tel:+375293943508"));
+    document.getElementById("HB").addEventListener('click', () => phone("tel:+375293943509"));
+    document.getElementById("VD").addEventListener('click', () => phone("tel:+375299943382"));
+</script>
+</body>
+
+</html>

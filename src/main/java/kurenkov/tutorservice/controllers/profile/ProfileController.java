@@ -3,6 +3,7 @@ package kurenkov.tutorservice.controllers.profile;
 import kurenkov.tutorservice.entities.*;
 import kurenkov.tutorservice.entities.dto.FullTutorProfileDTO;
 import kurenkov.tutorservice.entities.dto.TutorDataDTO;
+import kurenkov.tutorservice.interfaces.EmailService;
 import kurenkov.tutorservice.mappers.OrderMapper;
 import kurenkov.tutorservice.mappers.TutorDataMapper;
 import kurenkov.tutorservice.services.*;
@@ -43,6 +44,9 @@ public class ProfileController {
     @Autowired
     private VisitsService visitsService;
 
+    @Autowired
+    private EmailSenderService emailSenderService;
+
     @GetMapping
     public String tut(Model model){
         model.addAttribute("profile", getTutorProfileById(25L));
@@ -82,6 +86,7 @@ public class ProfileController {
             orderService.saveOrder(order);
             seekerService.saveSeeker(currentUser.getSeeker());
             tutorService.saveTutor(tutor.getTutor());
+            emailSenderService.sendEmailAttachment(orderData.date + orderData.time, currentUser, tutor);
             String responseMessage = "The order has been successfully saved and is awaiting confirmation by the tutor!";
             return ResponseEntity.ok()
                     .header("Content-Type", "text/plain")
