@@ -2,6 +2,7 @@ package kurenkov.tutorservice.controllers.home;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kurenkov.tutorservice.entities.dto.TutorDataDTO;
+import kurenkov.tutorservice.entities.dto.TutorDataDTOFav;
 import kurenkov.tutorservice.mappers.TutorDataMapper;
 import kurenkov.tutorservice.services.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -34,7 +36,8 @@ public class HomeController {
         System.out.println(username);
         List<TutorDataDTO> tutors = TutorDataMapper.INSTANCE.userDataListToTutorDataDTOList(userDataService.getAllUserData());
         //List<Tutor> tutors = tutorService.getAllTutors();
-        model.addAttribute("tutors", tutors);
+        List<TutorDataDTOFav> tutorsFav = addFavorite(tutors);
+        model.addAttribute("tutors", tutorsFav);
         return "homePage";
     }
 
@@ -45,5 +48,14 @@ public class HomeController {
             request.getSession().invalidate();
         }
         return "redirect:/";
+    }
+
+    private List<TutorDataDTOFav> addFavorite(List<TutorDataDTO> allTutors){
+        List<TutorDataDTOFav> favoriteTutors = new ArrayList<>();
+        for(TutorDataDTO tutor : allTutors){
+            TutorDataDTOFav favoriteTutor = new TutorDataDTOFav(tutor, true);
+            favoriteTutors.add(favoriteTutor);
+        }
+        return favoriteTutors;
     }
 }

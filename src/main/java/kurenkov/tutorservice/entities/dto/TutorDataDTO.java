@@ -14,15 +14,15 @@ import java.util.List;
 @Setter
 @ToString
 public class TutorDataDTO {
-    private Long id;
-    private String name;
-    private String surname;
-    private String secName;
-    private String specialisation;
-    private float price;
-    private String description;
-    private Address address;
-    private Photo photo;
-    private String phone;
-    private String email;
+    protected Long id;
+    protected String name;
+    protected String surname;
+    protected String secName;
+    protected String specialisation;
+    protected float price;
+    protected String description;
+    protected Address address;
+    protected Photo photo;
+    protected String phone;
+    protected String email;
 }
