@@ -25,4 +25,5 @@ public class TutorDataDTO {
     protected Photo photo;
     protected String phone;
     protected String email;
+    protected Long tutorId;
 }

@@ -29,6 +29,10 @@ public class Tutor {
     @Column(name = "description")
     private String description;
 
+    // Поле для хранения URL видео
+    @Column(name="video_url")
+    private String videoUrl;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
@@ -53,6 +57,7 @@ public class Tutor {
 
     @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Comment> comments;
+
 
 
     public Tutor updateTutorData(Tutor newTutorData) {

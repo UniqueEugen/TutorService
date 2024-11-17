@@ -1,6 +1,8 @@
 package kurenkov.tutorservice.controllers.home;
 
 import jakarta.servlet.http.HttpServletRequest;
+import kurenkov.tutorservice.entities.Tutor;
+import kurenkov.tutorservice.entities.UserData;
 import kurenkov.tutorservice.entities.dto.TutorDataDTO;
 import kurenkov.tutorservice.entities.dto.TutorDataDTOFav;
 import kurenkov.tutorservice.mappers.TutorDataMapper;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/home")
@@ -31,12 +35,13 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         boolean isAuth = !username.equals("anonymousUser");
+        UserData currentUser = isAuth ? userDataService.loadUserDataByUsername(username) : null;
         System.out.println(isAuth);
         model.addAttribute("auth",isAuth);
         System.out.println(username);
         List<TutorDataDTO> tutors = TutorDataMapper.INSTANCE.userDataListToTutorDataDTOList(userDataService.getAllUserData());
         //List<Tutor> tutors = tutorService.getAllTutors();
-        List<TutorDataDTOFav> tutorsFav = addFavorite(tutors);
+        List<TutorDataDTOFav> tutorsFav = addFavorite(tutors, currentUser);
         model.addAttribute("tutors", tutorsFav);
         return "homePage";
     }
@@ -50,10 +55,24 @@ public class HomeController {
         return "redirect:/";
     }
 
-    private List<TutorDataDTOFav> addFavorite(List<TutorDataDTO> allTutors){
+    private List<TutorDataDTOFav> addFavorite(List<TutorDataDTO> allTutors, UserData currentUser){
         List<TutorDataDTOFav> favoriteTutors = new ArrayList<>();
+        if(currentUser == null){
+            for(TutorDataDTO tutor : allTutors){
+                TutorDataDTOFav favoriteTutor = new TutorDataDTOFav(tutor, false);
+                favoriteTutors.add(favoriteTutor);
+            }
+            return favoriteTutors;
+        }
+        Set<Long> favoriteTutorIds = new HashSet<>();
+        if (currentUser.getFavoriteTutors() != null) {
+            for (Tutor tutor : currentUser.getFavoriteTutors()) {
+                favoriteTutorIds.add(tutor.getId());
+            }
+        }
         for(TutorDataDTO tutor : allTutors){
-            TutorDataDTOFav favoriteTutor = new TutorDataDTOFav(tutor, true);
+            boolean isFavorite = favoriteTutorIds.contains(tutor.getTutorId());
+            TutorDataDTOFav favoriteTutor = new TutorDataDTOFav(tutor, isFavorite);
             favoriteTutors.add(favoriteTutor);
         }
         return favoriteTutors;

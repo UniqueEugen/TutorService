@@ -22,4 +22,6 @@ public interface UserDataRepository extends JpaRepository<UserData, Long> {
     @Modifying
     @Query("SELECT u FROM UserData u JOIN u.tutor t WHERE t.id IN :tutorIds")
     List<UserData> findUsersByTutorIds(@Param("tutorIds") List<Long> tutorIds);
+
+    UserData findByUserId(Long userId);
 }

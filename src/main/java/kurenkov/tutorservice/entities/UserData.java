@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 @Entity
 @Table(name = "user_data")
@@ -37,6 +38,15 @@ public class UserData {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "seeker_id", referencedColumnName = "seeker_id")
     private Seeker seeker;
+
+    // Связь с репетиторами
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_tutors",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "tutor_id")
+    )
+    private List<Tutor> favoriteTutors;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId

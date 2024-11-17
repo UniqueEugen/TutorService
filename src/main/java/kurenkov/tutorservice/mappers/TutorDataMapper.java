@@ -19,6 +19,7 @@ public interface TutorDataMapper {
     @Mapping(source = "tutor.description", target = "description")
     @Mapping(source = "tutor.address", target = "address")
     @Mapping(source = "tutor.photo", target = "photo")
+    @Mapping(source = "tutor.id", target = "tutorId")
     TutorDataDTO userDataToTutorDataDTO(UserData userData);
 
     @AfterMapping

@@ -186,12 +186,12 @@
                 <div class="card-img-top photo no-photo" th:unless="${tutor.photo}"></div>
 
             </div>
-            <button class="favorite-button" id="fav-btn" th:onclick="'toggleFavorite(' + ${tutor.id} + ')'">
+            <button class="favorite-button" th:if="${auth}"  id="fav-btn" th:onclick="'toggleFavorite(' + ${tutor.tutorId} + ')'">
                 <i th:class="${tutor.isFavorite} ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
             </button>
-            <p class="card-text">
+<!--            <p class="card-text">
                 <small id="profileText" style="display: none;">К профилю</small>
-            </p>
+            </p>-->
         </div>
     </div>
 </div>
@@ -242,10 +242,28 @@
     })
     //document.getElementById("fav-btn").addEventListener("")
     function toggleFavorite(tutorId) {
-
+        fetch(`home/api/favorite/${tutorId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Изменение выполнено успешно');
+                    // Здесь можно обновить интерфейс, если необходимо
+                } else {
+                    console.error('Ошибка при изменении избранного');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+            });
         // Here you would add your logic to add/remove the tutor from favorites
         console.log(`Toggled favorite for tutor ID: ${tutorId}`);
     }
+
+
     function filterFavorites() {
         const showFavorites = document.getElementById('filter-checkbox').checked;
         const allCards = document.querySelectorAll('.maincol');

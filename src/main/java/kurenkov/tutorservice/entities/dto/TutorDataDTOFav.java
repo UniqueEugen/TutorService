@@ -15,7 +15,7 @@ public class TutorDataDTOFav extends TutorDataDTO {
                 tutorDataDTO.secName, tutorDataDTO.specialisation,
                 tutorDataDTO.price, tutorDataDTO.description,
                 tutorDataDTO.address, tutorDataDTO.photo,
-                tutorDataDTO.phone, tutorDataDTO.email);
+                tutorDataDTO.phone, tutorDataDTO.email, tutorDataDTO.tutorId);
         this.isFavorite = isFavorite;
     }
 }

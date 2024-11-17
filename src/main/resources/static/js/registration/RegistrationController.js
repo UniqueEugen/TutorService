@@ -5,6 +5,7 @@ angular.module('registrationApp', [])
         $scope.user = {};
         $scope.tutor = {};
         $scope.seeker = {};
+        $scope.errors = {};
         $scope.registerUser = function() {
             var userData = {
                 name: $scope.userData.firstName,
