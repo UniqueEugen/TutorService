@@ -11,7 +11,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../static/css/common/Heading.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
     <style>
+        footer a{
+            color: black;
+            text-decoration: none;
+            transition: color 0.6s;
+        }
+        footer a:hover{
+            color: #b825b3;
+        }
+        footer p{
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
         .favorite-button {
             background: transparent;
             border: none;
@@ -45,6 +58,7 @@
         }
 
         .photo{
+            border-top: solid 1px darkgray;
             background-size: cover;
             background-position: center;
             width: 100%;
@@ -96,6 +110,25 @@
             /*display: -webkit-box; /* Для поддержки многоточия */
             -webkit-box-orient: vertical; /* Для вертикального отображения */
             -webkit-line-clamp: 3; /* Количество строк, которые будут отображаться */
+        }
+        .my-card{
+            border-color: #cccccc;
+            /*background-color: #FFF;*/
+            box-shadow: 0 0 10px rgba(115, 171, 255,0.5);
+            background-color: #faf5ff;
+        }
+        body{
+            /*background-color: #f0f0f0;*/
+            background-color: #ebf3ff;
+        }
+
+        .nav-link:hover {
+            color: #b825b3; /* Цвет при наведении */
+        }
+        .nav-link, .nav-item {
+            text-decoration: none; /* Убираем подчеркивание */
+            color: #403dff; /* Цвет ссылок */
+            transition: color 0.6s; /* Плавный переход для цветов */
         }
     </style>
 </head>
@@ -165,7 +198,7 @@
     <div class="row">
         <!-- Iterate over tutors -->
         <div class="col-md-4 mt-3 maincol" th:each="tutor : ${tutors}">
-            <div class="card mb-4" th:onclick="'redirectToTutorProfile(' + ${tutor.id} + ')'"
+            <div class="card  my-card mb-4" th:onclick="'redirectToTutorProfile(' + ${tutor.id} + ')'"
                  onmouseover="showProfileText(event)" onmouseout="hideProfileText()" style="cursor: pointer;">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${tutor.specialisation}"></h5>
@@ -186,7 +219,7 @@
                 <div class="card-img-top photo no-photo" th:unless="${tutor.photo}"></div>
 
             </div>
-            <button class="favorite-button" th:if="${auth}"  id="fav-btn" th:onclick="'toggleFavorite(' + ${tutor.tutorId} + ')'">
+            <button class="favorite-button" th:if="${auth}"  th:id="'fav-btn-' + ${tutor.tutorId}" th:onclick="'toggleFavorite(' + ${tutor.tutorId} + ')'">
                 <i th:class="${tutor.isFavorite} ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
             </button>
 <!--            <p class="card-text">
@@ -196,8 +229,17 @@
     </div>
 </div>
 
+
 <footer class="bg-light py-4 mt-4">
-    <div class="container text-center">
+    <div class="container text-center ">
+        <p>Find me on social media.</p>
+        <a href=""><i class="fa-brands fa-facebook-official w3-hover-opacity"></i></a>
+        <a href=""><i class="fa-brands fa-instagram w3-hover-opacity"></i></a>
+        <a href="https://t.me/Menar_games"><i class="fa-brands fa-telegram w3-hover-opacity"></i></a>
+        <a href="https://www.youtube.com/@menargames"><i class="fa-brands fa-youtube w3-hover-opacity"></i></a>
+        <a href="https://x.com/GamesMenar?t=T05f5tuj0TdjmB49G9jQSg&s=09"><i class="fa-brands fa-twitter w3-hover-opacity"></i></a>
+        <a href=""><i class="fa-brands fa-linkedin w3-hover-opacity"></i></a>
+        <p>Powered by <a href="https://t.me/Menar_games" style="color: darkblue" target="_blank">MenarGames</a></p>
         <p class="mb-0">&copy; 2024 Tutor Search. All rights reserved.</p>
         <p class="mb-0">Designed and developed by Yauheni Kurankou.</p>
     </div>
@@ -224,22 +266,22 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 <script>
-    document.getElementById("fav-btn").addEventListener("click", function (e){
-        e.stopPropagation();
-        const button = e.currentTarget;
-        const icon = button.querySelector('i');
-        if (icon.classList.contains('fa-regular')) {
-            icon.classList.remove('fa-regular'); // Убираем незакрашенное сердце
-            icon.classList.add('fa-solid'); // Добавляем закрашенное сердце
-            console.log("added to favorite");
-        } else {
-            icon.classList.remove('fa-solid'); // Убираем закрашенное сердце
-            icon.classList.add('fa-regular'); // Добавляем незакрашенное сердце
-            console.log("remove from favorite");
-        }
+    function setFav(id) {
+        const button = document.getElementById("fav-btn-" + id)
+            console.log(button);
+            const icon = button.querySelector('i');
+            if (icon.classList.contains('fa-regular')) {
+                icon.classList.remove('fa-regular'); // Убираем незакрашенное сердце
+                icon.classList.add('fa-solid'); // Добавляем закрашенное сердце
+                console.log("added to favorite");
+            } else {
+                icon.classList.remove('fa-solid'); // Убираем закрашенное сердце
+                icon.classList.add('fa-regular'); // Добавляем незакрашенное сердце
+                console.log("remove from favorite");
+            }
 
-        filterFavorites();
-    })
+            filterFavorites();
+    }
     //document.getElementById("fav-btn").addEventListener("")
     function toggleFavorite(tutorId) {
         fetch(`home/api/favorite/${tutorId}`, {
@@ -251,6 +293,7 @@
             .then(response => {
                 if (response.ok) {
                     console.log('Изменение выполнено успешно');
+                    setFav(tutorId);
                     // Здесь можно обновить интерфейс, если необходимо
                 } else {
                     console.error('Ошибка при изменении избранного');
