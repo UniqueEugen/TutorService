@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Личный кабинет</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="/../static/pictures/faviconCircle.ico">
     <!-- Подключение библиотеки Croppie с помощью CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -23,6 +24,22 @@
 
         .no-photo {
             background-image: url('../../static/pictures/NoPhoto.png');
+        }
+        #analyseHref{
+            display: block;
+            text-align: center;
+            font-size: larger;
+            font-weight: bolder;
+            margin-bottom: -20px;
+            width: 100vw;
+            background-color: #40b736;
+            color: black;
+            transition: color 0.6s; /* Плавный переход для цветов */
+            text-decoration: none; /* Убираем подчеркивание */
+        }
+        #analyseHref:hover{
+            background-color: #4CAF50;
+            color: blueviolet;
         }
     </style>
 </head>
@@ -323,6 +340,9 @@
         </div>
     </div>
 </div>
+<a th:if="${account.tutor}" id="analyseHref" class="py-4 mt-4" href="/analyse">
+    В аналитику!
+</a>
 <footer class="bg-light py-4 mt-4">
     <div class="container text-center">
         <p class="mb-0">&copy; 2024 Tutor Search. All rights reserved.</p>

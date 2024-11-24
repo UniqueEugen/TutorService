@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аналитика репетитора</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="/../static/pictures/faviconCircle.ico">
+    <script src="../../static/js/analyse/GetComments.js"></script>
+    <script src="../../static/js/analyse/GetOrders.js"></script>
+    <link rel="stylesheet" href="../../static/css/profile/comments.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        nav{
+            margin-top: -20px;
+        }
+        footer{
+            background-color: #e5e5e5;
+            margin: -20px;
+            border-top: solid 5px black;
+            border-radius: 50vw 50vw 0 0;
+        }
+        footer a{
+            color: black;
+            text-decoration: none;
+            transition: color 0.6s;
+        }
+        footer a:hover{
+            color: #b825b3;
+        }
+        footer p{
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .statistics, .tables, .reviews {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .charts, .tables-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+        }
+        canvas {
+            max-width: 100%;
+            margin: 20px;
+            min-width: 40vw;
+            flex: 1;
+        }
+        table {
+            width: 40vw;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        th.sort-asc:after {
+            content: " ▲";
+        }
+        th.sort-desc:after {
+            content: " ▼";
+        }
+        .export-button {
+            margin: 20px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .export-button:hover {
+            background-color: #45a049;
+        }
+
+        .nav-link:hover {
+            color: #b825b3; /* Цвет при наведении */
+        }
+        .nav-link, .nav-item {
+            text-decoration: none; /* Убираем подчеркивание */
+            color: #403dff; /* Цвет ссылок */
+            transition: color 0.6s; /* Плавный переход для цветов */
+
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand navbar-light bg-light">
+    <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+    </ul>
+    <a  class="nav-link ml-auto" href="/home/logout">Logout</a>
+    <a  class="nav-link ml-auto" href="/getcurrentpage">Back</a>
+</nav>
+<h1>Аналитика репетитора</h1>
+
+<div class="statistics">
+    <h2>Общая статистика</h2>
+    <p id="VisitsSum"><strong>Общее количество посещений:</strong> 150</p>
+    <p id="OrdersSum"><strong>Общее количество заказов:</strong> 30</p>
+    <p id="VisitsPerDay"><strong>Среднее количество посещений в день:</strong> 5</p>
+    <p id="OrdersPerDay"><strong>Среднее количество заказов в день:</strong> 1</p>
+    <p id="TotalProfit" style="color: #40b736; font-weight: bold"><strong>Сумма:</strong> 0</p>
+</div>
+
+<h2>Графики</h2>
+<div class="charts">
+    <div>
+        <h3>График посещений</h3>
+        <canvas id="visitsChart"></canvas>
+    </div>
+    <div>
+        <h3>График заказов</h3>
+        <canvas id="ordersChart"></canvas>
+    </div>
+</div>
+
+<h2>Таблицы</h2>
+<div class="tables-container">
+    <div class="tables">
+        <h3>Таблица с детализацией посещений</h3>
+        <table id="visitsTable">
+            <thead>
+            <tr>
+                <th onclick="sortTable(0)">Дата</th>
+                <th onclick="sortTable(1)">Количество посещений</th>
+            </tr>
+            </thead>
+            <tbody id="visitsTableBody">
+            <!-- Заполнение будет происходить динамически -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tables">
+        <h3>Таблица с детализацией заказов</h3>
+        <table id="ordersTable">
+            <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Заказ</th>
+                <th>Статус</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2024-10-01</td>
+                <td>Урок по математике</td>
+                <td>Завершен</td>
+            </tr>
+            <tr>
+                <td>2024-10-02</td>
+                <td>Урок по английскому</td>
+                <td>В процессе</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="comment-section" ng-controller="CommentController" style="border: none">
+
+    <h1 class="reviews-header">Отзывы:</h1>
+    <!-- Встроенный tutorId в атрибуте data- -->
+    <div class="comment-list" id="comments" style="margin: 5px">
+        <!-- Комментарии будут добавлены сюда -->
+    </div>
+
+</div>
+
+<button class="export-button" onclick="exportToExcel()">Экспорт в Excel</button>
+<footer class="py-4 mt-4">
+    <div class="container text-center ">
+        <p>Find me on social media.</p>
+        <a href=""><i class="fa-brands fa-facebook-official w3-hover-opacity"></i></a>
+        <a href=""><i class="fa-brands fa-instagram w3-hover-opacity"></i></a>
+        <a href="https://t.me/Menar_games"><i class="fa-brands fa-telegram w3-hover-opacity"></i></a>
+        <a href="https://www.youtube.com/@menargames"><i class="fa-brands fa-youtube w3-hover-opacity"></i></a>
+        <a href="https://x.com/GamesMenar?t=T05f5tuj0TdjmB49G9jQSg&s=09"><i class="fa-brands fa-twitter w3-hover-opacity"></i></a>
+        <a href=""><i class="fa-brands fa-linkedin w3-hover-opacity"></i></a>
+        <p>Powered by <a href="https://t.me/Menar_games" style="color: darkblue" target="_blank">MenarGames</a></p>
+        <p class="mb-0">&copy; 2024 Tutor Search. All rights reserved.</p>
+        <p class="mb-0">Designed and developed by Yauheni Kurankou.</p>
+    </div>
+</footer>
+<script>
+    // Функция для вычисления общего количества посещений
+    function calculateTotalVisits(visits) {
+        return visits.reduce((total, current) => total + current, 0);
+    }
+
+    // Функция для вычисления среднего количества посещений
+    function calculateAverageVisits(visits) {
+        const total = calculateTotalVisits(visits);
+        return visits.length > 0 ? total / visits.length : 0;
+    }
+    async function fetchVisitsData() {
+        const response = await fetch('/analyse/api/dateanalys');
+        const data = await response.json();
+
+        const dates = data.map(item => item[0]);
+        const visits = data.map(item => item[1]);
+
+        return { dates, visits };
+    }
+
+    /*const ordersData = {
+        dates: ["2024-10-01", "2024-10-02", "2024-10-03"],
+        orders: [2, 3, 1]
+    };*/
+
+    function fillVisitsTable(visitsData) {
+        const visitsTableBody = document.getElementById('visitsTableBody');
+        visitsTableBody.innerHTML = ''; // Очистка текущего содержимого
+
+        visitsData.dates.slice(0, 10).forEach((date, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${date}</td><td>${visitsData.visits[index]}</td>`;
+            visitsTableBody.appendChild(row);
+        });
+    }
+
+    async function renderCharts() {
+        const visitsData = await fetchVisitsData();
+        const averageVisits = calculateAverageVisits(visitsData.visits);
+        const totalVisits = calculateTotalVisits(visitsData.visits);
+        console.log(averageVisits);
+        console.log(totalVisits);
+        document.getElementById("VisitsPerDay").innerHTML = `<strong>Общее количество посещений:</strong> ${averageVisits}`;
+        document.getElementById("VisitsSum").innerHTML = `<strong>Общее количество посещений:</strong> ${totalVisits}`;
+        fillVisitsTable(visitsData);
+
+        const ctxVisits = document.getElementById('visitsChart').getContext('2d');
+        //const ctxOrders = document.getElementById('ordersChart').getContext('2d');
+
+        new Chart(ctxVisits, {
+            type: 'line',
+            data: {
+                labels: visitsData.dates,
+                datasets: [{
+                    label: 'Посещения',
+                    data: visitsData.visits,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        /*new Chart(ctxOrders, {
+            type: 'bar',
+            data: {
+                labels: ordersData.dates,
+                datasets: [{
+                    label: 'Заказы',
+                    data: ordersData.orders,
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });*/
+    }
+
+    function sortTable(columnIndex) {
+        const table = document.getElementById("visitsTable");
+        const tbody = table.tBodies[0];
+        const rowsArray = Array.from(tbody.rows);
+        const currentSort = tbody.getAttribute('data-sort') || 'asc';
+        const newSort = currentSort === 'asc' ? 'desc' : 'asc';
+
+        rowsArray.sort((rowA, rowB) => {
+            const cellA = rowA.cells[columnIndex].innerText;
+            const cellB = rowB.cells[columnIndex].innerText;
+
+            if (columnIndex === 0) { // сортировка по дате
+                return newSort === 'asc' ? new Date(cellA) - new Date(cellB) : new Date(cellB) - new Date(cellA);
+            } else { // сортировка по числам
+                return newSort === 'asc' ? cellA - cellB : cellB - cellA;
+            }
+        });
+
+        tbody.innerHTML = ''; // Очистка текущих строк
+        rowsArray.forEach(row => tbody.appendChild(row)); // Добавление отсортированных строк
+
+        // Обновление атрибута сортировки
+        tbody.setAttribute('data-sort', newSort);
+        // Обновление классов для сортировки
+        Array.from(table.querySelectorAll("th")).forEach((th, index) => {
+            th.classList.remove('sort-asc', 'sort-desc');
+            if (index === columnIndex) {
+                th.classList.add(newSort === 'asc' ? 'sort-asc' : 'sort-desc');
+            }
+        });
+    }
+
+    function exportToExcel() {
+        const visitsTable = document.getElementById('visitsTable');
+        const ordersTable = document.getElementById('ordersTable');
+
+        const wb = XLSX.utils.book_new();
+
+        // Лист с посещениями
+        const visitsSheet = XLSX.utils.table_to_sheet(visitsTable);
+        XLSX.utils.book_append_sheet(wb, visitsSheet, 'Посещения');
+
+        // Лист с заказами
+        const ordersSheet = XLSX.utils.table_to_sheet(ordersTable);
+        XLSX.utils.book_append_sheet(wb, ordersSheet, 'Заказы');
+
+        // Лист с общей статистикой
+        const statsSheetData = [
+            ['Показатель', 'Значение'], // Заголовки
+            ['Общее количество посещений', parseInt(document.getElementById('VisitsSum').innerText.match(/\d+/)[0])],
+            ['Общее количество заказов', parseInt(document.getElementById('OrdersSum').innerText.match(/\d+/)[0])],
+            ['Среднее количество посещений в день', parseFloat(document.getElementById('VisitsPerDay').innerText.match(/[\d.]+/)[0])],
+            ['Среднее количество заказов в день', parseFloat(document.getElementById('OrdersPerDay').innerText.match(/[\d.]+/)[0])],
+            ['Общая прибыль', parseFloat(document.getElementById('TotalProfit').innerText.match(/[\d.]+/)[0])],
+        ];
+
+        const statsSheet = XLSX.utils.aoa_to_sheet(statsSheetData);
+        XLSX.utils.book_append_sheet(wb, statsSheet, 'Общая статистика');
+
+        // Сохранение файла
+        XLSX.writeFile(wb, 'Аналитика_репетитора.xlsx');
+    }
+
+    renderCharts();
+</script>
+
+</body>
+</html>

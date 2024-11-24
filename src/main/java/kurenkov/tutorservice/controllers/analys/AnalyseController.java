@@ -6,4 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/analyse")
 public class AnalyseController {
+
+    @RequestMapping
+    public String analyse() {
+        return "service/Analyse";
+    }
 }
