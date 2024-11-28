@@ -4,8 +4,11 @@ import kurenkov.tutorservice.entities.Order;
 import kurenkov.tutorservice.entities.UserData;
 import kurenkov.tutorservice.entities.dto.OrderDataDTO;
 import kurenkov.tutorservice.entities.dto.SeekerDataDTO;
+import kurenkov.tutorservice.entities.dto.TutorDataDTO;
 import kurenkov.tutorservice.mappers.OrderListMapper;
+import kurenkov.tutorservice.mappers.TutorDataMapper;
 import kurenkov.tutorservice.services.OrderService;
+import kurenkov.tutorservice.services.TutorService;
 import kurenkov.tutorservice.services.UserDataService;
 import kurenkov.tutorservice.services.VisitsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,9 @@ public class AnalyseRestController {
 
     @Autowired
     private OrderListMapper orderListMapper;
+
+    @Autowired
+    private TutorService tutorService;
 
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
@@ -66,10 +72,17 @@ public class AnalyseRestController {
         return currentUser.getTutor().getPrice();
     }
 
+    private TutorDataDTO getTutorProfileById(Long id) {
+        UserData userData = tutorService.getTutorById(id).getUserData();
+        return TutorDataMapper.INSTANCE.userDataToTutorDataDTO(userData);
+    }
+
     private List<OrderDataDTO> getTutorsData(UserData userData){
         List<OrderDataDTO> tutorOrdersList = new ArrayList<>();
         for(Order order: userData.getTutor().getTutorOrders()){
             OrderDataDTO currentOrder = orderListMapper.orderToOrderDataDto(order);
+            TutorDataDTO t = getTutorProfileById(currentOrder.getTutor());
+            currentOrder.setTutorData(t);
             tutorOrdersList.add(currentOrder);
         }
         return tutorOrdersList;

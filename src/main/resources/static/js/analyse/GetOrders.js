@@ -48,6 +48,51 @@ async function fetchTutorPrice() {
 }
 
 
+async function populateOrdersTable(orders) {
+    const ordersTableBody = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
+
+    // Очищаем существующие строки таблицы
+    ordersTableBody.innerHTML = '';
+
+    // Проходим по заказам и заполняем таблицу
+    for (let i = 0; i < Math.min(orders.length, 5); i++) {
+        const order = orders[i];
+
+        // Создаем новую строку
+        const row = ordersTableBody.insertRow();
+
+        // Заполняем ячейки
+        const dateCell = row.insertCell(0);
+        const orderCell = row.insertCell(1);
+        const statusCell = row.insertCell(2);
+
+        dateCell.textContent = order.date; // Дата
+        orderCell.textContent = `Урок по ${order.tutorData.specialisation}`; // Заказ с специальностью
+
+        // Условная логика для статуса
+        switch (order.status) {
+            case 'PENDING':
+                statusCell.textContent = 'В ожидании принятия';
+                break;
+            case 'CANCELED':
+                statusCell.textContent = 'Отменен';
+                break;
+            case 'CONFIRMED':
+                statusCell.textContent = 'Согласован/выполнен';
+                break;
+            default:
+                statusCell.textContent = 'Неизвестный статус'; // На случай, если статус не совпадает
+        }
+    }
+
+    // Инициализация DataTables
+    $('#ordersTable').DataTable({
+        paging: false, // Отключаем пагинацию, так как мы ограничим вывод до 5 строк
+        info: false, // Отключаем информацию о количестве строк
+        searching: false, // Отключаем поиск
+        ordering: true // Включаем сортировку
+    });
+}
 
 async function fetchOrdersData() {
     const response = await fetch('/analyse/api/getorders'); // URL для получения заказов
@@ -73,7 +118,7 @@ async function processOrdersData(orders) {
     const lostProfitData = {};
     const possibleProfitData = {};
     orderRate = await fetchTutorPrice(); // Получаем ставку заказа
-
+    populateOrdersTable(orders);
     orders.forEach(order => {
         const date = order.date; // Используем уже преобразованную дату
 
