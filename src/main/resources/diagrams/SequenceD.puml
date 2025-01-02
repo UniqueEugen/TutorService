@@ -22,6 +22,8 @@ activate UDR
 UDR -> DB : findByLogin(name)
 activate DB
 
+DB -> DB : Поиск
+
 DB -->> UDR : userData
 deactivate DB
 
@@ -39,6 +41,8 @@ activate CR
 
 CR ->  DB : findByUserData(currentUser)
 activate DB
+
+DB -> DB : Поиск
 
 DB -->> CR : comment
 deactivate DB

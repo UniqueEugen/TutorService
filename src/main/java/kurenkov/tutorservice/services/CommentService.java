@@ -40,7 +40,7 @@ public class CommentService {
     public List<Comment> findByTutor(Tutor tutor) {
         return commentRepository.findByTutor(tutor);
     }
-    public Comment findByUserData(UserData userData) {
+    public List<Comment> findByUserData(UserData userData) {
         return commentRepository.findByUserData(userData);
     }
 }

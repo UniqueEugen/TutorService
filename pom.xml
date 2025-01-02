@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>kurenkov</groupId>
-    <artifactId>TutorService</artifactId>
+    <artifactId>TutorServiceTry</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>TutorService</name>
     <description>TutorService</description>

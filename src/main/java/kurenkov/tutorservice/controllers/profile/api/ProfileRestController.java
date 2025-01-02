@@ -83,13 +83,23 @@ public class ProfileRestController {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserData currentUser = userDataService.loadUserDataByUsername(authentication.getName());
-            Comment ExistsComment = commentService.findByUserData(currentUser);
+            List<Comment> existsComments = commentService.findByUserData(currentUser);
+            Tutor currentTutor = userDataService.getUserDataById(request.tutor_id).getTutor();
+            // Проверяем, есть ли комментарий к текущему репетитору
+            Comment existsComment = null;
+            for (Comment comment : existsComments) {
+                if (comment.getTutor().getId().equals(currentTutor.getId())) {
+                    existsComment = comment;
+                    break;
+                }
+            }
             Comment comment = new Comment();
-            if (ExistsComment == null) {
+            if (existsComment == null) {
                 comment.setUserData(currentUser);
-                comment.setTutor(userDataService.getUserDataById(request.tutor_id).getTutor());
+                System.out.println(request.tutor_id);
+                comment.setTutor(currentTutor);
             }else {
-                comment = ExistsComment;
+                comment = existsComment;
             }
             comment.setRating(request.rating);
             comment.setComment(request.comment);
