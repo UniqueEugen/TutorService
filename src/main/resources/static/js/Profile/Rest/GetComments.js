@@ -14,10 +14,10 @@ async function fetchUserId() {
         console.error('Ошибка получения ID пользователя:', error);
     }
 }
-
+let tutorId;
 async function fetchComments() {
     // Получаем tutorId из элемента <ul>
-   const tutorId = getID()
+   tutorId = getID()
 
     if (!tutorId) {
         console.error('ID репетитора не найден.');
@@ -232,6 +232,7 @@ async function deleteComment(commentId) {
             // Comment deleted successfully
             console.log(`Comment with ID ${commentId} deleted successfully.`);
             fetchComments();
+            setRating();
         } else if (response.status === 404) {
             // Comment not found
             console.error('Comment not found.');
@@ -246,5 +247,56 @@ async function deleteComment(commentId) {
 
 }
 
+async function setRating(){
+
+    if (!tutorId) {
+        console.error('ID репетитора не найден.');
+        return;
+    }
+
+    try {
+        // Выполняем запрос к API для получения комментариев
+        const response = await fetch(`/profile/api/getrating?tutorId=${tutorId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // Проверка на успешный ответ
+        if (!response.ok) {
+            throw new Error(`Ошибка при получении комментариев: ${response.status}`);
+        }
+
+        // Парсим JSON-ответ
+        const rating = await response.json();
+        console.log(rating);
+        displayRating(rating);
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
+}
+
+async function displayRating(rating){
+    const rate = document.getElementById("CommonRate");
+    const childElements = rate.children;
+    let couneter = 1;
+    if (rating === null){
+        rate.innerHTML = "Нет данных";
+    }else {
+        console.log(childElements);
+        // Проходим по каждому дочернему элементу и назначаем класс 'active'
+        for (let child of childElements) {
+            if(rating >= couneter) {
+                child.classList.add('active');
+                couneter++;
+                console.log(couneter);
+            }
+        }
+        document.getElementById("CommonRateNum").innerText = rating;
+    }
+}
+
 // Вызов функции для получения комментариев при загрузке страницы
 document.addEventListener('DOMContentLoaded', fetchComments);
+document.addEventListener("DOMContentLoaded", setRating);

@@ -20,6 +20,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,6 +127,30 @@ public class ProfileRestController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/getrating")
+    public double getRating(@RequestParam Long tutorId) {
+        Tutor tutor = userDataService.getUserDataById(tutorId).getTutor();
+        List<Comment> comments = commentService.findByTutor(tutor);
+        double rating = 0;
+        int counter = 0;
+
+        for (Comment comment : comments) {
+            rating += comment.getRating();
+            counter++;
+        }
+
+        // Проверяем, есть ли комментарии
+        if (counter > 0) {
+            rating = rating / counter;
+        } else {
+            return 0; // Или любое другое значение по умолчанию, если комментариев нет
+        }
+
+        // Округляем до сотых
+        BigDecimal roundedRating = new BigDecimal(rating).setScale(2, RoundingMode.HALF_UP);
+        return roundedRating.doubleValue();
     }
 
     private static class CommentRequest {

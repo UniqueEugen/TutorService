@@ -10,9 +10,14 @@
           integrity="sha384-xrRl7bB7pNABbLjofy4+7V74Q5ihBZ2iDwFhcnGKak6gXjz9otDyM9ypv1Z1rL7C" crossorigin="anonymous">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../static/css/common/Heading.css">
+    <link rel="stylesheet" href="../../static/css/profile/commonRate.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
     <style>
+        .rating-result {
+            width: 200px;
+            margin: 0;
+        }
         footer a{
             color: black;
             text-decoration: none;
@@ -206,10 +211,16 @@
                         <p class="card-description" th:if="${tutor.description}" th:text="${tutor.description}"></p>
                         <div th:unless="${tutor.description}" style="height: 25%;"></div>
                         <div>
-                            <p th:text="'Name: ' + ${tutor.surname} + ' ' + ${tutor.name}"></p>
-                            <p th:text="'Country: ' + ${tutor.address.country}"></p>
-                            <p th:text="'City: ' + ${tutor.address.city}"></p>
-                            <p id="price" th:text="'Price: $' + ${tutor.price}"></p>
+                            <p th:text="'Имя: ' + ${tutor.surname} + ' ' + ${tutor.name}"></p>
+                            <p th:text="'Страна: ' + ${tutor.address.country}"></p>
+                            <p th:text="'Город: ' + ${tutor.address.city}"></p>
+                            <p id="price" th:text="'Цена: $' + ${tutor.price}"></p>
+                            <p th:text="'Рейтинг: ' + ${tutor.rating}"><div class="rating-result"><span th:class="${tutor.rating >= 1} ? 'active' : ''"></span>
+                            <span th:class="${tutor.rating >= 2} ? 'active' : ''"></span>
+                            <span th:class="${tutor.rating >= 3} ? 'active' : ''"></span>
+                            <span th:class="${tutor.rating >= 4} ? 'active' : ''"></span>
+                            <span th:class="${tutor.rating >= 5} ? 'active' : ''"></span></div>
+                            </p>
                         </div>
                     </div>
                 </div>
