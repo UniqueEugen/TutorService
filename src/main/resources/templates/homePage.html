@@ -15,8 +15,13 @@
     <!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
     <style>
         .rating-result {
-            width: 200px;
+            width: 180px;
             margin: 0;
+            margin-left: 10px;
+        }
+        .rating-result span {
+            font-size: 24px;
+            margin: 0 1px;
         }
         footer a{
             color: black;
@@ -165,30 +170,30 @@
         <div class="col-md-12">
             <div class="filter-sort-panel">
                 <button class="btn btn-link filter-sort-toggle" type="button" data-toggle="collapse" data-target="#filterSortPanel" aria-expanded="false" aria-controls="filterSortPanel">
-                    <i class="fas fa-cog"></i> Filter/Sort
+                    <i class="fas fa-cog"></i> Фильтр/Сорт.
                 </button>
                 <div class="collapse" id="filterSortPanel">
                     <form id="sortForm">
                         <div class="form-group">
-                            <label for="sortOrder">Sort Order:</label>
+                            <label for="sortOrder">Порядок сортировки:</label>
                             <select class="form-control" id="sortOrder">
-                                <option value="asc">Price: Low to High</option>
-                                <option value="desc">Price: High to Low</option>
+                                <option value="asc">Цена: От низкой к высокой</option>
+                                <option value="desc">Цена: От высокой к низкой</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="filterField">Filter By:</label>
+                            <label for="filterField">Фильтрация по:</label>
                             <select class="form-control" id="filterField">
-                                <option value="city">City</option>
-                                <option value="specialization">Specialization</option>
-                                <option value="lastName">Last Name</option>
+                                <option value="city">Город</option>
+                                <option value="specialization">Специализация</option>
+                                <option value="lastName">Фамилия</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="filterValue">Filter Value:</label>
+                            <label for="filterValue">Значение фильтрации:</label>
                             <input type="text" class="form-control" id="filterValue">
                         </div>
-                        <button type="submit" class="btn btn-primary">Apply</button>
+                        <button type="submit" class="btn btn-primary">Подтвердить</button>
                     </form>
                 </div>
             </div>
@@ -200,7 +205,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row sortMy">
         <!-- Iterate over tutors -->
         <div class="col-md-4 mt-3 maincol" th:each="tutor : ${tutors}">
             <div class="card  my-card mb-4" th:onclick="'redirectToTutorProfile(' + ${tutor.id} + ')'"
@@ -215,7 +220,7 @@
                             <p th:text="'Страна: ' + ${tutor.address.country}"></p>
                             <p th:text="'Город: ' + ${tutor.address.city}"></p>
                             <p id="price" th:text="'Цена: $' + ${tutor.price}"></p>
-                            <p th:text="'Рейтинг: ' + ${tutor.rating}"><div class="rating-result"><span th:class="${tutor.rating >= 1} ? 'active' : ''"></span>
+                            <p style="display: inline-block" th:text="'Рейтинг: ' + ${tutor.rating}"><div style="display: inline-block" class="rating-result"><span th:class="${tutor.rating >= 1} ? 'active' : ''"></span>
                             <span th:class="${tutor.rating >= 2} ? 'active' : ''"></span>
                             <span th:class="${tutor.rating >= 3} ? 'active' : ''"></span>
                             <span th:class="${tutor.rating >= 4} ? 'active' : ''"></span>
