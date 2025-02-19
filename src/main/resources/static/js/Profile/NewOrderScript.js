@@ -1,7 +1,21 @@
 $(function() {
     moment.locale("ru");
-    $('#datepicker').datetimepicker({
-        format: 'L',
+    console.log( new Date());
+    $('#datetimepicker').datetimepicker({
+        //format: 'L',
+       // useCurrent: false,
+        minDate: new Date(),
+        icons: {
+            time: "bi bi-clock",
+            date: "fa fa-calendar",
+            up: "fa fa-chevron-up",
+            down: "fa fa-chevron-down",
+            previous: "fa fa-chevron-left",
+            next: "fa fa-chevron-right",
+            today: "fa fa-calendar-check-o",
+            clear: "fa fa-trash",
+            close: "fa fa-times"
+        }
     });
     $('#timepicker').datetimepicker({
         format: 'LT',

@@ -250,8 +250,44 @@
         });
     }
 
+    function prepareVisitsData(visitsData) {
+        // Получаем уникальные даты из массива visitsData.dates
+        const allDates = new Set(visitsData.dates);
+
+        // Преобразуем Set обратно в массив и сортируем
+        const sortedDates = Array.from(allDates).sort((a, b) => new Date(a) - new Date(b));
+
+        // Определяем минимальную и максимальную дату
+        const startDate = new Date(sortedDates[0]);
+        const endDate = new Date(sortedDates[sortedDates.length - 1]);
+
+        const dates = [];
+        const visits = [];
+
+        // Создаем объект для сопоставления посещений
+        const visitsMap = {};
+        visitsData.dates.forEach((date, index) => {
+            visitsMap[date] = visitsData.visits[index];
+        });
+
+        // Заполняем массивы для всех дат в диапазоне
+        const currentDate = new Date(startDate);
+        while (currentDate <= endDate) {
+            const formattedDate = currentDate.toISOString().split('T')[0]; // 'YYYY-MM-DD'
+            dates.push(formattedDate);
+
+            // Заполняем данными или нулями
+            visits.push(visitsMap[formattedDate] || 0);
+
+            // Переходим к следующему дню
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        return { dates, visits };
+    }
     async function renderCharts() {
         const visitsData = await fetchVisitsData();
+        console.log(visitsData + "fdsfsf");
         const averageVisits = calculateAverageVisits(visitsData.visits);
         const totalVisits = calculateTotalVisits(visitsData.visits);
         console.log(averageVisits);
@@ -262,14 +298,14 @@
 
         const ctxVisits = document.getElementById('visitsChart').getContext('2d');
         //const ctxOrders = document.getElementById('ordersChart').getContext('2d');
-
+        const chartData = prepareVisitsData(visitsData);
         new Chart(ctxVisits, {
             type: 'line',
             data: {
-                labels: visitsData.dates,
+                labels: chartData.dates,
                 datasets: [{
                     label: 'Посещения',
-                    data: visitsData.visits,
+                    data: chartData.visits,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     fill: false
                 }]

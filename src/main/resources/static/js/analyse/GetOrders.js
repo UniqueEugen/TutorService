@@ -173,11 +173,49 @@ function updateStatistics(orders, orderRate) {
     document.getElementById('TotalProfit').innerText = `Общая прибыль: ${totalProfit}$`; // Предполагается, что у вас есть этот элемент
 }
 
-function prepareChartData(ordersData) {
+/*function prepareChartData(ordersData) {
     const dates = Object.keys(ordersData.possibleProfit).sort(); // Сортируем даты
     const profit = dates.map(date => ordersData.profit[date] || 0);
     const lostProfit = dates.map(date => ordersData.lostProfit[date] || 0);
     const possibleProfit = dates.map(date => ordersData.possibleProfit[date] || 0);
+
+    return { dates, profit, lostProfit, possibleProfit };
+}*/
+
+function prepareChartData(ordersData) {
+    // Получаем все уникальные даты из всех объектов
+    const allDates = new Set([
+        ...Object.keys(ordersData.profit),
+        ...Object.keys(ordersData.lostProfit),
+        ...Object.keys(ordersData.possibleProfit),
+    ]);
+
+    // Преобразуем Set обратно в массив и сортируем
+    const sortedDates = Array.from(allDates).sort((a, b) => new Date(a) - new Date(b));
+
+    // Определяем минимальную и максимальную дату
+    const startDate = new Date(sortedDates[0]);
+    const endDate = new Date(sortedDates[sortedDates.length - 1]);
+
+    const dates = [];
+    const profit = [];
+    const lostProfit = [];
+    const possibleProfit = [];
+
+    // Заполняем массивы для всех дат в диапазоне
+    const currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+        const formattedDate = currentDate.toISOString().split('T')[0]; // 'YYYY-MM-DD'
+        dates.push(formattedDate);
+
+        // Заполняем данными или нулями
+        profit.push(ordersData.profit[formattedDate] || 0);
+        lostProfit.push(ordersData.lostProfit[formattedDate] || 0);
+        possibleProfit.push(ordersData.possibleProfit[formattedDate] || 0);
+
+        // Переходим к следующему дню
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
 
     return { dates, profit, lostProfit, possibleProfit };
 }
