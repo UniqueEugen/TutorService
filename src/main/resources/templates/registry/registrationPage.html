@@ -27,12 +27,12 @@
 </head>
 <body ng-controller="RegistrationController">
 <div class="container content-container">
-    <h1>User Registration</h1>
+    <h1>Регистрация пользователя</h1>
 
     <!-- Форма регистрации -->
     <form ng-submit="registerUser()">
         <div class="registration-block visible" id="userDataBlock">
-            <h3>Personal Information</h3>
+            <h3>Персональная информация</h3>
             <div ng-show="showErrorMessage" class="error-message">
                 Необходимо заполнить все обязательные поля.
             </div>
@@ -107,7 +107,7 @@
             <button class="btn btn-secondary" type="button" onclick="next()">Далее</button>
         </div>
         <div class="registration-block" id="addressBlock">
-            <h3>Address Information</h3>
+            <h3>Информация об адресе</h3>
             <div class="form-group requiredChangeTutor">
                 <label for="country">Cтрана:</label>
                 <input type="text" class="form-control" id="country" ng-model="address.country" minlength="4" maxlength="100" required>
@@ -138,13 +138,13 @@
             <button class="btn btn-secondary" type="button" onclick="next()">Далее</button>
         </div>
         <div class="registration-block" id="userBlock">
-            <h3>Account Information</h3>
+            <h3>Информация аккаунта</h3>
             <div class="form-group">
-                <label for="username">Login:</label>
+                <label for="username">Логин:</label>
                 <input type="text" class="form-control" id="username" ng-model="user.username" minlength="4" maxlength="30" required>
             </div>
             <div class="form-group">
-                <label for="password">Password:</label>
+                <label for="password">Пароль:</label>
                 <input type="password" class="form-control" id="password" ng-model="user.password" minlength="4" maxlength="12" required>
             </div>
             <div ng-show="showFormErrors">
@@ -152,7 +152,7 @@
                 <!-- Дополнительная разметка для отображения сообщений об ошибках -->
             </div>
             <button type="button" onclick="previous()" class="back-button">Назад</button>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary">Регистрация</button>
         </div>
     </form>
 </div>
