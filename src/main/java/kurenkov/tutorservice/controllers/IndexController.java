@@ -26,7 +26,7 @@ public class IndexController {
 
     @GetMapping
     public RedirectView redirectToHomePage() {
-        /*User user = userService.getUserById(4L);
+        /*User user = userService.getUserById(1L);
         user.setPassword("1234");
         userService.saveUser(user);*/
         /*User user = userService.getUserById(3L);
